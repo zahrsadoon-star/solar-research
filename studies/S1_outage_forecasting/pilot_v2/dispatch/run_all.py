@@ -29,6 +29,7 @@ from oracle_lp import oracle_point  # noqa: E402
 
 GRID_S = np.round(np.arange(0.30, 1.0001, 0.05), 2)          # as specified
 GRID_S_EXT = np.round(np.arange(0.10, 0.2501, 0.05), 2)     # extension (see README): closes the gap to PV-only
+GRID_S_FINE = np.array([0.76, 0.77, 0.78, 0.79, 0.795])     # extension (see README): resolves the 80 % step cost
 GRID_MODE0_THR = np.round(np.arange(0.30, 0.9501, 0.05), 2)
 GRID_THETA = np.round(np.arange(0.0, 0.99001, 0.01), 2)
 GRID_SLOW = np.round(np.arange(0.20, 0.8001, 0.05), 2)
@@ -69,7 +70,7 @@ def run_config(cfg: tuple[str, str, float, float]) -> pd.DataFrame:
 
     sim = lambda pol: S.simulate(load, on, pv, cap, *pol)  # noqa: E731
     add("no_forecast", "PV-only", "-", "-", np.nan, sim(S.pv_only(n)))
-    for s in np.r_[GRID_S_EXT, GRID_S]:
+    for s in np.sort(np.r_[GRID_S_EXT, GRID_S, GRID_S_FINE]):
         add("no_forecast", "SOC-trigger", "-", "S", s, sim(S.soc_trigger(n, s)))
         add("no_forecast", "SOC-target", "-", "S", s, sim(S.soc_target(n, s)))
     add("no_forecast", "Mode0-thesis-0.25C", "-", "threshold", 0.8, sim(S.mode0(prev, 0.25, 0.8)))
@@ -166,6 +167,26 @@ def analyse(pts: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame
             perf = r[r.model == "PerfectBinary"].dropna(subset=["regret_interp_pp"])
             nff = pareto_front(nf, x)
             dpf, lpf = pareto_front(dp, x), pareto_front(lp, x)
+            # (i) skill value: ML forecasters vs the best of no-forecast AND the statistical forecasters
+            stat_ref = pd.concat([nf, fc[fc.model.isin(["HourMarkov", "Climatology"])]])
+            ml = regret_table(fc[fc.model.isin(["RandomForest", "Logistic"])], stat_ref, x).dropna(
+                subset=["regret_interp_pp"])
+            # (ii) stress saved at equal LPSP: NF stress needed to reach the forecast point's LPSP minus its own
+            xneed = np.array([_x_needed(nff, x, yv) for yv in learned.LPSP_pct])
+            saving = xneed - learned[x].to_numpy(float)
+            ks = int(np.nanargmax(saving)) if np.isfinite(saving).any() else None
+            mlpts = fc[fc.model.isin(["RandomForest", "Logistic"])]
+            srf = pareto_front(stat_ref, x)
+            ml_saving = np.array([_x_needed(srf, x, yv) for yv in mlpts.LPSP_pct]) - mlpts[x].to_numpy(float)
+            ml_saving_rel = ml_saving / np.array([_x_needed(srf, x, yv) for yv in mlpts.LPSP_pct])
+            # (iii) sensitivity: NF restricted to the grids exactly as specified (S = 0.30..1.00 step 0.05)
+            ext = nf.family.isin(["SOC-trigger", "SOC-target"]) & (
+                (nf.knob_value < 0.30 - 1e-9) | np.isclose(nf.knob_value.to_numpy(float)[:, None], GRID_S_FINE).any(axis=1))
+            nf_spec = nf[~ext]
+            rs_spec = regret_table(learned.drop(columns=[c for c in learned.columns if c.startswith(("nf_", "regret",
+                                   "interp_"))]), nf_spec, x).dropna(subset=["regret_interp_pp"])
+            nfs_front = pareto_front(nf_spec, x)
+            sav_spec = np.array([_x_needed(nfs_front, x, yv) for yv in learned.LPSP_pct]) - learned[x].to_numpy(float)
             bi = learned.loc[learned.regret_interp_pp.idxmin()]
             bs = learned.loc[learned.regret_step_pp.idxmin()]
             head.append(dict(zip(CFG_KEY, key), plane=plane,
@@ -178,6 +199,21 @@ def analyse(pts: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame
                              learned_best_step=f"{bs.model}/{bs.family}:{bs.knob}={bs.knob_value}",
                              learned_n_points_regret_interp_lt0=int((learned.regret_interp_pp < 0).sum()),
                              learned_n_comparable=len(learned),
+                             ml_min_regret_vs_nf_and_stat_pp=ml.regret_interp_pp.min() if len(ml) else np.nan,
+                             ml_min_regret_step_vs_nf_and_stat_pp=ml.regret_step_pp.min() if len(ml) else np.nan,
+                             learned_max_stress_saving_equal_LPSP=saving[ks] if ks is not None else np.nan,
+                             learned_stress_saving_at_LPSP=learned.LPSP_pct.iloc[ks] if ks is not None else np.nan,
+                             learned_stress_saving_point=(f"{learned.model.iloc[ks]}/{learned.family.iloc[ks]}:"
+                                                          f"{learned.knob.iloc[ks]}={learned.knob_value.iloc[ks]}"
+                                                          if ks is not None else ""),
+                             learned_stress_saving_rel_pct=100 * saving[ks] / xneed[ks] if ks is not None else np.nan,
+                             ml_max_stress_saving_vs_nf_and_stat=np.nanmax(ml_saving) if np.isfinite(ml_saving).any() else np.nan,
+                             ml_max_stress_saving_vs_nf_and_stat_rel_pct=100 * np.nanmax(ml_saving_rel)
+                             if np.isfinite(ml_saving_rel).any() else np.nan,
+                             learned_stress_saving_x=learned[x].iloc[ks] if ks is not None else np.nan,
+                             specgrid_learned_min_regret_interp_pp=rs_spec.regret_interp_pp.min(),
+                             specgrid_learned_min_regret_step_pp=rs_spec.regret_step_pp.min(),
+                             specgrid_learned_max_stress_saving=np.nanmax(sav_spec) if np.isfinite(sav_spec).any() else np.nan,
                              perfectbinary_min_regret_interp_pp=perf.regret_interp_pp.min() if len(perf) else np.nan,
                              oracle_DP_min_LPSP_pct=dpf.LPSP_pct.min(),
                              oracle_DP_x_at_min=dpf.loc[dpf.LPSP_pct.idxmin(), x],
@@ -325,8 +361,18 @@ def figures(pts: pd.DataFrame, reg: pd.DataFrame) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--refit", action="store_true", help="regenerate the forecasts")
+    ap.add_argument("--analyse-only", action="store_true", help="re-run analysis/figures from policy_points.csv")
     a = ap.parse_args()
     t0 = time.time()
+    if a.analyse_only:
+        pts = pd.read_csv(OUT / "policy_points.csv")
+        reg, reg_sum, gap_sum, head = analyse(pts)
+        reg.to_csv(OUT / "regret_points.csv", index=False)
+        reg_sum.to_csv(OUT / "regret_summary.csv", index=False)
+        gap_sum.to_csv(OUT / "oracle_gap_summary.csv", index=False)
+        head.to_csv(OUT / "headline.csv", index=False)
+        figures(pts, reg)
+        return
     for site in SITES:
         for label in LABELS:
             get_forecasts(site, label, refit=a.refit)
