@@ -59,3 +59,50 @@ Diebold-Mariano are planned); KR uses no weather because the NASA series is for 
 2. Simple models (logistic) are close to random forest - the full benchmark must test whether deep and foundation
    models add anything beyond them.
 3. Next: tuned 20+ model benchmark with statistics, then dispatch value with the corrected PV model.
+
+---
+
+# Criterion 2 - dispatch value of the forecasts (added 2026-10-22)
+
+Scripts: `dispatch_value.py` (size sweep, `results/dispatch_value_{BG,KR}.csv`) and `pareto.py`
+(`results/pareto_{BG,KR}.csv`, `results/pareto.png`). Corrected PV model (`src/pv/model.py`, 2018 weather);
+out-of-sample forecasts, April-December; KR uses Baghdad weather as a proxy.
+
+## 1. The thesis system is oversized once the PV model is corrected
+With 15 kWp / 30.6 kWh / 10 kW, Baghdad April-December: PV 21,700 kWh vs load 19,504 kWh, and LPSP is already 0.35 %
+with **no grid charging at all** (Mode 0: 0.29 %). The remaining ~57 kWh unserved is a power limit, not energy. The
+thesis sizing must be redone with the corrected model (product track), and forecast value cannot show at this size.
+
+## 2. Charging policy matters more than forecasting (size sweep)
+Allowing the grid to keep the battery topped up (Blanket) instead of the thesis rule (Mode 0: night-time only,
+below 80 % SOC, 0.25 C) cuts unserved energy by 5-67 % (BG) and 5-73 % (KR) across the sizes tested. A random-forest
+trigger reaches 98-100 % of Blanket's reliability gain in BG with ~1-3 % less grid charging; perfect 6-h foresight is
+no better. With outages ~54 % of hours in BG, "an outage within 6 h" is almost always true, so a forecast has little
+room to change the decision. This agrees with Babu (2026, *Results in Engineering*): grid-charging permission, not
+foresight, drives the benefit.
+
+## 3. Where forecast skill does turn into value: reliability vs. battery stress
+If time at high state of charge is treated as a cost (calendar ageing; see study S2), the trigger threshold traces a
+frontier between LPSP and hours with SOC >= 80 % (8 kWp, 10.2 kWh):
+
+| Site | LPSP at the same high-SOC hours as Mode 0 | Mode 0 |
+|---|---|---|
+| BG | Logistic 3.96 %, Random forest 4.07 %, Markov 6.61 %, Climatology 6.59 % | 5.33 % |
+| KR | Logistic 2.62 %, Random forest 3.23 %, Markov 4.04 %, Climatology 4.16 % | 2.70 % |
+
+- Learned forecasters dominate the Markov chain and climatology across the middle of the frontier at both sites
+  (e.g. BG: ~4 % vs ~6.6 % LPSP at equal battery stress).
+- At the corners (no grid charging, or always charging) every strategy converges - forecasts only matter for the
+  trade-off in between.
+- In BG, a learned trigger with a 0.3 pp LPSP penalty spends 15-19 % fewer hours at high SOC than Blanket.
+- Perfect foresight is a single point here (binary risk), close to Blanket; it is not an upper bound on this frontier.
+
+## Verdict on criterion 2
+Met as written (forecast-triggered dispatch changes unserved energy by > 10 % vs Mode 0), **but most of that effect
+comes from the charging policy, not the forecast**. The defensible claim is narrower: forecast skill buys a better
+reliability / battery-stress trade-off than a Markov model or climatology. Keep S1 GO with this framing:
+"skill is not value - outage forecasts matter on the reliability-ageing frontier, not for reliability alone."
+
+## Limitations of this part
+Single-year simulation; no battery ageing model yet (high-SOC hours is only a proxy); untuned thresholds and models;
+6-h look-ahead only; KR weather proxy; no economics (Iraqi grid vs generator tariffs to be sourced and cited).
