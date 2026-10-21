@@ -89,13 +89,15 @@ def hour_markov(o: pd.Series, h: int, fit_end: pd.Timestamp, window_days: int | 
             sel = m & (s[:-1] == a)
             p1 = (s[1:][sel].sum() + 1) / (sel.sum() + 2)
             P[hr, a] = [1 - p1, p1]
-    out = np.empty(len(o))
-    for i, (st, t) in enumerate(zip(o.values, o.index)):
-        v = np.array([1.0 - st, float(st)])
+    # h-step transition matrix for each starting clock hour: M[hr] = P[hr] @ P[hr+1] @ ... (h factors)
+    M = np.empty((24, 2, 2))
+    for hr in range(24):
+        A = np.eye(2)
         for k in range(h):
-            v = v @ P[(t.hour + k) % 24]
-        out[i] = v[1]
-    return pd.Series(out, index=o.index)
+            A = A @ P[(hr + k) % 24]
+        M[hr] = A
+    st = o.values.astype(int)
+    return pd.Series(M[o.index.hour, st, 1], index=o.index)
 
 
 # ----------------------------------------------------------------------------- features for ML
