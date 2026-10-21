@@ -1,0 +1,9 @@
+site,model,max_abs_diff_k1to6_vs_pilot_cache
+BG,RandomForest,4.440892098500626e-16
+BG,Logistic,0.0
+BG,HourMarkov,0.0
+BG,Climatology,0.0
+KR,RandomForest,4.440892098500626e-16
+KR,Logistic,0.0
+KR,HourMarkov,0.0
+KR,Climatology,0.0
