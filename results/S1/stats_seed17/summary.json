@@ -1,0 +1,404 @@
+{
+  "status": "partial_weather_unavailable",
+  "config": {
+    "study": "S1",
+    "output_directory": "results/S1/stats_seed17",
+    "seed": 17,
+    "dpi": 300,
+    "weibull_fixed_location": 0,
+    "quantile_interpolation": "linear"
+  },
+  "row_count": 8760,
+  "outage_hours": 4324,
+  "outage_share": 0.49360730593607305,
+  "event_count": 1064,
+  "duration_h": {
+    "mean": 4.06390977443609,
+    "median": 3.0,
+    "minimum": 1,
+    "maximum": 59,
+    "sample_std_ddof1": 3.7471411661979306,
+    "p95": 10.849999999999909
+  },
+  "by_month": [
+    {
+      "month": 1,
+      "hours": 744,
+      "outage_hours": 394,
+      "outage_share": 0.5295698924731183,
+      "event_count": 99
+    },
+    {
+      "month": 2,
+      "hours": 672,
+      "outage_hours": 295,
+      "outage_share": 0.43898809523809523,
+      "event_count": 83
+    },
+    {
+      "month": 3,
+      "hours": 744,
+      "outage_hours": 89,
+      "outage_share": 0.1196236559139785,
+      "event_count": 33
+    },
+    {
+      "month": 4,
+      "hours": 720,
+      "outage_hours": 314,
+      "outage_share": 0.4361111111111111,
+      "event_count": 83
+    },
+    {
+      "month": 5,
+      "hours": 744,
+      "outage_hours": 475,
+      "outage_share": 0.6384408602150538,
+      "event_count": 78
+    },
+    {
+      "month": 6,
+      "hours": 720,
+      "outage_hours": 548,
+      "outage_share": 0.7611111111111111,
+      "event_count": 138
+    },
+    {
+      "month": 7,
+      "hours": 744,
+      "outage_hours": 594,
+      "outage_share": 0.7983870967741935,
+      "event_count": 93
+    },
+    {
+      "month": 8,
+      "hours": 744,
+      "outage_hours": 544,
+      "outage_share": 0.7311827956989247,
+      "event_count": 136
+    },
+    {
+      "month": 9,
+      "hours": 720,
+      "outage_hours": 485,
+      "outage_share": 0.6736111111111112,
+      "event_count": 130
+    },
+    {
+      "month": 10,
+      "hours": 744,
+      "outage_hours": 115,
+      "outage_share": 0.15456989247311828,
+      "event_count": 46
+    },
+    {
+      "month": 11,
+      "hours": 720,
+      "outage_hours": 117,
+      "outage_share": 0.1625,
+      "event_count": 41
+    },
+    {
+      "month": 12,
+      "hours": 744,
+      "outage_hours": 354,
+      "outage_share": 0.47580645161290325,
+      "event_count": 104
+    }
+  ],
+  "by_hour": [
+    {
+      "hour": 0,
+      "hours": 365,
+      "outage_hours": 83,
+      "outage_share": 0.2273972602739726
+    },
+    {
+      "hour": 1,
+      "hours": 365,
+      "outage_hours": 117,
+      "outage_share": 0.32054794520547947
+    },
+    {
+      "hour": 2,
+      "hours": 365,
+      "outage_hours": 73,
+      "outage_share": 0.2
+    },
+    {
+      "hour": 3,
+      "hours": 365,
+      "outage_hours": 116,
+      "outage_share": 0.3178082191780822
+    },
+    {
+      "hour": 4,
+      "hours": 365,
+      "outage_hours": 99,
+      "outage_share": 0.27123287671232876
+    },
+    {
+      "hour": 5,
+      "hours": 365,
+      "outage_hours": 133,
+      "outage_share": 0.3643835616438356
+    },
+    {
+      "hour": 6,
+      "hours": 365,
+      "outage_hours": 141,
+      "outage_share": 0.3863013698630137
+    },
+    {
+      "hour": 7,
+      "hours": 365,
+      "outage_hours": 176,
+      "outage_share": 0.4821917808219178
+    },
+    {
+      "hour": 8,
+      "hours": 365,
+      "outage_hours": 168,
+      "outage_share": 0.4602739726027397
+    },
+    {
+      "hour": 9,
+      "hours": 365,
+      "outage_hours": 226,
+      "outage_share": 0.6191780821917808
+    },
+    {
+      "hour": 10,
+      "hours": 365,
+      "outage_hours": 228,
+      "outage_share": 0.6246575342465753
+    },
+    {
+      "hour": 11,
+      "hours": 365,
+      "outage_hours": 242,
+      "outage_share": 0.663013698630137
+    },
+    {
+      "hour": 12,
+      "hours": 365,
+      "outage_hours": 210,
+      "outage_share": 0.5753424657534246
+    },
+    {
+      "hour": 13,
+      "hours": 365,
+      "outage_hours": 236,
+      "outage_share": 0.6465753424657534
+    },
+    {
+      "hour": 14,
+      "hours": 365,
+      "outage_hours": 235,
+      "outage_share": 0.6438356164383562
+    },
+    {
+      "hour": 15,
+      "hours": 365,
+      "outage_hours": 239,
+      "outage_share": 0.6547945205479452
+    },
+    {
+      "hour": 16,
+      "hours": 365,
+      "outage_hours": 231,
+      "outage_share": 0.6328767123287671
+    },
+    {
+      "hour": 17,
+      "hours": 365,
+      "outage_hours": 262,
+      "outage_share": 0.7178082191780822
+    },
+    {
+      "hour": 18,
+      "hours": 365,
+      "outage_hours": 234,
+      "outage_share": 0.6410958904109589
+    },
+    {
+      "hour": 19,
+      "hours": 365,
+      "outage_hours": 234,
+      "outage_share": 0.6410958904109589
+    },
+    {
+      "hour": 20,
+      "hours": 365,
+      "outage_hours": 181,
+      "outage_share": 0.4958904109589041
+    },
+    {
+      "hour": 21,
+      "hours": 365,
+      "outage_hours": 189,
+      "outage_share": 0.5178082191780822
+    },
+    {
+      "hour": 22,
+      "hours": 365,
+      "outage_hours": 126,
+      "outage_share": 0.3452054794520548
+    },
+    {
+      "hour": 23,
+      "hours": 365,
+      "outage_hours": 145,
+      "outage_share": 0.3972602739726027
+    }
+  ],
+  "label_validation": {
+    "row_count": 8760,
+    "alignment_method": "row_order_checked_grid_energy_and_full_datetimes",
+    "full_datetime_count": 745,
+    "time_only_count": 8015,
+    "provenance_note": "Generator comparison is not independent: workbook labels are generator-derived.",
+    "national_status": {
+      "valid_comparison_count": 8760,
+      "coverage": 1.0,
+      "agreement_rate": 0.9995433789954338,
+      "disagreement_count": 4,
+      "missing_count": 0,
+      "invalid_binary_count": 0,
+      "invalid_source_count": 0,
+      "disagreements": [
+        {
+          "timestamp": "2018-07-21T20:00:00+03:00",
+          "outage": 0,
+          "comparator_outage": 1,
+          "national_status": 0.0,
+          "grid_kwh": 0.0,
+          "generator_kwh": 0.0
+        },
+        {
+          "timestamp": "2018-07-21T21:00:00+03:00",
+          "outage": 0,
+          "comparator_outage": 1,
+          "national_status": 0.0,
+          "grid_kwh": 0.0,
+          "generator_kwh": 0.0
+        },
+        {
+          "timestamp": "2018-07-22T06:00:00+03:00",
+          "outage": 0,
+          "comparator_outage": 1,
+          "national_status": 0.0,
+          "grid_kwh": 0.0,
+          "generator_kwh": 0.0
+        },
+        {
+          "timestamp": "2018-07-22T10:00:00+03:00",
+          "outage": 0,
+          "comparator_outage": 1,
+          "national_status": 0.0,
+          "grid_kwh": 0.0,
+          "generator_kwh": 0.0
+        }
+      ]
+    },
+    "generator": {
+      "valid_comparison_count": 8760,
+      "coverage": 1.0,
+      "agreement_rate": 1.0,
+      "disagreement_count": 0,
+      "missing_count": 0,
+      "invalid_binary_count": 0,
+      "invalid_source_count": 0,
+      "disagreements": []
+    }
+  },
+  "event_validation": {
+    "computed_event_count": 1064,
+    "workbook_event_count": 1064,
+    "record_differences": [],
+    "summary_comparison": {
+      "Number of outage events": {
+        "computed": 1064,
+        "workbook": 1064.0,
+        "difference": 0.0
+      },
+      "Total outage hours": {
+        "computed": 4324,
+        "workbook": 4324.0,
+        "difference": 0.0
+      },
+      "Mean duration (h)": {
+        "computed": 4.06390977443609,
+        "workbook": 4.06390977443609,
+        "difference": 0.0
+      },
+      "Median duration (h)": {
+        "computed": 3.0,
+        "workbook": 3.0,
+        "difference": 0.0
+      },
+      "95th percentile duration (h)": {
+        "computed": 10.849999999999909,
+        "workbook": 10.849999999999909,
+        "difference": 0.0
+      },
+      "Longest outage (h)": {
+        "computed": 59,
+        "workbook": 59.0,
+        "difference": 0.0
+      }
+    }
+  },
+  "weibull_fit": {
+    "included_events": 1064,
+    "excluded_boundary_events": 0,
+    "method": "maximum likelihood, location fixed at zero",
+    "failure": null,
+    "interpretation": "Descriptive continuous approximation to discrete hourly durations.",
+    "shape": 1.3908196124819705,
+    "location_h": 0.0,
+    "scale_h": 4.519271344947114
+  },
+  "boundary_events": [],
+  "source_sha256": {
+    "BG18760_with_analysis.xlsx": "fedf6910716d9521138b48100d9956188ef0e556871d20a23d35865485c7fe63",
+    "BG1-8760_v2026-04_homer_folder.xlsx": "9086c82647e68dbc85ce1875ee9072e19daab9818bdb534ddf5cc0f7d20d6b25"
+  },
+  "source_sheets": {
+    "BG18760_with_analysis.xlsx": [
+      "Hourly Data",
+      "Outage Events",
+      "Read Me"
+    ],
+    "BG1-8760_v2026-04_homer_folder.xlsx": [
+      "National Status"
+    ]
+  },
+  "energy_column_mapping": {
+    "Grid (kWh)": "grid_kwh",
+    "Generator (kWh)": "generator_kwh",
+    "Total (kWh)": "load_kwh",
+    "Outage (1/0)": "outage"
+  },
+  "weather": {
+    "file": "nasa_power_baghdad_2018_hourly_local.csv",
+    "present": false,
+    "schema": "UNVERIFIED",
+    "temperature_analysis_generated": false
+  },
+  "versions": {
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2",
+    "openpyxl": "3.1.5",
+    "python": "3.12.15 (main, Oct 14 2026, 01:08:45) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "limitations": [
+    "Annual timestamps reconstructed from row order; partial January validation.",
+    "Full-year descriptive EDA inspected: later evaluation months are not wholly unseen.",
+    "One household and one year; no causal or forecasting inference.",
+    "No inferential statistical test or independent stochastic runs: deterministic WP1 EDA.",
+    "Boundary-touching runs may be censored; excluded from Weibull fitting."
+  ]
+}

@@ -10,12 +10,25 @@
 ## Data
 `data/raw/BG18760_with_analysis.xlsx` (Hourly Data: Outage 1/0; Outage Events) cross-checked with
 `data/raw/BG1-8760_v2026-04_homer_folder.xlsx` (National Status). Exogenous: hourly 2018 air temperature for Baghdad
-(NASA POWER / ERA5, downloaded by the lead because agents have no network) - temperature drives load-shedding.
+(NASA POWER / ERA5, supplied by the lead because agents have no network). Whether temperature is associated with
+the outage proxy is a hypothesis; daily descriptive scatter cannot establish a causal effect on load-shedding.
 Limit: one year (8,760 h, 1,064 events); judge effect sizes accordingly.
+
+Operational target: the analysis workbook defines an outage by positive generator energy. Treat this as a
+generator-operation proxy for grid unavailability, not independently verified grid status. Retain source labels,
+expose disagreements with National Status, and do not adjudicate them without independent evidence. Perfect
+agreement with generator operation is internal consistency, not independent validation.
 
 ## Targets and horizons
 - Classification: grid status at t+h for h = 1, 3, 6, 12, 24 h; and "any outage in (t, t+h]".
 - Regression / survival: remaining duration of an ongoing outage.
+
+All forecasting claims must identify the proxy target. Completed-event durations, future grid/generator energy,
+realized daily maximum temperature and full-year climatology are unavailable to earlier forecasts. Use only
+information available at the forecast origin and training-only climatology.
+
+Before WP2 implementation, the lead must freeze numerical tuning budgets, search spaces, selection rules,
+baseline fallback behavior, ablations and dependence-aware inference. WP1 does not resolve these choices.
 
 ## Models (>= 10, same tuning budget for each)
 Baselines: persistence, seasonal-naive (same hour yesterday), climatology (P(outage | hour, month)).

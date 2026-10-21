@@ -1,0 +1,85 @@
+{
+  "seeds": [
+    0,
+    17
+  ],
+  "summary_equal_except_config": true,
+  "tables_byte_identical": true,
+  "independent_raw_accounting": {
+    "event_count": 1064,
+    "outage_hours": 4324,
+    "outage_share": 0.49360730593607305,
+    "duration_mean_h": 4.06390977443609
+  },
+  "class_counts": {
+    "0": 4436,
+    "1": 4324
+  },
+  "majority_class_share": 0.506392694063927,
+  "national_status": {
+    "valid_comparison_count": 8760,
+    "coverage": 1.0,
+    "agreement_rate": 0.9995433789954338,
+    "disagreement_count": 4,
+    "missing_count": 0,
+    "invalid_binary_count": 0,
+    "invalid_source_count": 0,
+    "disagreements": [
+      {
+        "timestamp": "2018-07-21T20:00:00+03:00",
+        "outage": 0,
+        "comparator_outage": 1,
+        "national_status": 0.0,
+        "grid_kwh": 0.0,
+        "generator_kwh": 0.0
+      },
+      {
+        "timestamp": "2018-07-21T21:00:00+03:00",
+        "outage": 0,
+        "comparator_outage": 1,
+        "national_status": 0.0,
+        "grid_kwh": 0.0,
+        "generator_kwh": 0.0
+      },
+      {
+        "timestamp": "2018-07-22T06:00:00+03:00",
+        "outage": 0,
+        "comparator_outage": 1,
+        "national_status": 0.0,
+        "grid_kwh": 0.0,
+        "generator_kwh": 0.0
+      },
+      {
+        "timestamp": "2018-07-22T10:00:00+03:00",
+        "outage": 0,
+        "comparator_outage": 1,
+        "national_status": 0.0,
+        "grid_kwh": 0.0,
+        "generator_kwh": 0.0
+      }
+    ]
+  },
+  "generator": {
+    "valid_comparison_count": 8760,
+    "coverage": 1.0,
+    "agreement_rate": 1.0,
+    "disagreement_count": 0,
+    "missing_count": 0,
+    "invalid_binary_count": 0,
+    "invalid_source_count": 0,
+    "disagreements": []
+  },
+  "weibull_fit": {
+    "included_events": 1064,
+    "excluded_boundary_events": 0,
+    "method": "maximum likelihood, location fixed at zero",
+    "failure": null,
+    "interpretation": "Descriptive continuous approximation to discrete hourly durations.",
+    "shape": 1.3908196124819705,
+    "location_h": 0.0,
+    "scale_h": 4.519271344947114
+  },
+  "scope": "Deterministic descriptive EDA; seed invariance is not statistical robustness or independent replication.",
+  "statistical_tests": "None: no model comparison or inferential claim in WP1.",
+  "weather_available": false
+}
