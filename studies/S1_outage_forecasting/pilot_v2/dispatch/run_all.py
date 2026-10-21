@@ -187,6 +187,7 @@ def analyse(pts: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame
                                    "interp_"))]), nf_spec, x).dropna(subset=["regret_interp_pp"])
             nfs_front = pareto_front(nf_spec, x)
             sav_spec = np.array([_x_needed(nfs_front, x, yv) for yv in learned.LPSP_pct]) - learned[x].to_numpy(float)
+            lenv = pareto_front(learned, x)          # envelope of all four learned/statistical forecasters
             bi = learned.loc[learned.regret_interp_pp.idxmin()]
             bs = learned.loc[learned.regret_step_pp.idxmin()]
             head.append(dict(zip(CFG_KEY, key), plane=plane,
@@ -211,6 +212,12 @@ def analyse(pts: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame
                              ml_max_stress_saving_vs_nf_and_stat_rel_pct=100 * np.nanmax(ml_saving_rel)
                              if np.isfinite(ml_saving_rel).any() else np.nan,
                              learned_stress_saving_x=learned[x].iloc[ks] if ks is not None else np.nan,
+                             learned_envelope_points=len(lenv),
+                             learned_envelope_share_regret_lt0_pct=100 * float((lenv.regret_interp_pp < 0).mean()),
+                             learned_envelope_max_regret_interp_pp=lenv.regret_interp_pp.max(),
+                             learned_envelope_x_range_regret_lt0=(f"{lenv.loc[lenv.regret_interp_pp < 0, x].min():.1f}-"
+                                                                  f"{lenv.loc[lenv.regret_interp_pp < 0, x].max():.1f}"
+                                                                  if (lenv.regret_interp_pp < 0).any() else ""),
                              specgrid_learned_min_regret_interp_pp=rs_spec.regret_interp_pp.min(),
                              specgrid_learned_min_regret_step_pp=rs_spec.regret_step_pp.min(),
                              specgrid_learned_max_stress_saving=np.nanmax(sav_spec) if np.isfinite(sav_spec).any() else np.nan,
@@ -327,9 +334,10 @@ def figures(pts: pd.DataFrame, reg: pd.DataFrame) -> None:
                     ax.set_ylim(0, top)
                     for s in ("top", "right"):
                         ax.spines[s].set_visible(False)
-            axes[0, 0].legend(fontsize=7, loc="upper right")
+            h_, l_ = axes[0, 0].get_legend_handles_labels()
+            fig.legend(h_, l_, loc="lower center", ncol=5, fontsize=8, frameon=False)
             fig.suptitle(f"S1 dispatch v2 - LPSP vs {plane} - label {label}", fontsize=11)
-            fig.tight_layout()
+            fig.tight_layout(rect=(0, 0.06, 1, 1))
             fig.savefig(OUT / f"pareto_{plane}_{label}.png", dpi=200)
             plt.close(fig)
     # regret plot, primary label
@@ -350,10 +358,11 @@ def figures(pts: pd.DataFrame, reg: pd.DataFrame) -> None:
                 ax.grid(alpha=0.25, lw=0.5)
                 for s in ("top", "right"):
                     ax.spines[s].set_visible(False)
-        axes[0, 0].legend(fontsize=7)
+        h_, l_ = axes[0, 0].get_legend_handles_labels()
+        fig.legend(h_, l_, loc="lower center", ncol=5, fontsize=8, frameon=False)
         fig.suptitle(f"Regret of each forecaster's front (interpolated baseline), {plane}, label {PRIMARY_LABEL}; "
                      "< 0 = forecast beats no-forecast", fontsize=11)
-        fig.tight_layout()
+        fig.tight_layout(rect=(0, 0.05, 1, 1))
         fig.savefig(OUT / f"regret_{plane}_{PRIMARY_LABEL}.png", dpi=200)
         plt.close(fig)
 
