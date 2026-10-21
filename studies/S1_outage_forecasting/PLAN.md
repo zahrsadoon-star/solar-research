@@ -7,6 +7,12 @@
   LPSP, grid import and cost against Mode 0, blanket pre-charging and perfect foresight.
 - **RQ4** Do conclusions hold on the other two households (BS, KR) if their generator data reveal outages?
 
+## Positioning (from literature/S1_related_work_alphaxiv.md)
+Prior outage forecasting targets weather-driven, region-level outages; random splits inflate their scores
+(arXiv:2608.24665). Outage-aware dispatch on weak grids has used a Markov chain with survey-estimated rates
+(arXiv:2604.18268). S1's contribution: household-level forecasting of chronic load shedding from a measured record,
+and whether learned models add dispatch value **beyond a fitted Markov chain**.
+
 ## Data
 `data/raw/BG18760_with_analysis.xlsx` (Hourly Data: Outage 1/0; Outage Events) cross-checked with
 `data/raw/BG1-8760_v2026-04_homer_folder.xlsx` (National Status). Exogenous: hourly 2018 air temperature for Baghdad
