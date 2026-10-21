@@ -145,3 +145,19 @@ def test_perfect_binary_risk_looks_only_ahead():
     fc = {m: pd.DataFrame(np.zeros((n, 6)), columns=range(1, 7)) for m in MODELS}
     r = dispatch_risk(fc, np.ones(n, bool), o)["PerfectBinary"]
     assert list(np.flatnonzero(r)) == [4, 5, 6, 7, 8, 9]
+
+
+def test_frontier_regret_hand_example():
+    from frontier import interp_value, pareto_front, regret_table
+    nf = pd.DataFrame({"x": [10.0, 20.0, 30.0, 25.0], "LPSP_pct": [5.0, 3.0, 2.0, 4.0]})   # (25, 4) is dominated
+    assert list(pareto_front(nf, "x").x) == [10.0, 20.0, 30.0]
+    fc = pd.DataFrame({"x": [5.0, 15.0, 20.0, 40.0], "LPSP_pct": [9.0, 3.5, 3.0, 1.5]})
+    r = regret_table(fc, nf, "x")
+    assert np.isnan(r.regret_step_pp[0]) and np.isnan(r.regret_interp_pp[0])        # below every NF point
+    assert r.regret_step_pp[1] == pytest.approx(3.5 - 5.0)                            # step: NF point at x=10
+    assert r.regret_interp_pp[1] == pytest.approx(3.5 - 4.0)                          # chord 10..20 at 15
+    assert r.interp_bracket_width[1] == pytest.approx(10.0)
+    assert r.regret_interp_pp[2] == pytest.approx(0.0)
+    assert r.regret_interp_pp[3] == pytest.approx(1.5 - 2.0)                          # beyond: last NF point
+    v, _ = interp_value(nf, "x", np.array([30.0]))
+    assert v[0] == pytest.approx(2.0)

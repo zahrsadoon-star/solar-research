@@ -80,10 +80,15 @@ def get_forecasts(site: str, label: str, refit: bool = False) -> dict[str, pd.Da
 def dispatch_risk(fc: dict[str, pd.DataFrame], mask: np.ndarray, outage: np.ndarray) -> dict[str, np.ndarray]:
     """risk_t = max_k P(outage at t+k), k=1..H, for each model over the window, plus the binary
     'PerfectBinary' risk = 1 if an outage actually occurs in t+1..t+H (same policy shape, not an oracle)."""
-    risks = {m: fc[m].loc[mask].max(axis=1).to_numpy(float) for m in MODELS}
-    for m, r in risks.items():
-        if np.isnan(r).any():
+    # In the last H hours of 2018 some targets t+k fall outside the year and have no forecast: the max is taken over
+    # the available k; the final hour (no k available) gets risk 0. Any other gap is an error.
+    risks = {}
+    for m in MODELS:
+        f = fc[m].loc[mask]
+        allnan = f.isna().all(axis=1).to_numpy()
+        if allnan[:-1].any():
             raise ValueError(f"{m}: missing forecasts in the evaluation window")
+        risks[m] = f.max(axis=1).fillna(0.0).to_numpy(float)
     o = np.asarray(outage, int)
     n = len(o)
     fut = np.array([o[t + 1:t + 1 + H].max() if t + 1 < n else 0 for t in range(n)], float)
