@@ -1,5 +1,5 @@
 {
-  "status": "partial_weather_unavailable",
+  "status": "complete",
   "config": {
     "study": "S1",
     "output_directory": "results/S1/eda",
@@ -30989,7 +30989,7 @@
         "source_clock": "00:00:00"
       }
     ],
-    "alignment_limitation": "Time-only clocks are audited separately; label agreement is conditional on positional alignment.",
+    "alignment_limitation": "Index built by position from 2018-01-01 00:00 Baghdad local; only full datetimes check calendar alignment. Time-only Excel cells are diagnostic only; agreement is conditional on row order.",
     "target_definition": "Positive generator energy; proxy for national-grid unavailability.",
     "uncertainty_policy": "Retain workbook labels and expose all disagreements; no adjudication without independent evidence.",
     "provenance_note": "Generator comparison is not independent: workbook labels are generator-derived.",
@@ -31097,7 +31097,9 @@
   "boundary_events": [],
   "source_sha256": {
     "BG18760_with_analysis.xlsx": "fedf6910716d9521138b48100d9956188ef0e556871d20a23d35865485c7fe63",
-    "BG1-8760_v2026-04_homer_folder.xlsx": "9086c82647e68dbc85ce1875ee9072e19daab9818bdb534ddf5cc0f7d20d6b25"
+    "BG1-8760_v2026-04_homer_folder.xlsx": "9086c82647e68dbc85ce1875ee9072e19daab9818bdb534ddf5cc0f7d20d6b25",
+    "nasa_power_baghdad_2018_hourly_local.csv": "7a1f19a6c0e44214df5fc0a15f9cf8c7770deca787398b99c2a7f0b956b79d16",
+    "nasa_power_baghdad_2018_hourly_local.meta.json": "77e2f0d47df1eab394c2c72bbb64003921ac863dd1d6bc4ff12db354bd354bc6"
   },
   "source_sheets": {
     "BG18760_with_analysis.xlsx": [
@@ -31117,9 +31119,16 @@
   },
   "weather": {
     "file": "nasa_power_baghdad_2018_hourly_local.csv",
-    "present": false,
-    "schema": "UNVERIFIED",
-    "temperature_analysis_generated": false
+    "present": true,
+    "schema": {
+      "temp_air_c": "degC",
+      "rel_humidity_pct": "%",
+      "wind_speed_10m_ms": "m/s",
+      "ghi_wm2": "W/m2"
+    },
+    "time_convention": "Naive Baghdad local timestamps localized without shift",
+    "unit_conversion": "none",
+    "temperature_analysis_generated": true
   },
   "versions": {
     "numpy": "2.5.4",

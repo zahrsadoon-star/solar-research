@@ -1,9 +1,8 @@
 # S1 WP1: descriptive outage-proxy audit
 
-Status: **partial; weather-dependent MUST-FIX remains blocked**. The required
-`data/raw/nasa_power_baghdad_2018_hourly_local.csv` is absent. Its schema, units,
-sentinels and timestamp convention cannot be inspected. No substitute weather was
-created. The complete eight-column loader and temperature plot are not delivered.
+Status: **complete WP1 descriptive EDA with supplied NASA POWER weather**.
+Weather is joined on all local hours of 2018 without unit conversion or clock shift.
+The source CSV and metadata remain unchanged.
 
 ## Reproduce
 
@@ -12,25 +11,23 @@ From the repository root with Python 3.12 (tested: 3.12.15):
 ```powershell
 # For a fresh environment with package access; current venv is already provisioned:
 python -m pip install -r requirements-s1.txt
-python scripts/s1_eda.py --outage-only
+python scripts/s1_eda.py
+python scripts/s1_stats_check.py
 python -m pytest -q
 ```
-
-The full test suite intentionally fails `test_complete_dataset_contract` while
-weather is absent; this acceptance requirement is no longer skipped. Supplying
-the file alone is insufficient: its actual schema must first be inspected and
-the full loader implemented. Only then run `python scripts/s1_eda.py` without
-`--outage-only`. Do not use the partial run as a full WP1 acceptance result.
 
 Configuration: `experiments/s1_eda.json`; dependencies: `requirements-s1.txt`.
 The script enforces 300 dpi, Weibull location zero and linear quantile
 interpolation. Seed 0 is recorded, but this EDA is deterministic: no statistical
 test, stochastic model experiment or independent-run inference is performed.
-Earlier seed-invariance checks are reproducibility checks, not replication.
+The complete EDA is rerun with seeds 0 and 17 by `s1_stats_check.py`;
+`stats_audit.json` records identical tables and summaries except configuration,
+independent event accounting and daily temperature aggregation. Alternate outputs
+are in `stats_seed17/`. These checks establish reproducibility, not replication.
 
 ## What was run and saved
 
-`scripts/s1_eda.py --outage-only` reads the analysis workbook's `Hourly Data`,
+`scripts/s1_eda.py` reads the analysis workbook's `Hourly Data`,
 compares labels with the HOMER workbook's `National Status`, checks individual
 events and summary statistics against `Outage Events` (header on Excel row 3),
 and fits a descriptive Weibull by maximum likelihood to complete event durations.
@@ -41,10 +38,17 @@ Outputs in `eda/`:
 - `summary.json`: source hashes, software versions, configuration, hourly/monthly
   summaries, label and clock disagreements, event comparisons, duration fit.
 - `tables.csv`: monthly/hourly/joint denominators and shares, events, duration
-  histogram and fitted density underlying the figures.
+  histogram, fitted density and daily maximum temperature/share underlying the figures.
 - `outage_hour_month.png`, `outage_duration.png`: 300 dpi descriptive figures.
 
-No temperature figure or daily temperature table was generated.
+`outage_temperature.png` plots daily generator-operation proxy share against daily
+maximum air temperature (degC), using complete local days. The `daily_temperature`
+rows in `tables.csv` contain the values and denominators. This is descriptive
+association only; the PLAN temperature statement remains a hypothesis.
+The independent audit in `stats_audit.json` verifies 365 complete local days;
+daily maximum temperature spans 12.1 to 49.16 degC. No association coefficient
+or significance test was estimated, so the plot alone does not establish a
+temperature relationship independently of seasonality or serial dependence.
 
 ## Findings and target policy
 
@@ -68,6 +72,9 @@ Retain these source labels and expose the conflicting records; do not silently
 relabel or claim independent grid verification. Adjudication requires independent
 evidence from the lead/data owner.
 
+The hourly index is built by position from 2018-01-01 00:00 Baghdad local time.
+Only full datetime cells check calendar alignment; time-only Excel cells cannot
+establish it and their clock differences are diagnostics, not alignment evidence.
 The status workbook has 745 usable full datetimes and 8,015 time-only values.
 Clock auditing finds 7,682 mismatches and 333 matches among time-only values;
 all observed time-only values are midnight. Matching rowwise grid energy and
@@ -85,8 +92,8 @@ or dispatch benefit has been established. Full-year EDA has been inspected;
 later evaluation months cannot be described as wholly unseen.
 
 Completed-event durations, future generator/grid energy, realized daily maximum
-temperature and full-year climatology must not enter earlier forecasts. A future
-daily temperature scatter would show descriptive association only. Before WP2,
+temperature and full-year climatology must not enter earlier forecasts. The
+daily temperature scatter shows descriptive association only. Before WP2,
 freeze tuning budgets, search spaces, selection rules, baseline fallbacks,
 ablations and dependence-aware inference. The present task does not select these
 future protocol choices.

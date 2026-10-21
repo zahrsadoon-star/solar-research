@@ -13,6 +13,10 @@ ANALYSIS = "BG18760_with_analysis.xlsx"
 STATUS = "BG1-8760_v2026-04_homer_folder.xlsx"
 WEATHER = "nasa_power_baghdad_2018_hourly_local.csv"
 TZ = "Asia/Baghdad"
+WEATHER_UNITS = {
+    "temp_air_c": "degC", "rel_humidity_pct": "%",
+    "wind_speed_10m_ms": "m/s", "ghi_wm2": "W/m2",
+}
 ENERGY_COLUMNS = {
     "Grid (kWh)": "grid_kwh", "Generator (kWh)": "generator_kwh",
     "Total (kWh)": "load_kwh", "Outage (1/0)": "outage",
@@ -38,14 +42,18 @@ def load_outage_observations(raw_dir: Path = RAW) -> pd.DataFrame:
     BG18760_with_analysis.xlsx, 'Hourly Data': Timestamp, Grid (kWh),
     Generator (kWh), Total (kWh), Hour, Month, Outage (1/0).
     'Read Me' says timestamps were reconstructed from row order with partial
-    January validation. Localize to Asia/Baghdad without shifting the clock.
+    January validation. Build the index by position from 2018-01-01 00:00
+    Baghdad local time. BG Date & Time cells are mostly time-only Excel
+    values; only full datetimes can check calendar alignment (745 in the
+    supplied National Status sheet). Never reconstruct dates from time-only cells.
     This partial dataset is explicitly NOT the complete WP1 dataset.
     """
     source = pd.read_excel(Path(raw_dir) / ANALYSIS, sheet_name="Hourly Data")
-    idx = pd.DatetimeIndex(pd.to_datetime(source["Timestamp"])).tz_localize(TZ)
+    supplied = pd.DatetimeIndex(pd.to_datetime(source["Timestamp"])).tz_localize(TZ)
     expected = pd.date_range("2018-01-01", periods=8760, freq="h", tz=TZ)
-    if not idx.equals(expected):
+    if not supplied.equals(expected):
         raise ValueError("Hourly Data must cover exactly the 8,760 local hours of 2018")
+    idx = expected  # Reconstruct by position; analysis timestamps are a consistency check.
     if not np.array_equal(source["Hour"], idx.hour) or not np.array_equal(source["Month"], idx.month):
         raise ValueError("Workbook Hour/Month disagree with Timestamp")
     df = source[list(ENERGY_COLUMNS)].rename(columns=ENERGY_COLUMNS)
@@ -58,27 +66,35 @@ def load_outage_observations(raw_dir: Path = RAW) -> pd.DataFrame:
 
 
 def load_outage_dataset(raw_dir: Path = RAW) -> pd.DataFrame:
-    """Load the full 2018 hourly dataset, failing closed on unavailable weather.
+    """Join weather to generator-operation proxy observations by local hour.
 
-    Energy source: BG18760_with_analysis.xlsx / Hourly Data; exact source
-    columns: Timestamp, Grid (kWh), Generator (kWh), Total (kWh), Hour,
-    Month, Outage (1/0). Output units are kWh and binary outage. The label
-    means positive generator output, a proxy for grid unavailability, not
-    independently verified national-grid status. Preserve source labels.
-    Weather source: nasa_power_baghdad_2018_hourly_local.csv, already local.
-    That file is absent from this checkout; its exact headers, units and
-    missing-value codes are UNVERIFIED. Mapping to temp_air_c (deg C),
-    rel_humidity_pct (%), wind_speed_10m_ms (m/s), ghi_wm2 (W/m2) cannot
-    safely be implemented until the real file is inspected. Never fabricate,
-    interpolate or substitute weather. The complete loader remains blocked.
+    Weather timestamps are naive Baghdad clocks, already UTC+3. Localize,
+    never shift; preserve degC, %, m/s and W/m2 values without conversion.
+    Require every local hour of 2018 exactly once and finite measurements;
+    never interpolate, substitute weather or adjudicate source outage labels.
     """
     path = Path(raw_dir) / WEATHER
     if not path.is_file():
         raise FileNotFoundError(f"Required local weather file is missing: {path}")
-    raise NotImplementedError(
-        "Weather file is now present; inspect its timestamp/header/unit/sentinel "
-        "schema before implementing a validated one-to-one local-time join."
-    )
+    weather = pd.read_csv(path)
+    required = {"time_local_baghdad", *WEATHER_UNITS}
+    if not required.issubset(weather.columns):
+        raise ValueError(f"Missing weather columns: {sorted(required - set(weather.columns))}")
+    if len(weather) != 8760:
+        raise ValueError("Weather must contain exactly 8,760 hourly rows")
+    idx = pd.DatetimeIndex(pd.to_datetime(weather.pop("time_local_baghdad"), errors="raise"))
+    if idx.tz is not None:
+        raise ValueError("Weather timestamps must be naive Baghdad local time")
+    expected = pd.date_range("2018-01-01", periods=8760, freq="h", tz=TZ)
+    idx = idx.tz_localize(TZ)
+    if not idx.equals(expected):
+        raise ValueError("Weather must cover unique, ordered, consecutive local hours of 2018")
+    weather = weather[list(WEATHER_UNITS)].apply(pd.to_numeric, errors="raise")
+    if not np.isfinite(weather.to_numpy(dtype=float)).all():
+        raise ValueError("Weather measurements must be finite and nonmissing")
+    weather.index = idx.rename("timestamp")
+    observations = load_outage_observations(raw_dir)
+    return observations.join(weather, how="left", validate="one_to_one")
 
 
 def validate_outage_labels(
@@ -125,7 +141,7 @@ def validate_outage_labels(
         "time_only_clock_agreement_count": time_only - len(clock_disagreements),
         "time_only_clock_disagreement_count": len(clock_disagreements),
         "time_only_clock_disagreements": clock_disagreements,
-        "alignment_limitation": "Time-only clocks are audited separately; label agreement is conditional on positional alignment.",
+        "alignment_limitation": "Index built by position from 2018-01-01 00:00 Baghdad local; only full datetimes check calendar alignment. Time-only Excel cells are diagnostic only; agreement is conditional on row order.",
         "target_definition": "Positive generator energy; proxy for national-grid unavailability.",
         "uncertainty_policy": "Retain workbook labels and expose all disagreements; no adjudication without independent evidence.",
         "provenance_note": "Generator comparison is not independent: workbook labels are generator-derived.",

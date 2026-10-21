@@ -1,4 +1,4 @@
-"""Deterministic WP1 EDA. Run with --outage-only while weather is unavailable."""
+"""Deterministic WP1 EDA; optional --outage-only produces a partial audit."""
 
 import argparse
 import hashlib
@@ -21,7 +21,7 @@ import pandas as pd
 from scipy.stats import weibull_min
 
 from outage.data import (
-    ANALYSIS, ENERGY_COLUMNS, RAW, STATUS, WEATHER, load_outage_dataset,
+    ANALYSIS, ENERGY_COLUMNS, RAW, STATUS, WEATHER, WEATHER_UNITS, load_outage_dataset,
     load_outage_observations, outage_events, validate_outage_events, validate_outage_labels,
 )
 
@@ -104,13 +104,13 @@ def run(config: dict[str, Any], outage_only: bool = False) -> dict[str, Any]:
         tables.append(daily.reset_index().assign(table="daily_temperature"))
         fig, ax = plt.subplots(figsize=(8, 5))
         ax.scatter(daily["temp_air_c"], daily["outage_share"], alpha=.5, s=16)
-        ax.set(xlabel="Daily maximum air temperature (deg C)", ylabel="Daily outage share",
+        ax.set(xlabel="Daily maximum air temperature (deg C)", ylabel="Daily generator-operation proxy share",
                title="Descriptive association; not a causal estimate", ylim=(0, 1))
         fig.tight_layout()
         fig.savefig(output / "outage_temperature.png", dpi=config["dpi"])
         plt.close(fig)
 
-    sources = [ANALYSIS, STATUS] + ([] if outage_only else [WEATHER])
+    sources = [ANALYSIS, STATUS] + ([] if outage_only else [WEATHER, Path(WEATHER).with_suffix(".meta.json").name])
     summary = {
         "status": "partial_weather_unavailable" if outage_only and not (RAW / WEATHER).exists() else
                   "partial_outage_only" if outage_only else "complete",
@@ -127,7 +127,9 @@ def run(config: dict[str, Any], outage_only: bool = False) -> dict[str, Any]:
         "source_sha256": {name: hashlib.sha256((RAW / name).read_bytes()).hexdigest() for name in sources},
         "source_sheets": {ANALYSIS: ["Hourly Data", "Outage Events", "Read Me"], STATUS: ["National Status"]},
         "energy_column_mapping": ENERGY_COLUMNS,
-        "weather": {"file": WEATHER, "present": (RAW / WEATHER).is_file(), "schema": "UNVERIFIED",
+        "weather": {"file": WEATHER, "present": (RAW / WEATHER).is_file(), "schema": WEATHER_UNITS,
+                    "time_convention": "Naive Baghdad local timestamps localized without shift",
+                    "unit_conversion": "none",
                     "temperature_analysis_generated": not outage_only},
         "versions": {name: importlib.metadata.version(name) for name in
                      ["numpy", "pandas", "scipy", "matplotlib", "openpyxl"]} | {"python": sys.version},

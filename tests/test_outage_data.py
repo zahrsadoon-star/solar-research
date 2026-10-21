@@ -81,10 +81,49 @@ def test_loader_fails_closed_without_weather(tmp_path: Path) -> None:
         load_outage_dataset(tmp_path)
 
 
-def test_loader_requires_real_schema_inspection(tmp_path: Path) -> None:
-    (tmp_path / WEATHER).touch()
-    with pytest.raises(NotImplementedError, match="inspect"):
+@pytest.mark.parametrize("kind", ["missing_column", "missing_hour", "extra_hour", "duplicate", "reverse", "shift", "half_hour", "nat", "aware", "nan", "inf", "text"])
+def test_weather_rejects_invalid_input(tmp_path: Path, kind: str) -> None:
+    """Reject broken local-hour coverage and invalid weather values before joining."""
+    weather = pd.read_csv(RAW / WEATHER)
+    if kind == "missing_column":
+        weather = weather.drop(columns="temp_air_c")
+    elif kind == "missing_hour":
+        weather = weather.iloc[:-1]
+    elif kind == "extra_hour":
+        weather = pd.concat([weather, weather.iloc[-1:]])
+    elif kind == "duplicate":
+        weather.loc[1, "time_local_baghdad"] = weather.loc[0, "time_local_baghdad"]
+    elif kind == "reverse":
+        weather = weather.iloc[::-1]
+    elif kind in {"shift", "half_hour", "aware"}:
+        stamps = pd.to_datetime(weather["time_local_baghdad"])
+        if kind == "aware":
+            stamps = stamps.dt.tz_localize("Asia/Baghdad")
+        else:
+            stamps += pd.Timedelta(hours=3) if kind == "shift" else pd.Timedelta(minutes=30)
+        weather["time_local_baghdad"] = stamps.astype(str)
+    elif kind == "nat":
+        weather.loc[0, "time_local_baghdad"] = None
+    else:
+        weather["temp_air_c"] = weather["temp_air_c"].astype(object)
+        weather.loc[0, "temp_air_c"] = {"nan": np.nan, "inf": np.inf, "text": "invalid"}[kind]
+    weather.to_csv(tmp_path / WEATHER, index=False)
+    with pytest.raises(ValueError):
         load_outage_dataset(tmp_path)
+
+
+def test_weather_join_preserves_values_and_local_time(observations: pd.DataFrame) -> None:
+    """All weather units and hourly energy/labels survive the join unchanged."""
+    source = pd.read_csv(RAW / WEATHER)
+    result = load_outage_dataset()
+    pd.testing.assert_frame_equal(result[observations.columns], observations)
+    for column in source.columns.drop("time_local_baghdad"):
+        np.testing.assert_array_equal(result[column], source[column])
+    expected = pd.DatetimeIndex(pd.to_datetime(source["time_local_baghdad"])).tz_localize("Asia/Baghdad")
+    assert result.index.equals(expected)
+    audit = validate_outage_labels(result)
+    assert audit["full_datetime_count"] == 745
+    assert audit["national_status"]["disagreement_count"] == 4
 
 
 @pytest.fixture(scope="module")
