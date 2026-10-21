@@ -1,0 +1,86 @@
+[
+ {
+  "file": "data/raw/BG1-8760.xlsx",
+  "source": "C:\\Users\\lenovo\\OneDrive - Universiti Tenaga Nasional\\Desktop\\final thesess\\data\\BG1-8760.xlsx",
+  "sha256_16": "522ba695f4f6471e",
+  "modified": "2026-06-06T17:57",
+  "kb": 425
+ },
+ {
+  "file": "data/raw/BG1-8760_v2026-03_downloads.xlsx",
+  "source": "D:\\Downloads\\BG1-8760.xlsx",
+  "sha256_16": "1695d7c16fee0ffa",
+  "modified": "2026-03-19T18:58",
+  "kb": 230
+ },
+ {
+  "file": "data/raw/BG1-8760_v2026-04_homer_folder.xlsx",
+  "source": "C:\\Users\\lenovo\\OneDrive - Universiti Tenaga Nasional\\Desktop\\final thesess\\data\\البيانات المهمة\\BG1-8760.xlsx",
+  "sha256_16": "9086c82647e68dbc",
+  "modified": "2026-04-07T16:41",
+  "kb": 701
+ },
+ {
+  "file": "data/raw/BS-8760.xlsx",
+  "source": "C:\\Users\\lenovo\\OneDrive - Universiti Tenaga Nasional\\Desktop\\final thesess\\data\\BS-8760.xlsx",
+  "sha256_16": "2b680d34d7bc2492",
+  "modified": "2026-03-16T20:31",
+  "kb": 178
+ },
+ {
+  "file": "data/raw/KR-8760.xlsx",
+  "source": "C:\\Users\\lenovo\\OneDrive - Universiti Tenaga Nasional\\Desktop\\final thesess\\data\\KR-8760.xlsx",
+  "sha256_16": "b99c34f1a95be95a",
+  "modified": "2026-03-16T20:31",
+  "kb": 208
+ },
+ {
+  "file": "data/raw/BG18760_with_analysis.xlsx",
+  "source": "D:\\Downloads\\BG18760_with_analysis.xlsx",
+  "sha256_16": "fedf6910716d9521",
+  "modified": "2026-09-19T10:18",
+  "kb": 520
+ },
+ {
+  "file": "data/raw/hourly_load_8760.csv",
+  "source": "D:\\Downloads\\hourly_load_8760.csv",
+  "sha256_16": "e6c37a9ca9916ed7",
+  "modified": "2026-02-20T19:22",
+  "kb": 618
+ },
+ {
+  "file": "data/raw/BG1_HOMER_Load.csv",
+  "source": "D:\\Downloads\\BG1_HOMER_Load.csv",
+  "sha256_16": "f4d0bf5bdb45a6c5",
+  "modified": "2026-03-31T16:05",
+  "kb": 42
+ },
+ {
+  "file": "data/raw/Baghdad_Grid_Reliability_HOMER.csv",
+  "source": "D:\\Downloads\\Baghdad_Grid_Reliability_HOMER.csv",
+  "sha256_16": "177012365844552a",
+  "modified": "2026-03-31T17:37",
+  "kb": 17
+ },
+ {
+  "file": "data/raw/Baghdad_Grid_RealTimeRates_HOMER.csv",
+  "source": "D:\\Downloads\\Baghdad_Grid_RealTimeRates_HOMER.csv",
+  "sha256_16": "da3924044a334a31",
+  "modified": "2026-03-31T17:09",
+  "kb": 72
+ },
+ {
+  "file": "data/raw/PV_LONGI_650W_1module_Baghdad_HOMER.csv",
+  "source": "D:\\Downloads\\PV_LONGI_650W_1module_Baghdad_HOMER.csv",
+  "sha256_16": "5fa5707e94c28b9f",
+  "modified": "2026-03-31T16:38",
+  "kb": 188
+ },
+ {
+  "file": "data/raw/homer_pro_data_simulation.csv",
+  "source": "C:\\Users\\lenovo\\OneDrive - Universiti Tenaga Nasional\\Desktop\\final thesess\\data\\البيانات المهمة\\homer pro dadta sumolation.csv",
+  "sha256_16": "18ce37712727dab6",
+  "modified": "2026-04-08T13:43",
+  "kb": 2593
+ }
+]

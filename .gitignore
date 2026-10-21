@@ -11,3 +11,5 @@ build/
 dist/
 *.egg-info/
 runs/tmp/
+
+# per-task agent notes are committed on codex/* branches only
