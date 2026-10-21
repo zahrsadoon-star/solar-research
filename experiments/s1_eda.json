@@ -1,0 +1,8 @@
+{
+  "study": "S1",
+  "output_directory": "results/S1/eda",
+  "seed": 0,
+  "dpi": 300,
+  "weibull_fixed_location": 0,
+  "quantile_interpolation": "linear"
+}
