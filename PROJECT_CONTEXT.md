@@ -36,11 +36,20 @@ Owner: **Zaher** (electrical engineer, MSc EE at UNITEN, Malaysia; from Nasiriya
 | `BG1-8760_v2026-04_homer_folder.xlsx` | Same plus sheet **National Status** (1 = national grid on). |
 | `BG18760_with_analysis.xlsx` | Analysis workbook: Hourly Data with **Outage (1/0)**, hourly/monthly profiles, **Outage Events** (1,064 events, 4,324 outage h, mean 4.06 h), Thesis Check. Best source for outage forecasting. |
 | `BG1-8760_v2026-03_downloads.xlsx` | Older 2-column export (load, generator). Superseded - do not use. |
-| `BS-8760.xlsx` | Second **Baghdad** household (confirmed by Zaher). Column 0 load; column 1 is all zeros, so it holds **no generator/outage information** - usable for load, not for outage forecasting. |
-| `KR-8760.xlsx` | Household in the **Kurdistan Region** (Zaher). Column 0 grid load (26,562 kWh/y), column 1 generator (4,915 kWh/y, 1,216 non-zero hours) -> outages can be inferred from generator use. Zaher did not prepare it himself: it came with the same dataset as BG1 (see provenance). |
+| `BS-8760.xlsx` | **Basra house** (BS). Load only; column 1 all zeros because the house was supplied by the grid 24 h - no outage information. |
+| `KR-8760.xlsx` | **Karbala house** (KR). Column 0 grid load, column 1 private-generator energy -> outages can be inferred. |
 | `Baghdad_Grid_Reliability_HOMER.csv`, `Baghdad_Grid_RealTimeRates_HOMER.csv`, `BG1_HOMER_Load.csv`, `PV_LONGI_650W_1module_Baghdad_HOMER.csv`, `homer_pro_data_simulation.csv` | HOMER Pro inputs/outputs used for benchmarking. |
 | `hourly_load_8760.csv` | NOT Baghdad (2006-2008 household dataset, starts 2006-12-16). Unrelated; ignore unless asked. |
 Site: lat 33.322535, lon 44.339421. Panel: LONGi Hi-MO X10 650 W (datasheet in knowledge/thesis).
+
+## Households (confirmed from Al-Shamri PhD 2019, Leeds, pp. 227-229 / abbreviations pp. xxvi-xxvii)
+| Code | Meaning | Location | Residents | Annual energy 2018 |
+|---|---|---|---|---|
+| **BG** (BG1) | **Baghdad house** | Al-Mansour, Baghdad (33.322535, 44.339421 - the thesis site coordinates) | 4 | grid 14,909 kWh + local diesel generator 6,997 kWh |
+| **KR** | **Karbala house** | Maytham al-Tamar St, Karbala (32.613561, 44.042958) | 3 | grid 26,562 kWh + private generator 4,915 kWh |
+| **BS** | **Basra house** | Al-Tuwaisa, Basra (30.515271, 47.818658) | 7 | 36,696 kWh, all from the national grid (supplied 24 h) |
+Notes: BGW in that thesis = Baghdad International Airport weather station. Generator tariff quoted there: 325 per
+25 A per month (13 per ampere per month; currency symbol lost in the PDF text - check the PDF) - useful later for S3.
 
 ## Data provenance - MUST be cited
 File metadata of BG1, BS and KR show they were authored in 2018-2019 by **Hussain Al-Shamri (University of Leeds)** - the PhD thesis `Alshamri_H_ School of Chemical and Process Engineering _PhD_2019` is in Zaher's thesis folder. All three files were copied into OneDrive together on 2026-03-16. Any paper must cite this source, confirm the data-use permission with Zaher, and check overlap with Alshamri et al. (2024) *Clean Technologies* "On-off-Grid Optimal Hybrid Renewable Energy Systems for House Units in Iraq".

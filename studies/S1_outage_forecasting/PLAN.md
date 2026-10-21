@@ -5,7 +5,7 @@
 - **RQ2** Which information matters (outage history, calendar, load, temperature)? (permutation importance / SHAP / ablation)
 - **RQ3** What is a forecast worth? Feed each model's forecasts into a predictive battery-dispatch rule and measure
   LPSP, grid import and cost against Mode 0, blanket pre-charging and perfect foresight.
-- **RQ4** Do conclusions transfer to a second region? KR (Kurdistan household, outages inferred from generator use). BS (Baghdad) has no generator column, so it cannot be used for outage labels.
+- **RQ4** Do conclusions transfer to a second region? KR (Karbala house, outages inferred from private-generator use). BS (Basra house) was supplied by the grid 24 h, so it has no outages to label.
 
 ## Positioning (from literature/S1_related_work_alphaxiv.md)
 Prior outage forecasting targets weather-driven, region-level outages; random splits inflate their scores
