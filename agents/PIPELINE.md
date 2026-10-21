@@ -10,5 +10,5 @@ Every Codex task runs through five agents in order (engine.py, `pipeline` field 
 | 4 | Reviewer 2 | read-only | agents/4_reviewer2.md |
 | 5 | Fixer & Documenter | workspace-write | agents/5_fixer.md |
 
-Then the lead (Claude) reviews .agents/*.md and the diff, and merges to main or sends a fix task.
+Then the lead (Claude) reviews agent_notes/*.md and the diff, and merges to main or sends a fix task.
 Role prompts: agents/<n>_<role>.md. Each agent sees the TASK SPEC plus the files written by earlier agents.

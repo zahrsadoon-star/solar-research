@@ -1,0 +1,6 @@
+case,annual_poa_kwh_m2,yield_kwh_per_kwp,poa_peak_hour_local,poa_vs_corrected_reindl_pct
+"corrected, isotropic",1970.1,1826.8,11,-2.3
+"corrected, reindl",2017.0,1868.6,11,0.0
+"corrected, haydavies",2011.9,1864.0,11,-0.3
+"corrected, perez",2055.4,1902.0,11,1.9
+"thesis defects (north + 3 h shift), reindl",1321.1,,8,-34.5

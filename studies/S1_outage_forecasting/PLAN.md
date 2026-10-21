@@ -5,7 +5,13 @@
 - **RQ2** Which information matters (outage history, calendar, load, temperature)? (permutation importance / SHAP / ablation)
 - **RQ3** What is a forecast worth? Feed each model's forecasts into a predictive battery-dispatch rule and measure
   LPSP, grid import and cost against Mode 0, blanket pre-charging and perfect foresight.
-- **RQ4** Do conclusions hold on the other two households (BS, KR) if their generator data reveal outages?
+- **RQ4** Do conclusions transfer to a second region? KR (Karbala house, outages inferred from private-generator use). BS (Basra house) was supplied by the grid 24 h, so it has no outages to label.
+
+## Positioning (from literature/S1_related_work_alphaxiv.md)
+Prior outage forecasting targets weather-driven, region-level outages; random splits inflate their scores
+(arXiv:2608.24665). Outage-aware dispatch on weak grids has used a Markov chain with survey-estimated rates
+(arXiv:2604.18268). S1's contribution: household-level forecasting of chronic load shedding from a measured record,
+and whether learned models add dispatch value **beyond a fitted Markov chain**.
 
 ## Data
 `data/raw/BG18760_with_analysis.xlsx` (Hourly Data: Outage 1/0; Outage Events) cross-checked with
@@ -35,6 +41,7 @@ Baselines: persistence, seasonal-naive (same hour yesterday), climatology (P(out
 Statistical: 1st/2nd-order Markov chain, logistic regression, Weibull/Cox duration model (duration target).
 ML: kNN, SVM, Random Forest, Extra Trees, XGBoost, LightGBM, CatBoost.
 Deep: MLP, LSTM, GRU, TCN, small Transformer.
+Time-series foundation models, zero-shot (downloaded from Hugging Face to D:/SolarProject/models, Apache-2.0): Chronos-2 (with temperature as covariate), Chronos-Bolt, TimesFM 2.5, TinyTimeMixer r2. Question: does a pretrained model with no outage-specific training beat models trained on the Baghdad record?
 
 ## Evaluation protocol (no leakage)
 - Rolling-origin time-series CV (expanding window, monthly folds); hyper-parameters tuned only inside training folds.

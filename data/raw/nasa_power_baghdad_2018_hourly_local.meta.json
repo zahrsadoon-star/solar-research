@@ -1,0 +1,8 @@
+{
+ "source": "NASA POWER hourly API (community RE)",
+ "url": "https://power.larc.nasa.gov/api/temporal/hourly/point?parameters=T2M,RH2M,WS10M,ALLSKY_SFC_SW_DWN&community=RE&longitude=44.339421&latitude=33.322535&start=20171231&end=20181231&format=JSON&time-standard=UTC",
+ "lat": 33.322535,
+ "lon": 44.339421,
+ "time": "converted from UTC to Baghdad local time (UTC+3, no DST)",
+ "downloaded": "2026-10-21T12:17:23.641737"
+}
