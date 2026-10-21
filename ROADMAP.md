@@ -1,10 +1,17 @@
 # Roadmap - Research track
 
 ## Stage 1 - Idea selection
-- [ ] 1.1 Idea bank: at least 50 distinct research ideas in `ideas/IDEA_BANK.md` (title, research question, method, data needed, expected contribution)
-- [ ] 1.2 Score every idea 1-5 on novelty, feasibility with available data, publishability (Q1 fit), effort, overlap risk with the thesis
-- [ ] 1.3 Novelty check for the top 10 against recent literature (2021-2026); record closest papers with DOI
-- [ ] 1.4 Shortlist 3 with a one-page proposal each -> **Zaher chooses** (stop and ask; do not proceed past this point without his choice)
+- [x] 1.1 Idea bank: 54 ideas in `ideas/IDEA_BANK.md`
+- [x] 1.2 Scored (`ideas/score_ideas.py` recomputes totals)
+- [x] 1.3 Novelty check for the top directions (`literature/novelty_check.md`; DOIs still to verify). S4/S5 not yet checked.
+- [x] 1.4 Five studies proposed in `ideas/RECOMMENDATION.md`
+- [ ] 1.5 **Zaher's decision** per study (approve / defer / cancel) -> record in `DECISIONS.md`. Do not start pilots before this.
+- [ ] 1.6 Merge useful ideas from Codex's independent list (`ideas/CODEX_IDEAS.md`, branch codex/20261021-r01-codex-ideas)
+
+## Stage 1b - Shared core and pilots (after 1.5)
+- [ ] 1b.1 Shared simulation core: outage record parser, EMS variants, ageing model, economics, optimiser interface, weather cache
+- [ ] 1b.2 Pilot S5 -> S1 -> S2 -> S3 -> S4, each with its go/no-go threshold from RECOMMENDATION.md
+- [ ] 1b.3 Pilot report to Zaher -> he picks the studies that continue to Stage 2
 
 ## Stage 2 - Foundations
 - [ ] 2.1 Literature review notes + explicit research gap statement
