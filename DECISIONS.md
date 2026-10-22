@@ -15,16 +15,14 @@
   24-h grid supply and no outages, so it is kept for later sizing studies as a reliable-grid contrast case.
 - S1 pilot (studies/S1_outage_forecasting/pilot/REPORT.md): forecasting criterion met at both sites -> GO.
 
-<<<<<<< Updated upstream
 ## 2026-10-22 (lead decisions, protocol v1.0-rc)
 - S1 primary outage label = grid_kwh == 0 (closest observable to grid unavailability); generator > 0 (thesis label) is a pre-registered sensitivity. BG differs in 4 h only.
 - Q1 confirmatory test two-sided with Holm over 5 horizons; exploratory comparisons get effect sizes + CIs, no p-values.
 - Dispatch (RQ3) objective = LPSP + lambda x battery ageing (Naumann LFP calendar model + throughput cycle term), primary pair = forecast policy vs best ex-ante no-forecast policy; ageing equations hashed as an addendum by day 8.
-- Framing pending Zaher: given Mohammed et al. 2026 and Jawad & Al-Shammari 2025, S1 is framed as a calibrated benchmark vs strong baselines + decomposition of dispatch value (a negative result is publishable).
-=======
+- (Superseded by Zaher's decision below.) Framing proposed: given Mohammed et al. 2026 and Jawad & Al-Shammari 2025, S1 is framed as a calibrated benchmark vs strong baselines + decomposition of dispatch value (a negative result is publishable).
+
 ## 2026-10-22 23:44 (Zaher)
 - **S1 narrowed:** outage forecasting only. Small, simple model; compare ~12 algorithms on the same task and find the
   best. No battery / dispatch / energy management in S1 (pilot_v2/dispatch kept as background material only; its
   Codex tasks parked). Grow the benchmark one small reviewed step at a time.
 - Credit management: control/budget.json on the PC (Claude modest, Codex maximum speed).
->>>>>>> Stashed changes
