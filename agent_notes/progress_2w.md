@@ -31,3 +31,10 @@
 - [x] method/S1_ageing_model.md: Naumann LFP calendar + cycle model copied from the open-access 2018 TUM dissertation (Ch. 5, Eqs. 5.1-5.30, Tables 5.1/5.3), cross-checked against Collath 2022/2023 and SimSES; journal texts not readable (CAPTCHA). Second-agent check against the dissertation launched.
 - [x] literature/S1_round3_verification.md: Hansen 2005, White 2000, Kuensch 1989 (Crossref), Holm 1979 (JSTOR); K&V 2005 fixed-b polynomial UNVERIFIED; Iraq 2018 calendar: Eid al-Fitr 15 vs 16 Jun by authority, Ramadan start and Eid al-Adha day 1 UNVERIFIED.
 - [x] Engine: stale undeletable worktree dirs no longer fail a task (fresh path); dispatch-v2-verify re-queued (2nd failure was this bug, not code).
+
+## 23 Oct 00:36 run (after Zaher's narrowing)
+- [x] Benchmark v1 (cloud) reviewed by the lead: causal features, month-split excludes test-month targets, no leakage found.
+- [x] Queued 20261023-s1-bench-verify (independent N-version check of the numbers) and 20261023-s1-bench-step1-significance (DM + block bootstrap, top group).
+- [x] wp2-harness failed (Codex timeout) - obsolete under the new scope, left in queue/failed; dispatch/wp3 parked.
+- [x] Daily report 2026-10-22 written (both repos).
+- [ ] Next steps after significance is reviewed: tuning (same budget), feature importance, LSTM.
