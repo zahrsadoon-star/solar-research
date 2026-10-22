@@ -14,3 +14,9 @@
   second site** with a different outage regime; this makes one stronger paper than two thin ones. **BS (Basra)** had a
   24-h grid supply and no outages, so it is kept for later sizing studies as a reliable-grid contrast case.
 - S1 pilot (studies/S1_outage_forecasting/pilot/REPORT.md): forecasting criterion met at both sites -> GO.
+
+## 2026-10-22 (lead decisions, protocol v1.0-rc)
+- S1 primary outage label = grid_kwh == 0 (closest observable to grid unavailability); generator > 0 (thesis label) is a pre-registered sensitivity. BG differs in 4 h only.
+- Q1 confirmatory test two-sided with Holm over 5 horizons; exploratory comparisons get effect sizes + CIs, no p-values.
+- Dispatch (RQ3) objective = LPSP + lambda x battery ageing (Naumann LFP calendar model + throughput cycle term), primary pair = forecast policy vs best ex-ante no-forecast policy; ageing equations hashed as an addendum by day 8.
+- Framing pending Zaher: given Mohammed et al. 2026 and Jawad & Al-Shammari 2025, S1 is framed as a calibrated benchmark vs strong baselines + decomposition of dispatch value (a negative result is publishable).

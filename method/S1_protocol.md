@@ -32,7 +32,8 @@ go to `results/S1/DEVIATIONS.md` (date, reason, affected results). Supersedes th
 - **Target (a):** `y_{t+h}`, h in {1, 3, 6, 12, 24}.
 - **Target (b):** `z_{t,h} = max(y_{t+1..t+h})`; identical to (a) at h = 1, reported for h in {3, 6, 12, 24}.
 - **Target (c):** for origins with `y_t = 1`, remaining duration `R_t = min{k >= 1 : y_{t+k} = 0}` (integer hours >= 1);
-  right-censored where the event runs past the last observable hour (1.3).
+  right-censored where the event runs past the last observable hour (1.3). Duration models, the KM reference and MAE all
+  use this R_t scale. Targets (b) and (c) are scored only when every needed y in (t, t+h] (resp. the run) is observed.
 - **Missing hours** are never imputed as labels and are excluded from scoring (origin or label time missing). Lag
   features touching a missing hour take the training-window outage share plus a missing indicator = 1. Baseline
   fallbacks: persistence / seasonal-naive / rota-naive with missing input -> static climatology; Markov / semi-Markov
@@ -51,7 +52,10 @@ go to `results/S1/DEVIATIONS.md` (date, reason, affected results). Supersedes th
 - 9 folds, about 6,600 test origins (Apr-Dec) per horizon. First training window = 3 months `[JC]` (smallest window
   leaving a 2-month inner-train set plus a validation month while test months still cover summer and both shoulders).
 - **Purge = 24 h (max horizon).** A training origin t is kept only if `t + 24 <= T_train_end`; same rule between
-  inner-train and inner-validation. Test origins start at the first hour of the test month.
+  inner-train and inner-validation (inner-train origin kept only if `t + 24 <= T_innertrain_end`). **Inner-validation
+  origins** are kept for horizon h only if `t + h <= T_train_end` (e.g. fold 1, origin 31 Mar 23:00 is dropped for every
+  h; origin 31 Mar 00:00 is kept for h <= 23 and dropped for h = 24), so no inner-validation label lies in the test
+  month. Test origins start at the first hour of the test month.
 - Lags reaching into earlier months are allowed (available at the origin).
 - Test origins whose label time t+h passes the test month are scored with the realised label; in December, origins with
   t+h > 2018-12-31 23:00 are dropped for that horizon (so T_m depends on h).
@@ -60,8 +64,9 @@ go to `results/S1/DEVIATIONS.md` (date, reason, affected results). Supersedes th
 Tune on inner-train, score on inner-validation (section 4) at re-tuning folds (1, 4, 7). **On every fold** (re-tuned or
 not), every model is fit on that fold's inner-train with the current hyper-parameters, for every evaluation seed, and its
 inner-validation predictions are saved to `predictions/innerval/`; untuned baselines and FMs also produce them. These
-predictions are the only input to per-fold model selection (6.2), thresholds (6.1), Platt scaling, the seed rule (5) and
-ex-ante dispatch parameters (9). The model is then refit on the full training window; iterative models use the
+predictions are the only input to per-fold model selection (6.2), thresholds (6.1), Platt scaling and the seed rule (5).
+Ex-ante dispatch parameters for month m (9.5) may read inner-validation predictions and test-fold predictions whose
+origin lies before the first hour of month m, and nothing else. The model is then refit on the full training window; iterative models use the
 early-stopped round/epoch count `[JC]`. Thresholds and Platt parameters estimated on the inner-train model are applied
 unchanged to the refit model `[JC]` (no third split). Early stopping and the tuning objective share the inner-validation
 month `[JC]` (slightly optimistic selection; test months untouched).
@@ -83,8 +88,9 @@ ranking or go/no-go (test 16). No inference.
   past 6/24/168 h; state changes over the past 24 h; outage share over the past 720 h (regime level).
 - **Calendar:** hour of day (sin/cos), day of week, Friday flag, Iraqi public-holiday and Ramadan flags from
   `data/calendar/iraq_2018.csv`, committed and hashed before the freeze. Dates follow
-  `literature/S1_protocol_v1_refs.md`; where the two sources disagree, both candidate days get the flag `[JC]` and are
-  listed in the file header.
+  `literature/S1_protocol_v1_refs.md`; where the two sources disagree, or a date is unverified (Ramadan start,
+  12-13 May election days, Arbaeen), the day gets a separate `holiday_uncertain` flag instead of `holiday` `[JC]`;
+  all such dates are listed in the file header.
 - **Month and day-of-year excluded** `[JC]` (with one year the test month is always an unseen level).
 - **Household load is not a feature** in v1.0 `[JC]` (in outage hours it equals generator energy, capped by the
   subscription); a load ablation is a declared exploratory analysis.
@@ -100,7 +106,8 @@ All baselines are per-origin functions `f(history <= t, h)`, not per-fold fitted
   1. persistence `p = y_t`; (b) `y_t`.
   2. seasonal-naive `p = y_{t+h-24}`; (b) `max(y_{t+1-24 .. t+h-24})` (h <= 24, all inputs <= t).
   3. static climatology `p_clim(hour) = (n_out(hour) + 0.5) / (n(hour) + 1)` over all training origins (fit once per
-     fold); (b) training frequency of `z_{.,h}` by origin hour. Reporting reference only (6.1).
+     fold); (b) `(n_z(hour) + 0.5) / (n(hour) + 1)` with `z_{.,h}` by origin hour. It is a candidate for C_B
+     like every member of B; it is not the go/no-go reference (it defines `BSS_clim` only, 6.1).
   4. trailing climatology TC-W, W in {7, 14, 28} days, at every origin:
      `p = (sum_{k=k0}^{k0+W-1} y_{t+h-24k} + 0.5) / (W + 1)`, `k0 = ceil(h/24)` (all label times <= t); (b) same with
      `z_{t-24k, h}`, k = k0 .. k0+W-1 (every window (t-24k, t-24k+h] ends <= t). W selected per fold on inner-validation Brier; all three reported.
@@ -113,7 +120,8 @@ All baselines are per-origin functions `f(history <= t, h)`, not per-fold fitted
      (0.5 Laplace prior; d > 48 pooled), fit on training-window completed and censored spells; h-step forecast by exact
      forward recursion over (state, d); (b) by the same recursion with absorption.
   8. logistic regression (tuned, section 4).
-  9. KR only: rota-naive `p = y_{t+h-2*ceil(h/2)}` (most recent hour <= t with the clock parity of t+h).
+  9. KR only: rota-naive `p = y_{t+h-2*ceil(h/2)}` (most recent hour <= t with the clock parity of t+h);
+     (b) `max(y_{t-1}, y_t)` for h >= 2 (both parities seen within the window).
   "Simple models" in 6.2 = B.
 - **Duration (target (c)):** Weibull AFT and penalised Cox PH (run-length + calendar features), point forecast = median
   survival; reference = Kaplan-Meier conditional median remaining time given elapsed duration (training window).
@@ -143,7 +151,8 @@ All baselines are per-origin functions `f(history <= t, h)`, not per-fold fitted
   semi-Markov, rota-naive, FMs. TC-W and RM-N choose W/N on inner-validation (3 candidates, not a study).
 - **Wall-clock cap (rule frozen; number recorded at the timing run):** cap per study = 3 x (median trial time of that
   family in a timing run on fold 1 with seed 0) x number of trials of the study. The timing run uses fold 1 only and
-  touches no test month; values go to `config/S1_frozen.yaml` before any test prediction. If a cap is hit the study
+  touches no test month; values go to `config/S1_timing_caps.yaml`, whose SHA-256 is added as an addendum line to
+`results/S1/PROTOCOL.sha256` before any test prediction (the hashed `S1_frozen.yaml` is never edited). If a cap is hit the study
   ends with completed trials, the count is reported, the hit is logged in DEVIATIONS.md, and a model with < 30 completed
   trials in any study is flagged *under-tuned* in every table.
 - **Convergence flag:** best-so-far inner-validation Brier improved by > 0.0005 over the last 20 trials -> "possibly
@@ -210,7 +219,8 @@ max-|t| from the same paired bootstrap; Holm stays primary.
   and 168; month-stratified LRV (d_t demeaned within month, month LRVs summed).
 - **Bootstrap:** circular moving-block (Kuensch 1989), within each test month (T_m per horizon), paired (same indices
   for all models in a comparison and for the BSS reference; numerator and denominator resampled jointly), B = 9,999,
-  seed 20180102. Block length per confirmatory comparison:
+  seed 20180102. Block length (and HAC lag) per comparison - confirmatory, G2, G4 (on KR loss differentials) and every
+  exploratory CI alike:
   `L_block = clip(ceil24(max(PW(d pooled), median_m PW(d_m))), 48, 168)` h, PW = Politis & White (2004) automatic
   circular block length with the Patton, Politis & White (2009) correction (`arch.bootstrap.optimal_block_length`,
   circular column); values logged in `inference/block_lengths.csv`; L_block governs precision only. Sensitivity: fixed
@@ -224,7 +234,8 @@ max-|t| from the same paired bootstrap; Holm stays primary.
 
 ### 6.4 Descriptive ranking
 Mean ranks per horizon over N = 9 folds (Brier, target (a), W0), never pooled to 45 blocks; per-fold rank tables;
-Nemenyi CD diagrams (Demsar 2006) with q from `scipy.stats.studentized_range` (k = 27: CD ~ 12 rank units) and the
+Nemenyi CD diagrams (Demsar 2006) over the models that produce target (a) (BG: k = 25, Weibull/Cox excluded; CD at
+N = 9 computed with q from `scipy.stats.studentized_range`, about 12.7 rank units per Reviewer-2 v1rc arithmetic) and the
 printed caveat that folds are dependent and the ranking is descriptive only; no Friedman p-values in the text.
 
 ### 6.5 Karbala
@@ -244,12 +255,16 @@ printed caveat that folds are dependent and the ranking is descriptive only; no 
   on S-gen. Else NO-GO and the recommended forecaster is C_B. Rationale `[JC]`: against a strong baseline (pilot BG
   trailing-14d Brier ~0.17) the 5 % relative criterion binds.
 - **G2 weather value** (named secondary family, Holm over 5 horizons): composite C_all (per-fold inner-validation
-  selected over all models) under W1 vs under W0, dBS <= -0.003 and 95 % CI excluding 0 at >= 2 horizons. W2 is an
+  selected over all models) under W1 vs under W0, Holm-significant AND dBS <= -0.003 AND 95 % CI excluding 0 at >= 2
+  horizons. W2 is an
   upper bound only.
 - **G3 duration:** duration model selected per fold by inner-validation MAE; C-index >= 0.60 and MAE >= 10 % below the
   training-KM conditional median, event-cluster CI excluding 0.
-- **G4 transfer:** if KR-native `BSS_strong` > 0.02, BG->KR retains >= 50 % of it at h in {1, 6, 24}; inconclusive if
-  the BCa CI of the ratio straddles 50 %; "not assessable" if KR-native `BSS_strong` <= 0.02. Exploratory if KR has > 5 %
+- **G4 transfer:** evaluated separately at each h in {1, 6, 24}: transferred model = BG-selected C_ML (per fold),
+  compared with KR-native C_ML; retained share = `BSS_strong(BG->KR) / BSS_strong(KR-native)` (both vs KR's C_B).
+  At an h with KR-native `BSS_strong` <= 0.02: "not assessable". Otherwise PASS if the BCa 95 % CI lower bound of the
+  retained share is >= 0.50, FAIL if the upper bound is < 0.50, else inconclusive. G4 passes if it PASSes at all
+  assessable horizons and at least two are assessable. Exploratory if KR has > 5 %
   missing hours or the parity rule (6.5) fires.
 - **G5 dispatch value:** section 9.
 - **Leakage gate:** any failing test in section 8 blocks every result.
@@ -263,7 +278,8 @@ printed caveat that folds are dependent and the ranking is descriptive only; no 
 
 ## 8. Leakage and correctness tests the harness must pass (pytest)
 1. `test_purge_train_labels`: every training (origin, label-time) has `label_time <= T_train_end` (all folds, horizons,
-   targets; also inner-train vs inner-validation).
+   targets; also inner-train vs inner-validation), and every inner-validation (origin, label-time) has
+   `label_time <= T_train_end`.
 2. `test_test_origins_after_train`: `min(test origin) > T_train_end`; inner-validation month inside the training window.
 3. `test_feature_causality`: for 500 random origins, overwriting all y and weather at times > t leaves W0/W1 features at
    t unchanged; in W2 only declared oracle columns change.
@@ -289,8 +305,9 @@ printed caveat that folds are dependent and the ranking is descriptive only; no 
 18. `test_label_hour_convention`: label rows are hour-beginning (checked against the workbook's documented timestamps
     and the start/end times in "Outage Events"); fails on a 1-h shift.
 19. `test_label_definitions`: primary and S-gen labels reproduce the counts in `label_disagreement.csv`.
-20. `test_innerval_predictions_exist`: every test prediction file has a matching inner-validation file, and selection,
-    threshold, seed-rule and dispatch-parameter code reads only `predictions/innerval/`.
+20. `test_innerval_predictions_exist`: every test prediction file has a matching inner-validation file; selection,
+    threshold and seed-rule code reads only `predictions/innerval/`; dispatch-parameter code for month m reads only
+    predictions with origin before month m (overwriting later predictions leaves its choice unchanged).
 21. `test_dispatch_decision_alignment`: the decision for hour t+1 reads only forecasts with origin <= t; overwriting all
     forecasts with origin >= t+1 leaves it unchanged.
 22. `test_cache_key`: a cached artefact whose key does not match (YAML + code + data) hash is never read.
@@ -307,9 +324,11 @@ delivers it (labelled). Period: continuous Apr-Dec trajectory, initial SOC 0.5 o
 months. Outage-hour load = generator energy (suppressed demand, limitation stated in every table); sensitivity with a
 load factor of 1.25 on outage hours `[JC]`. Unserved energy is decomposed into energy-limited and power-limited parts.
 ### 9.2 Timing and forecast input
-A decision applied during hour t+1 uses only forecasts with origin <= t. Look-ahead H = 6 h `[JC]`; input = target (b)
-`z_{t,H}` probability. Primary forecast = C_ML (per-fold selected, seed-mean probability averaged over evaluation
-seeds `[JC]`, the operational choice); per-model tables use every model; the forecast seed spread is shown by re-running
+Site BG, weather W0, primary label (S-gen as sensitivity). A decision applied during hour t+1 uses only forecasts with
+origin <= t. Look-ahead H = 6 h `[JC]`; input = target (b) `z_{t,H}` probability. For dispatch, C_ML and C_B are
+selected per fold on inner-validation Brier of **target (b) at h = H** (not target (a)) `[LEAD]`. Primary forecast =
+C_ML, seed-mean probability averaged over evaluation seeds `[JC]` (the operational choice); hours with no forecast
+available (1 Apr 00:00, missing origins) use the static-climatology probability; per-model tables use every model; the forecast seed spread is shown by re-running
 F over seeds (min/median/max of each delta). Sensitivity H in {3, 12} (day 10).
 ### 9.3 Objective
 Per policy and month `J_lambda = LPSP_pp + lambda * A`, where A is battery degradation over the period in % of nameplate
@@ -330,14 +349,20 @@ subject to LPSP <= (Mode-0 LPSP on the selection window) + 0.10 pp.
 - N2 SOC-target, no forecast: grid-charge at rate c whenever SOC < S; S in {0.30, 0.35, ..., 1.00}, c in {0.25, 0.5} C;
 - N3 time-window SOC-target: N2 restricted to a charging window [a, b) local time, a and b on a 3-h grid;
 - N4 baseline-triggered: family F fed the C_B (strongest baseline) probability, i.e. no learned model;
-- F forecast SOC-target: `S(t) = S_lo + (S_hi - S_lo) * 1[p_t > theta]`, S_lo and S_hi on the N2 grid,
+- F forecast SOC-target: SOC target for hour t+1 `S_{t+1} = S_lo + (S_hi - S_lo) * 1[p_t > theta]`, p_t issued at
+  origin t; S_lo and S_hi on the N2 grid,
   theta in {0.05, 0.10, ..., 0.95};
 - O1 oracle: DP over SOC discretised at 1 % of nameplate with perfect knowledge of outages, PV and load over each month,
-  minimising J_lambda;
+  minimising J_lambda; because sqrt-time calendar ageing is path-dependent, the DP uses the calendar-ageing rate
+  linearised at the month's starting virtual time `[JC]`, and the realised O1 path is then re-scored with the exact
+  model (O1 is labelled "near-oracle" if the re-scored J differs from the DP value by > 1 %);
 - O2 policy-oracle: family F fed the realised `z_{t,H}` (separates forecast value from policy-class limits).
 ### 9.5 Ex-ante parameter choice (time-respecting)
 For each family and lambda, parameters minimise J_lambda on the preceding months Apr..m-1 (expanding, out-of-sample
-forecasts from the rolling folds) and are applied to month m. **April is used for selection only; scoring = May-Dec.**
+forecasts from the rolling folds) and are applied to month m. Each selection re-simulation starts on 1 Apr 00:00 at
+SOC 0.5 and zero ageing. **April is used for selection only; scoring = May-Dec;** headline J, LPSP and A are pooled
+over May-Dec. Policy changes ("best NF" and the primary pair F(C_ML) vs best NF replace ST's RiskTarget(RF) vs SOC-target
+a2; the objective uses ageing A instead of the SOC>=80 % stress proxy, per PLAN_2W day 9) are `[LEAD]` decisions.
 The family winner among no-forecast families {N0, N1, N1r, N2, N3, N4} ("best NF") is also selected on preceding months.
 Sensitivity: rolling 2-month selection window; leave-one-month-out cross-fit labelled *not time-respecting*. Full
 swept frontiers are shown as descriptive context, captioned "in-sample envelope, optimistic"; any in-sample minimum
@@ -350,7 +375,8 @@ month-stratified circular block bootstrap of per-day contributions (unserved kWh
 counts) from the realised trajectories, block 7 days (sensitivity 3 and 14), B = 9,999, seed 20180103; ratio statistics
 recomputed from resampled sums; percentile 95 % CIs and the share of replicates < 0. Secondary: month-stratified
 sign-flip randomisation test on weekly paired unserved-kWh differences. Episode sensitivity: leave-one-episode-out
-jackknife and dLPSP without the top 1/3/5 episodes (episode = outage event + preceding 24 h).
+jackknife, dLPSP without the top 1/3/5 episodes (episode = outage event + preceding 24 h), and an episode-resampling
+bootstrap within month (secondary).
 ### 9.7 G5 dispatch value
 - **Value:** F(C_ML) beats best NF with the 95 % CI of dJ excluding 0 AND gap closed >= 20 % `[JC]`, at >= 2 of 5
   lambda values.
@@ -359,11 +385,15 @@ jackknife and dLPSP without the top 1/3/5 episodes (episode = outage event + pre
 - Otherwise "inconclusive", never "no effect". Either outcome is a primary finding.
 
 ## 10. Open items before the hash (day 2)
-- Independent consistency check of this v1.0-rc against R2 and ST (Claude agent), edits applied by the lead.
+- [done 22 Oct 19:20] Independent consistency check (`agent_notes/claude_reviewer2_protocol_v1rc.md`,
+  HASH_AFTER_MINOR_EDITS): MUST edits M1-M9 applied (inner-validation purge, dispatch read scope, timing-cap addendum,
+  dispatch spec, G4 rule, Nemenyi k, static-climatology role, rota-naive (b), block-length scope) plus SHOULD items
+  (G2 Holm, R_t scale, (b)/(c) scoring, uncertain-holiday flag, episode bootstrap, near-oracle O1). Remaining SHOULD
+  items are reviewed by the lead on day 2 before the hash.
 - `data/calendar/iraq_2018.csv` built from `literature/S1_protocol_v1_refs.md` (disputed dates flagged).
 - `config/S1_frozen.yaml` mirroring every number above (WP2 harness reads it).
-- Timing run (fold 1, seed 0) for the wall-clock caps: after the WP2 harness exists; values added to the YAML before any
-  test prediction (the cap *rule* is frozen now).
+- Timing run (fold 1, seed 0) for the wall-clock caps: after the WP2 harness exists; values written to
+  `config/S1_timing_caps.yaml` and hashed as an addendum line before any test prediction (the cap *rule* is frozen now).
 - Test 18 (hour convention) must pass on the BG and KR workbooks.
 - Not blocking the hash (blocks only RQ3): `method/S1_ageing_model.md` (day 8 latest); primary-source check of the
   Kiefer & Vogelsang polynomial (sensitivity only).
