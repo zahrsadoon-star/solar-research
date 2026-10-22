@@ -1,0 +1,188 @@
+{
+  "pytest_exit_status": 0,
+  "suite_elapsed_seconds": 206.47034799994435,
+  "scientific_gate_cleared": false,
+  "reason": "Hour convention requires independent evidence; strict xfail remains.",
+  "tests": [
+    {
+      "test": "tests/test_eval_leakage.py::test_purge_train_labels",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 15.799189900048077
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_test_origins_after_train",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.3357279999181628
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_feature_causality",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 21.0317712998949
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_reference_causality[a]",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 37.52425499993842
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_reference_causality[b]",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 33.68421760003548
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_scaler_encoder_fit_scope",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.38097070006188005
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_test_index_guard",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.0018002999713644385
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_threshold_from_inner_val",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.1484673999948427
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_local_time_no_double_shift",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.006769000086933374
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_target_construction",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.042994000017642975
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_duration_censor_at_train_end",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.008776400005444884
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_seasonal_naive_index",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.32595450000371784
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_label_permutation_canary",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 5.424036400043406
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_iid_null_series",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 5.1757317000301555
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_randomsplit_quarantine",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.09636049997061491
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_determinism",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.7584318000590429
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_label_hour_convention",
+      "outcome": "skipped",
+      "expected_failure": "BG Read Me reconstructs timestamps from row order and partial January validation; Outage Events is derived from those rows. Neither documents whether metered energy is hour-beginning or hour-ending; KR source hour semantics likewise unverified. Independent interval documentation is required.",
+      "duration_seconds": 0.08028529991861433
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_label_definitions",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.01475990004837513
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_innerval_predictions_exist",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 6.335994000080973
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_cache_key",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.08755940000992268
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_markov_exact_power",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.002570000011473894
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_climatology_hand_computed_and_last_month",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.01694090000819415
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_selection_invariant_to_test_predictions",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.19741690007504076
+    },
+    {
+      "test": "tests/test_eval_leakage.py::test_generic_model_interface",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.6913282000459731
+    },
+    {
+      "test": "tests/test_eval_metrics.py::test_metrics_hand_computed",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.07166270003654063
+    },
+    {
+      "test": "tests/test_eval_metrics.py::test_duration_metrics_hand_computed",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.002224300056695938
+    },
+    {
+      "test": "tests/test_eval_metrics.py::test_dm_hand_computed",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.0023459000512957573
+    },
+    {
+      "test": "tests/test_eval_metrics.py::test_bootstrap_ar1_coverage",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 3.553180899936706
+    },
+    {
+      "test": "tests/test_eval_metrics.py::test_bootstrap_pairing_and_months",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.012479199911467731
+    },
+    {
+      "test": "tests/test_eval_metrics.py::test_holm_explicit_and_descriptive_ranks",
+      "outcome": "passed",
+      "expected_failure": null,
+      "duration_seconds": 0.16227339999750257
+    }
+  ]
+}

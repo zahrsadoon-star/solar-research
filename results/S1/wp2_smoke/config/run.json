@@ -1,0 +1,11 @@
+{
+  "smoke": true,
+  "cache_key": "0cd88f4422ccb4e8523c72022c277f0630efdb45907add4c23ca43f6b8b5a4f4",
+  "label": "grid_zero",
+  "target": "a",
+  "weather": "W0",
+  "trial_budget": 60,
+  "bootstrap_B": 199,
+  "calendar_present": false,
+  "hour_convention_verified": false
+}

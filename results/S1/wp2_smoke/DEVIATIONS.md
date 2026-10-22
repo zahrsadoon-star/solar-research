@@ -1,0 +1,8 @@
+- Harness smoke only; not the benchmark. Consumption-derived labels, not independently verified availability.
+- Hour-beginning convention is a protocol assumption, not established by workbook documentation; leakage gate remains unresolved.
+- Approved calendar unavailable: holiday/Ramadan features omitted in smoke only.
+- Smoke uses the full logistic trial budget. No Q1/G1 conclusions: later model families are absent.
+- No benchmark timing-cap addendum or approved protocol freeze is claimed.
+- Implemented strongest-baseline pool is incomplete: later work packages add remaining baselines.
+- PR-AUC uses non-interpolated average precision; threshold ties choose the smallest candidate. Markov sparse-cell fallback applies to the whole conditioning row.
+- BCa uses delete-nonoverlapping-block acceleration within month; requires lead acceptance.
