@@ -1,0 +1,7 @@
+site,label,h,auc_rolling_origin,auc_blocked_future_7d_embargo,auc_random_80_20
+BG,grid0,1,0.9056,0.919,0.9387
+BG,grid0,6,0.8434,0.8522,0.8705
+BG,grid0,24,0.8181,0.825,0.8775
+KR,grid0,1,0.8799,0.9136,0.9297
+KR,grid0,6,0.8284,0.8716,0.9072
+KR,grid0,24,0.778,0.8131,0.895
