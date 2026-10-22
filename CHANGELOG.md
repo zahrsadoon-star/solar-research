@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-10-22 - S1 team reviews integrated
+- Reviewer-2 pilot report (MAJOR_REVISION), Reviewer-2 + Statistician reviews of protocol v0.9 (FREEZE_AFTER_EDITS), Literature rounds 1-2 (all open DOIs resolved; novelty threats Mohammed et al. 2026, Jawad & Al-Shammari 2025). Lead synthesis: agent_notes/S1_day1_lead_synthesis.md. Dispatch v2 stays on claude/s1-robustness-wip until Codex N-version check.
+
 ## 2026-10-21 - Project created
 - Repository scaffolded; thesis notebook and Baghdad 8,760-h load data copied as baseline.
 - Research roadmap and integrity rules for agents added.
