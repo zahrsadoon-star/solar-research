@@ -12,7 +12,10 @@
 - [x] Reviewer 2 on protocol v0.9 -> FREEZE_AFTER_EDITS (agent_notes/claude_reviewer2_protocol.md)
 - [x] Statistician on protocol v0.9 -> exact settings list (agent_notes/claude_statistician_protocol.md)
 - [x] Literature round 2: all open DOIs resolved; novelty threats found (literature/S1_doi_followup.md)
-- [ ] Freeze protocol v1.0 (lead, 23 Oct)
+- [x] Protocol v1.0-rc written by the lead (22 Oct 18:50 run): all R2 MUST items + ST settings + dispatch section 9; R2/ST conflicts resolved as [LEAD] (two-sided Q1, no p-values for exploratory pairs, ST seed rule, label grid==0 primary)
+- [x] Literature officer (Claude agent): v1.0 refs verified (literature/S1_protocol_v1_refs.md); Naumann calendar model copied from the dissertation (journal text behind CAPTCHA); Iraq 2018 holidays with source disagreements; K&V fixed-b polynomial from a secondary source only
+- [x] WP2 pending task amended (amendment 2) to implement v1.0-rc
+- [ ] Independent consistency check of v1.0-rc, then hash (lead, 23 Oct)
 
 ## Day 2 prep (00:36 run) (done early, 22 Oct 00:36 run)
 - [x] method/S1_protocol.md DRAFT v0.9 (Claude Statistician agent + lead edits; fixed: weather file is already local time, no second shift). Freeze on day 2 after Reviewer-2 pass.
@@ -22,4 +25,4 @@
 ## Track B (product) - days 1-2
 - [x] p02 skeleton + fix (4-column loader) merged, 27 tests
 - [x] p03 battery model merged (ROADMAP 1.2), 107 tests total
-- [ ] Port research PV model into solarsizer/pv.py (queued 20261022-p05-pv)
+- [x] Port research PV model into solarsizer/pv.py: p05 merged 22 Oct 18:4x (APPROVE, 183 tests pass in lead re-run; cross-repo equivalence 1e-9; ROADMAP 1.1)
