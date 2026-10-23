@@ -5,7 +5,7 @@ Script: `benchmark.py` (one file). Outputs: `results/benchmark_results.csv`, `re
 `results/overall_ranking.csv`, `results/benchmark_accuracy.png`.
 
 **Task.** Will the national grid be off 1 h (and 6 h) ahead? Baghdad (BG) and Karbala (KR) households, 2018, hourly.
-Outage = grid energy == 0 (inferred from metering, not a utility log). Same 18 features for every algorithm (recent
+Outage = grid energy == 0 (inferred from metering, not a utility log). Same 19 features for every algorithm (recent
 outage history, time in current state, clock hour of the target, same clock hour over the last 7 days, recent load).
 **Test.** Time-ordered: train on all earlier months, test the next month, April-December (9 folds). The thesis-style
 random 80/20 split is also reported for comparison.
