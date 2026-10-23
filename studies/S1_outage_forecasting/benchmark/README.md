@@ -36,3 +36,21 @@ Decision Tree 10.75, Naive Bayes 12.0.
 2. Hyper-parameter tuning with the same budget for every algorithm (time-ordered validation inside the training months).
 3. Feature importance (which information matters).
 4. LSTM / GRU on the same task.
+
+## Step 1 - significance (2026-10-23, `significance.py`, `results/significance.csv`)
+Top six algorithms per case, re-run with the same protocol, hourly predictions kept. Against the best of each case:
+Diebold-Mariano on hourly Brier loss (Newey-West, lag 24 h, Holm over 5 comparisons) and 7-day moving-block bootstrap
+(2,000 replicates) 95 % CI. "Really better" = Holm p < 0.05 and CI above 0.
+
+| Case | Best | Statistically tied with the best | Significantly worse than the best |
+|---|---|---|---|
+| Baghdad 1 h | Extra Trees | Random Forest, CatBoost, LightGBM, XGBoost | Gradient Boosting |
+| Baghdad 6 h | Extra Trees | Random Forest, Logistic Regression, Gradient Boosting | CatBoost, XGBoost |
+| Karbala 1 h | Random Forest | CatBoost, Extra Trees, XGBoost, LightGBM | Gradient Boosting |
+| Karbala 6 h | Random Forest | Extra Trees, kNN, LightGBM, XGBoost, Gradient Boosting | - |
+
+**Conclusion:** there is no single winner. Random Forest and Extra Trees form a top group that is never separable
+(accuracy differences 0.1-0.2 points); the boosting models are usually tied with them too. The honest headline is
+"bagged tree ensembles (Random Forest / Extra Trees) are the best choice; most boosting methods are statistically
+equivalent; Naive Bayes, Decision Tree, SVM and MLP are clearly behind". At Baghdad 6 h even Logistic Regression is
+tied with the best - the extra value of complex models shrinks at longer horizons.
