@@ -43,3 +43,9 @@
 - Merged the independent N-version check of benchmark v1 (`benchmark/verify/`): REPRODUCED, 80/80 metric comparisons within the predeclared tolerances; no time-ordered leakage found. This covers the 3 references + LR + RF only, not the other 10 algorithms.
 - Added `.gitattributes` so the verifier's frozen-hash check also passes on Windows checkouts (autocrlf).
 - Open from the reviewer: benchmark README says 18 features (actual 19); random-split uplift explanation needs softening; RF diff (0.0034) cause unknown.
+
+## 2026-10-24 00:36 (lead)
+- PC was off ~10:00-00:16 on 23 Oct (14:36 and 22:36 check-ins missed); daily report 2026-10-23 written now.
+- Step 1 significance landed on main from a cloud session (18:32): RF/Extra Trees top group, no single winner.
+- The older Codex significance task started 00:20 with different settings; it will be reviewed as an independent check of step 1, not merged over it.
+- Queued 20261024-s1-bench-step2-tuning (equal budget K=20, nested time-ordered selection, new tuning.py only).
