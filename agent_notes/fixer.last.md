@@ -1,9 +1,7 @@
-تمّت المعالجة والتوثيق.
+عطّلت سكربت الدلالة القديم، وصحّحت ادعاءات الـREADME، ووثّقت النتائج وإعادة التحقق.
 
-- **REPRODUCED:** نجحت المقارنات الـ80، والاختبارات الـ68.
-- أضفت حماية للنتائج الأصلية وفحوصات للمقارنات الناقصة والمكررة.
-- سبب فرق RF يبقى غير محسوم، رغم أنه ضمن السماح.
+الاختبارات: **60 نجحت**.
 
-التوثيق: [README](studies/S1_outage_forecasting/benchmark/verify/results/README.md)، [FIX_REPORT](agent_notes/S1_bench_verify/FIX_REPORT.md)، [CODEX_REPORT](agent_notes/S1_bench_verify/CODEX_REPORT.md).
+باقي MUST-FIX 1 و3 متوقفات: اختلاف النتائج مؤكّد وسببه مجهول؛ بيئة التشغيل الأصلية غير موثّقة. حسب شرط المهمة، ما حسبت دلالة على النتائج المتغيّرة.
 
-التقارير بقيت بالمسار المسموح. ما عدّلت البيانات أو البنچمارك الأصلي، وما سويت commit.
+كتبت [FIX_REPORT.md](agent_notes/FIX_REPORT.md) و[CODEX_REPORT.md](CODEX_REPORT.md). ما غيّرت إعدادات الخوارزميات أو النتائج الأصلية، وما سويت commit أو push.

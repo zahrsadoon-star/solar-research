@@ -1,0 +1,35 @@
+{
+  "preservation_passed": false,
+  "changed_metric_cells": 135,
+  "maximum_absolute_difference": {
+    "accuracy": 0.005900000000000016,
+    "precision": 0.010699999999999932,
+    "recall": 0.020199999999999996,
+    "f1": 0.01649999999999996,
+    "auc": 0.0020999999999999908,
+    "brier": 0.0013000000000000234,
+    "accuracy_random_split": 0.0040999999999999925,
+    "rank_by_brier": 3.0
+  },
+  "archived_rerun_metric_discrepancies": [],
+  "original_artifacts_match_HEAD_bytes": {
+    "benchmark_results.csv": false,
+    "benchmark_fold_scores.csv": false,
+    "overall_ranking.csv": false,
+    "benchmark_accuracy.png": true
+  },
+  "original_artifacts_match_HEAD_normalized": {
+    "benchmark_results.csv": true,
+    "benchmark_fold_scores.csv": true,
+    "overall_ranking.csv": true,
+    "benchmark_accuracy.png": true
+  },
+  "original_artifacts_match_backup_bytes": {
+    "benchmark_results.csv": true,
+    "benchmark_fold_scores.csv": true,
+    "overall_ranking.csv": true,
+    "benchmark_accuracy.png": true
+  },
+  "new_seed_run": false,
+  "stop_reason": "Published metrics changed; task step 1 requires stopping."
+}

@@ -1,5 +1,7 @@
-تم التنفيذ: **REPRODUCED** — كل الـ80 مقارنة نجحت ضمن السماح، و59 اختبار نجح. ما لقيت تسرب معلومات بالتقييم الزمني. وثّقت أن القائمة تحتوي 19 ميزة، مو 18.
+توقفت حسب شرط المهمة: الإعادة غيّرت Brier لحد **0.0013** والرُتب لحد **3 مراتب**، مو مجرد تقريب.
 
-[التقرير الكامل](D:/SolarProject/worktrees/20261023-s1-bench-verify/studies/S1_outage_forecasting/benchmark/verify/REPORT.md) · [تقرير التسليم](D:/SolarProject/worktrees/20261023-s1-bench-verify/agent_notes/S1_bench_verify/CODEX_REPORT.md)
+- أضفت تصدير التنبؤات وحفظت أدلة الفروق.
+- رجّعت النتائج الأصلية؛ ما نفّذت تحليل الدلالة.
+- **53 اختبار نجح**. بدون commit أو push.
 
-ما عدّلت البنشمارك أو البيانات، وما سويت commit أو push.
+[التقرير الكامل](D:/SolarProject/worktrees/20261023-s1-bench-step1-significance-20261024001832/agent_notes/S1_bench_step1/CODEX_REPORT.md) يوضح العائق؛ سببه بعده غير محسوم.

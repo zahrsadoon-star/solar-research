@@ -1,5 +1,5 @@
-**REPRODUCED:** all 80 benchmark comparisons pass. No chronological leakage found; all 62 tests pass.
+تحققت من الأرقام: الإعادة غيّرت **135 خانة**؛ أكبر فرق Brier هو **0.0013** والرتبة تغيّرت لحد **3 مراتب**. لذلك، حسب شرط المهمة، تحليل الدلالة وتجربة بذرة جديدة متوقفين لحين حل الاختلاف.
 
-Seed 43 exposed one sensitivity: Karbala 6-hour F1 changed by 0.00794, exceeding 0.005. The other 15 metric differences stayed below that threshold.
+أضفت فحوص تسرب المعلومات والمحاذاة والـscaling؛ **59 اختبار نجح**. النتائج الأصلية محفوظة.
 
-Details: [STATS_REPORT.md](agent_notes/S1_bench_verify/STATS_REPORT.md). Protected files unchanged; no commits.
+[التقرير الإحصائي](D:/SolarProject/worktrees/20261023-s1-bench-step1-significance-20261024001832/agent_notes/S1_bench_step1/STATS_REPORT.md) يوضح الأدلة والقيود. ما سويت commit أو push.

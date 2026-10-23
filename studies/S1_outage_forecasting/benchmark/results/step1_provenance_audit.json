@@ -1,0 +1,30 @@
+{
+  "original_commit": "baa23da73544e099bbc6a83f6b7e81d492d5bf40",
+  "benchmark_history": [
+    "baa23da S1 narrowed to outage forecasting: 12-algorithm benchmark (time-ordered test), decision recorded"
+  ],
+  "original_source_sha256_normalized": "053442fd581c04cf4e4d5a4515d73fa3675928122049df375742116ae4b24385",
+  "current_source_sha256_normalized": "dd33bf8ed5a7b100c97c837babea13b4872dc84d31d823044649ad25455330d4",
+  "unchanged_functions": {
+    "load": true,
+    "features": true,
+    "algorithms": true,
+    "scores": true,
+    "main": true
+  },
+  "run_change": "Prediction export only; see git diff. No model, feature or split changes.",
+  "frozen_results_match_initial_commit_normalized": true,
+  "changed_cells_by_algorithm": {
+    "Decision Tree": 24,
+    "Extra Trees": 24,
+    "Random Forest": 27,
+    "XGBoost": 31,
+    "Gradient Boosting": 26,
+    "LightGBM": 2,
+    "k-Nearest Neighbours": 1
+  },
+  "preservation_passed": false,
+  "original_execution_environment": "Unavailable: no original producing-run environment manifest located in repository history/notes.",
+  "available_environment_evidence": "run_metadata.json records the export rerun; verify/results/freeze.json records a separate verifier, not the original benchmark run. requirements-s1.txt is not an original-run attestation and omits boosted-tree packages.",
+  "cause": "Unresolved. Code provenance alone cannot establish the execution environment, input bytes or actual executed source of the original producing run. No causal attribution to package versions or parallelism is justified."
+}

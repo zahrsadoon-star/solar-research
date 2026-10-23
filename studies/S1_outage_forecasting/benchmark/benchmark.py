@@ -112,6 +112,7 @@ def scores(y, p) -> dict:
 
 def run() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     rows, folds, rand = [], [], []
+    exported = []
     for site in ["BG", "KR"]:
         d = load(site)
         for h in HORIZONS:
@@ -138,18 +139,26 @@ def run() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
                     folds.append({"site": site, "h": h, "month": m, "algorithm": name,
                                   **scores(y[te].values, p)})
             yy = np.concatenate(ys)
+            origins = X.index[X.index.month >= 4]
+            pooled = pd.DataFrame({"site": site, "h": h, "origin_time": origins,
+                                   "target_time": origins + pd.Timedelta(hours=h),
+                                   "month": origins.month, "y": yy})
             for name, ps in preds.items():
                 p = np.clip(np.concatenate(ps), 0, 1)
+                pooled[name] = p
                 rows.append({"site": site, "h": h, "algorithm": name,
                              "kind": "reference" if name in ("Always no outage", "Persistence",
                                                              "Same hour last 7 days") else "algorithm",
                              **scores(yy, p), "fit_seconds": round(secs.get(name, 0.0), 1)})
+            exported.append(pooled)
             # thesis-style random split, for comparison only
             Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.2, random_state=SEED, stratify=X.index.month)
             for name, mdl in algorithms().items():
                 mdl.fit(Xtr, ytr)
                 rand.append({"site": site, "h": h, "algorithm": name,
                              "accuracy_random_split": accuracy_score(yte, mdl.predict(Xte))})
+    pd.concat(exported, ignore_index=True).to_csv(
+        OUT / "predictions.csv.gz", index=False, compression={"method": "gzip", "mtime": 0})
     return pd.DataFrame(rows), pd.DataFrame(folds), pd.DataFrame(rand)
 
 
