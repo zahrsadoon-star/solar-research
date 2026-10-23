@@ -1,0 +1,77 @@
+{
+  "config": {
+    "sites": [
+      "BG",
+      "KR"
+    ],
+    "horizons_h": [
+      1,
+      6
+    ],
+    "test_months": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "lags_h": [
+      1,
+      2,
+      3,
+      6,
+      12,
+      24,
+      48,
+      168
+    ],
+    "windows_h": [
+      6,
+      24,
+      168
+    ],
+    "history_days": 7,
+    "rf": {
+      "n_estimators": 300,
+      "min_samples_leaf": 5,
+      "random_state": 42,
+      "n_jobs": 1
+    },
+    "lr": {
+      "max_iter": 3000
+    },
+    "threshold": 0.5,
+    "tolerance": {
+      "LR": 0.002,
+      "RF": 0.005,
+      "reference_decimals": 4
+    }
+  },
+  "python": "3.12.15",
+  "numpy": "2.5.4",
+  "pandas": "2.3.3",
+  "sklearn": "1.7.2",
+  "openpyxl": "3.1.5",
+  "elapsed_seconds": 230.54005920002237,
+  "threads": 1,
+  "independent_seed_runs": 1,
+  "statistical_test": "none; numerical tolerance checks only",
+  "source_sha256": "9d7fd00289d7b6f94b2f92acbb9eb83b86aaf2754eabe77c0695e236b32a21eb",
+  "config_sha256": "8c181588f521c7d102f571506b867421f9c434a09a705ce03b608a17a8abde48",
+  "input_sha256": {
+    "BG": "fedf6910716d9521138b48100d9956188ef0e556871d20a23d35865485c7fe63",
+    "KR": "b99c34f1a95be95a4286259a791420261a5242746b9e4d26ebb8d5067c204214"
+  },
+  "output_sha256": {
+    "data_audit": "c657b5e52ac88c0615c0d8ab8e07a59b3537a937c57c2df5b60e91967272fd0c",
+    "outage_shares": "c21b868deba9e9f1e79fca88e4d499856421ef53322093aa2d06d5533cf3859a",
+    "folds": "2537bc8b0fcdc09224ae855a38a8f9e56361a2de48f7ebffad559fa240642b7d",
+    "exclusions": "00c3e2cc72f7864c038744ea967bc3994478e463df729cc79feb2fc26ba71167",
+    "predictions": "9c848ae87bbcf0ddc5a78d40ad19c5f3cc8dcc036e0c5a0b2ece5e88ac36f3f0",
+    "independent_metrics": "ced6dd671c3b0b921218d3d51e4c07604d4057f02d0c6d184e69035a5ec30b7a"
+  }
+}

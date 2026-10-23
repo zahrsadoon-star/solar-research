@@ -1,0 +1,15 @@
+{
+  "verdict": "REPRODUCED",
+  "comparisons": 80,
+  "passed": 80,
+  "failed": 0,
+  "max_abs_diff_by_method": {
+    "LR": 3.749052886792281e-05,
+    "RF": 0.00336580086580085,
+    "always_0": 4.986351228392083e-05,
+    "persistence": 4.563820018359255e-05,
+    "same_hour": 4.7638015654799526e-05
+  },
+  "benchmark_results_sha256": "abab31fd4c60663c3c18de41c3d63892711663daff4fd53a373cb9db93825233",
+  "published_decimal_places": 4
+}

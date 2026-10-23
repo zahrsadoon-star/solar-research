@@ -1,0 +1,9 @@
+{
+  "benchmark_source_sha256": "ff828b4ad30521f17b88c045b7857c9f618651ad2e36496f091176974d056e41",
+  "annotation_sha256": "662116e3a238d33ae6ed0268dc872f10953a0f14705074ba3ae7147683da903d",
+  "independent_outputs_intact": true,
+  "random_accuracy_recomputed": false,
+  "time_ordered_leakage_found": false,
+  "test_prediction_rows": 26386,
+  "feature_count": 19
+}

@@ -1,0 +1,3 @@
+site,rows,non_numeric,grid_kwh_nan,grid_kwh_negative,generator_kwh_nan,generator_kwh_negative
+BG,8760,0,0,0,0,0
+KR,8760,0,0,0,0,0
