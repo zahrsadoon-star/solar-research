@@ -1,0 +1,81 @@
+site,horizon_h,method,metric,ours,theirs,abs_diff,tolerance,rule,pass,status
+BG,1,always_0,accuracy,0.4620397029853008,0.462,3.970298530076022e-05,,equal rounded to four decimals,True,PASS
+BG,1,always_0,f1,0.0,0.0,0.0,,equal rounded to four decimals,True,PASS
+BG,1,always_0,auc,0.5,0.5,0.0,,equal rounded to four decimals,True,PASS
+BG,1,always_0,brier,0.5379602970146992,0.538,3.970298530087124e-05,,equal rounded to four decimals,True,PASS
+BG,1,persistence,accuracy,0.7417790574329444,0.7418,2.0942567055648453e-05,,equal rounded to four decimals,True,PASS
+BG,1,persistence,f1,0.76,0.76,0.0,,equal rounded to four decimals,True,PASS
+BG,1,persistence,auc,0.7402820596917022,0.7403,1.7940308297714758e-05,,equal rounded to four decimals,True,PASS
+BG,1,persistence,brier,0.2582209425670556,0.2582,2.0942567055592942e-05,,equal rounded to four decimals,True,PASS
+BG,1,same_hour,accuracy,0.753295953932414,0.7533,4.046067585972146e-06,,equal rounded to four decimals,True,PASS
+BG,1,same_hour,f1,0.7775348455862258,0.7775,3.48455862257957e-05,,equal rounded to four decimals,True,PASS
+BG,1,same_hour,auc,0.8228962624550188,0.8229,3.737544981174956e-06,,equal rounded to four decimals,True,PASS
+BG,1,same_hour,brier,0.1737523619843452,0.1738,4.7638015654799526e-05,,equal rounded to four decimals,True,PASS
+BG,1,LR,accuracy,0.8110319745415973,0.811,3.19745415972017e-05,0.002,absolute difference,True,PASS
+BG,1,LR,f1,0.8328642273153732,0.8329,3.5772684626733664e-05,0.002,absolute difference,True,PASS
+BG,1,LR,auc,0.8865269148508631,0.8865,2.691485086314671e-05,0.002,absolute difference,True,PASS
+BG,1,LR,brier,0.1341363081519611,0.1341,3.630815196109527e-05,0.002,absolute difference,True,PASS
+BG,1,RF,accuracy,0.8254280951659342,0.8251,0.00032809516593423904,0.005,absolute difference,True,PASS
+BG,1,RF,f1,0.8445763626551538,0.8444,0.00017636265515375005,0.005,absolute difference,True,PASS
+BG,1,RF,auc,0.9109104347303896,0.9105,0.0004104347303895972,0.005,absolute difference,True,PASS
+BG,1,RF,brier,0.1208143307966275,0.1211,0.0002856692033725017,0.005,absolute difference,True,PASS
+BG,6,always_0,accuracy,0.4616317864725508,0.4616,3.178647255080991e-05,,equal rounded to four decimals,True,PASS
+BG,6,always_0,f1,0.0,0.0,0.0,,equal rounded to four decimals,True,PASS
+BG,6,always_0,auc,0.5,0.5,0.0,,equal rounded to four decimals,True,PASS
+BG,6,always_0,brier,0.5383682135274492,0.5384,3.1786472550754397e-05,,equal rounded to four decimals,True,PASS
+BG,6,persistence,accuracy,0.667728237791932,0.6677,2.8237791932061995e-05,,equal rounded to four decimals,True,PASS
+BG,6,persistence,f1,0.6913649809832371,0.6914,3.5019016762949384e-05,,equal rounded to four decimals,True,PASS
+BG,6,persistence,auc,0.6657717791638135,0.6658,2.822083618647664e-05,,equal rounded to four decimals,True,PASS
+BG,6,persistence,brier,0.3322717622080679,0.3323,2.8237791932061995e-05,,equal rounded to four decimals,True,PASS
+BG,6,same_hour,accuracy,0.7531088868668486,0.7531,8.886866848634156e-06,,equal rounded to four decimals,True,PASS
+BG,6,same_hour,f1,0.7775348455862258,0.7775,3.48455862257957e-05,,equal rounded to four decimals,True,PASS
+BG,6,same_hour,auc,0.8226261775647314,0.8226,2.617756473144439e-05,,equal rounded to four decimals,True,PASS
+BG,6,same_hour,brier,0.1738841123346517,0.1739,1.5887665348296443e-05,,equal rounded to four decimals,True,PASS
+BG,6,LR,accuracy,0.7766151046405824,0.7766,1.5104640582408457e-05,0.002,absolute difference,True,PASS
+BG,6,LR,f1,0.8038876314738383,0.8039,1.2368526161599114e-05,0.002,absolute difference,True,PASS
+BG,6,LR,auc,0.8476861431400493,0.8477,1.3856859950700517e-05,0.002,absolute difference,True,PASS
+BG,6,LR,brier,0.1566705602831772,0.1567,2.9439716822815543e-05,0.002,absolute difference,True,PASS
+BG,6,RF,accuracy,0.7778283287837428,0.7777,0.00012832878374280376,0.005,absolute difference,True,PASS
+BG,6,RF,f1,0.8079192342992002,0.8077,0.00021923429920023274,0.005,absolute difference,True,PASS
+BG,6,RF,auc,0.8487341526160908,0.8482,0.0005341526160907994,0.005,absolute difference,True,PASS
+BG,6,RF,brier,0.1546358609809988,0.1549,0.00026413901900121384,0.005,absolute difference,True,PASS
+KR,1,always_0,accuracy,0.8349749962115472,0.835,2.5003788452715447e-05,,equal rounded to four decimals,True,PASS
+KR,1,always_0,f1,0.0,0.0,0.0,,equal rounded to four decimals,True,PASS
+KR,1,always_0,auc,0.5,0.5,0.0,,equal rounded to four decimals,True,PASS
+KR,1,always_0,brier,0.1650250037884528,0.165,2.5003788452798714e-05,,equal rounded to four decimals,True,PASS
+KR,1,persistence,accuracy,0.7202606455523565,0.7203,3.9354447643580315e-05,,equal rounded to four decimals,True,PASS
+KR,1,persistence,f1,0.1524334251606978,0.1524,3.3425160697792e-05,,equal rounded to four decimals,True,PASS
+KR,1,persistence,auc,0.4924599067727264,0.4925,4.0093227273607646e-05,,equal rounded to four decimals,True,PASS
+KR,1,persistence,brier,0.2797393544476436,0.2797,3.9354447643580315e-05,,equal rounded to four decimals,True,PASS
+KR,1,same_hour,accuracy,0.8111835126534324,0.8112,1.6487346567672923e-05,,equal rounded to four decimals,True,PASS
+KR,1,same_hour,f1,0.3449001051524711,0.3449,1.0515247111930748e-07,,equal rounded to four decimals,True,PASS
+KR,1,same_hour,auc,0.748219782380812,0.7482,1.9782380812016775e-05,,equal rounded to four decimals,True,PASS
+KR,1,same_hour,brier,0.1354348679917489,0.1354,3.486799174889921e-05,,equal rounded to four decimals,True,PASS
+KR,1,LR,accuracy,0.912562509471132,0.9126,3.749052886792281e-05,0.002,absolute difference,True,PASS
+KR,1,LR,f1,0.7011910926980839,0.7012,8.907301916161181e-06,0.002,absolute difference,True,PASS
+KR,1,LR,auc,0.8871788333758306,0.8872,2.116662416939974e-05,0.002,absolute difference,True,PASS
+KR,1,LR,brier,0.0713733096545662,0.0714,2.6690345433802443e-05,0.002,absolute difference,True,PASS
+KR,1,RF,accuracy,0.9157448098196695,0.917,0.00125519018033049,0.005,absolute difference,True,PASS
+KR,1,RF,f1,0.6991341991341992,0.7025,0.00336580086580085,0.005,absolute difference,True,PASS
+KR,1,RF,auc,0.9170792231838264,0.9177,0.0006207768161735627,0.005,absolute difference,True,PASS
+KR,1,RF,brier,0.067614151314783,0.0675,0.00011415131478299811,0.005,absolute difference,True,PASS
+KR,6,always_0,accuracy,0.8348498635122839,0.8348,4.986351228386532e-05,,equal rounded to four decimals,True,PASS
+KR,6,always_0,f1,0.0,0.0,0.0,,equal rounded to four decimals,True,PASS
+KR,6,always_0,auc,0.5,0.5,0.0,,equal rounded to four decimals,True,PASS
+KR,6,always_0,brier,0.1651501364877161,0.1652,4.986351228392083e-05,,equal rounded to four decimals,True,PASS
+KR,6,persistence,accuracy,0.7003336366393691,0.7003,3.363663936906125e-05,,equal rounded to four decimals,True,PASS
+KR,6,persistence,f1,0.0927456382001836,0.0927,4.563820018359255e-05,,equal rounded to four decimals,True,PASS
+KR,6,persistence,auc,0.4566362160119901,0.4566,3.621601199010893e-05,,equal rounded to four decimals,True,PASS
+KR,6,persistence,brier,0.2996663633606308,0.2997,3.363663936922778e-05,,equal rounded to four decimals,True,PASS
+KR,6,same_hour,accuracy,0.8110403397027601,0.811,4.0339702760072704e-05,,equal rounded to four decimals,True,PASS
+KR,6,same_hour,f1,0.3449001051524711,0.3449,1.0515247111930748e-07,,equal rounded to four decimals,True,PASS
+KR,6,same_hour,auc,0.7480824261106649,0.7481,1.7573889335098514e-05,,equal rounded to four decimals,True,PASS
+KR,6,same_hour,brier,0.1355375635240447,0.1355,3.756352404468699e-05,,equal rounded to four decimals,True,PASS
+KR,6,LR,accuracy,0.8961176827418865,0.8961,1.768274188651553e-05,0.002,absolute difference,True,PASS
+KR,6,LR,f1,0.6299297676931388,0.6299,2.976769313878247e-05,0.002,absolute difference,True,PASS
+KR,6,LR,auc,0.8555754890161628,0.8556,2.451098383726702e-05,0.002,absolute difference,True,PASS
+KR,6,LR,brier,0.0851883592880497,0.0852,1.1640711950297589e-05,0.002,absolute difference,True,PASS
+KR,6,RF,accuracy,0.9018804974218988,0.901,0.0008804974218987738,0.005,absolute difference,True,PASS
+KR,6,RF,f1,0.6304968589377499,0.6275,0.0029968589377499244,0.005,absolute difference,True,PASS
+KR,6,RF,auc,0.8762470714910646,0.8761,0.00014707149106463202,0.005,absolute difference,True,PASS
+KR,6,RF,brier,0.0814066261163205,0.0814,6.6261163205044715e-06,0.005,absolute difference,True,PASS
