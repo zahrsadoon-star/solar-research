@@ -38,3 +38,8 @@
 - [x] wp2-harness failed (Codex timeout) - obsolete under the new scope, left in queue/failed; dispatch/wp3 parked.
 - [x] Daily report 2026-10-22 written (both repos).
 - [ ] Next steps after significance is reviewed: tuning (same budget), feature importance, LSTM.
+
+## 2026-10-23 08:36 (lead)
+- Merged the independent N-version check of benchmark v1 (`benchmark/verify/`): REPRODUCED, 80/80 metric comparisons within the predeclared tolerances; no time-ordered leakage found. This covers the 3 references + LR + RF only, not the other 10 algorithms.
+- Added `.gitattributes` so the verifier's frozen-hash check also passes on Windows checkouts (autocrlf).
+- Open from the reviewer: benchmark README says 18 features (actual 19); random-split uplift explanation needs softening; RF diff (0.0034) cause unknown.
