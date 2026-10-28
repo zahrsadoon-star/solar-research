@@ -49,3 +49,7 @@
 - Step 1 significance landed on main from a cloud session (18:32): RF/Extra Trees top group, no single winner.
 - The older Codex significance task started 00:20 with different settings; it will be reviewed as an independent check of step 1, not merged over it.
 - Queued 20261024-s1-bench-step2-tuning (equal budget K=20, nested time-ordered selection, new tuning.py only).
+
+## 2026-10-29 02:55 (lead, late 22:36 run)
+- PC asleep ~02:15 24 Oct to ~02:50 29 Oct: no engine runs, no check-ins for 5 days.
+- Codex step1-significance: NOT merged (MAJOR_REVISION, gate stopped it). Windows rerun of benchmark.py drifts from the published Linux numbers (max Brier 0.0013, mostly XGBoost/GB, max rank change 3). Lead decision: cross-platform variability, document it. Fix task queued: independent significance check on the original predictions, compare top groups with main (cec3552).
