@@ -1,0 +1,7 @@
+{
+  "seed": 42,
+  "resamples": 2000,
+  "block_hours": 24,
+  "alpha": 0.05,
+  "cases": [["BG", 1], ["BG", 6], ["KR", 1], ["KR", 6]]
+}

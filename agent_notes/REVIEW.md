@@ -1,25 +1,27 @@
 **Verdict: MAJOR_REVISION**
 
-Stopping at the preservation gate was correct and explicitly required. This is an honestly reported blocked analysis, not a completed significance study. Reviewed `agent_notes/PLAN.md` and the task-specific `agent_notes/S1_bench_step1/STATS_REPORT.md`; the root `agent_notes/STATS_REPORT.md` is absent.
+The independent statistical check substantially follows `agent_notes/PLAN.md`. I found no demonstrated error in its paired bootstrap, HAC/HLN calculation, Holm adjustment, or AUC calculation. The lead’s cross-platform drift decision is accepted; recovering agreement is not required.
 
 **MUST-FIX**
 
-1. **Resolve predictive drift before inference.** I independently confirmed 135 changed metric/rank cells and maximum absolute Brier drift of 0.0013. Exported probabilities reproduce the archived rerun’s Brier scores, not the frozen published scores. Establish the original code/environment provenance and explain the discrepancy. Do not change settings, widen tolerances, or select favorable reruns to recover agreement.
+1. **Complete the required integration.** `origin/main` is not an ancestor of HEAD. I independently verified that the nine listed primary files match local `origin/main` byte-for-byte, but copying blobs does not complete Step 0. The lead must complete the merge in an environment with writable Git metadata and verify preservation afterward.
 
-2. **Prevent accidental use of the historical significance implementation.** `benchmark/significance.py` still refits models, uses 168-hour blocks, fixes HAC lag at 24, omits HLN correction, compares only against the best, and estimates accuracy rather than AUC differences. Its zero-difference case also divides by zero. Clearly disable or mark this entry point as historical while the gate remains failed. The README warning alone does not prevent incompatible results being regenerated.
+2. **Repair the obsolete tests before running the full suite.** `tests/test_s1_bench_significance.py` still reads moved prediction files and asserts that the restored primary significance entry point is disabled. Its direct `loaded.main()` call can now invoke the primary analysis. Obtain the necessary allowed-path exception, update archive paths, and replace the obsolete test with a nonexecuting preservation check. Then require an unfiltered `python -m pytest -q` pass. The reported **65 passed, four failed, one skipped, one deselected** does not meet acceptance.
 
-3. **Complete the specified analysis only after preservation is resolved.** Required outputs are absent: `significance_pairs.csv` and `significance_summary.md`. Implement the planned 21 comparisons per case, paired 24-hour bootstrap, horizon-dependent HAC lag, HLN correction, Holm adjustment, AUC intervals, and required statistical tests. Current passing export tests do not validate those methods. Their deferral is justified; their eventual completion remains necessary.
-
-4. **Remove conflicting claims from the README.** “Tree ensembles win” overstates descriptive rankings while significance remains unresolved. The random-versus-temporal split difference does not isolate adjacency as its cause: training composition, sample sizes, and test periods also differ. Describe observed differences without causal attribution or a proven-winner claim.
+3. **Resolve contradictory scientific guidance.** `benchmark/results/README.md` still declares significance blocked and primary artifacts unusable. The restored benchmark README claims statistical equivalence, proven superiority, and a causal explanation for random-split improvement. These claims are unsupported by this check. Preserve main’s protected files as instructed, but add an explicit current-status correction in the permitted `COMPARISON.md`, identifying the superseded claims; arrange any primary-document correction separately with the lead. Non-rejection does not establish equivalence, and excluded algorithms were not tested here.
 
 **SHOULD-FIX**
 
-- Preserve the plan’s exploratory interpretation prominently: test-selected shortlists, marginal intervals, and within-case Holm correction do not establish study-wide superiority. Non-rejection is not equivalence.
-- Describe fairness narrowly. Shared features and outer splits support comparability, but fixed heterogeneous settings and MLP internal early stopping do not establish equal tuning effort or optimal performance. Equal-budget tuning and ablations belong to later approved steps.
-- Document longer dependence, seasonal changes, and monthly refitting as limitations of pooled inference. Bootstrap replicates do not replace independent training seeds.
-- Keep the completed-origin-hour availability assumption explicit. Inspection and passing perturbation tests found no demonstrated future-feature leakage; random-split results remain nonprospective.
-- Reconcile shortlist input handling with the existing plan, which already proposes frozen CSV-derived configuration. Add verified methodological sources before publication; none were independently verified here.
+- State baseline fairness explicitly in `COMPARISON.md`: common features and outer splits do not establish equal tuning budgets. No reference forecasts are available, so superiority over persistence or seasonal references remains untested.
+- Keep conclusions conditional on the saved single-seed forecasts. Bootstrap-seed sensitivity is not training-seed replication; equal-budget tuning and feature ablations remain future work, not completed evidence.
+- Before publication, assess dependence beyond 24 hours and seasonal/monthly heterogeneity under a separately approved protocol. Current caveats appropriately limit the pooled inference.
+- Verify methodological sources before publication. No fabricated citations were found, but source verification remains outstanding.
+- Generate manifest integration status from actual repository state; the currently hard-coded permission-denied status will become inaccurate after integration.
 
-**Verification:** Independent preservation and exported-Brier checks confirmed the reported blocker. Read-only pytest execution produced **44 passed, 15 setup errors**, caused by unavailable writable temporary directories. The earlier log records 59 passes; I cannot claim a fresh full-suite pass.
+**Verification**
 
-No files were edited. `agent_notes/REVIEW.md` was not saved because this session is read-only.
+Fresh execution of the independent-check tests produced **11 passed, 19 warnings**. Manifest input, primary-result, script, and configuration hashes match current files. Broader pytest execution failed before collection because capture required a writable temporary directory; no fresh full-suite pass is claimed.
+
+The saved comparison reports agreement in three cases. BG 1 h retains Gradient Boosting under the independent procedure. This disagreement is reported transparently and is not itself a defect.
+
+No files were edited. This review could not be saved to `agent_notes/REVIEW.md` because the session is read-only.

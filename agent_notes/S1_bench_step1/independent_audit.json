@@ -1,0 +1,33 @@
+{
+  "columns": [
+    "site",
+    "h",
+    "time",
+    "y",
+    "Extra Trees",
+    "Random Forest",
+    "CatBoost",
+    "LightGBM",
+    "XGBoost",
+    "Gradient Boosting",
+    "Logistic Regression",
+    "k-Nearest Neighbours"
+  ],
+  "seed42_reproduced": true,
+  "primary_seed": 42,
+  "sensitivity_seed": 43,
+  "resamples_each": 2000,
+  "changed_pair_decisions": 0,
+  "max_interval_endpoint_change": {
+    "brier_ci_low": 0.00039404735082749966,
+    "brier_ci_high": 0.0002967921697205458,
+    "auc_ci_low": 0.0007353460830184233,
+    "auc_ci_high": 0.0008516449142585095
+  },
+  "max_absolute_published_metric_difference": {
+    "auc": 4.222946086496204e-05,
+    "brier": 4.860826813768426e-05
+  },
+  "class_share_min": 0.026881720430107527,
+  "class_share_max": 0.803763440860215
+}

@@ -1,199 +1,198 @@
-Protocol for `20261023-s1-bench-step1-significance`. **No files were edited or saved:** this session is read-only and explicitly requests no edits. The task allowlist permits `agent_notes/S1_bench_step1/PLAN.md`, whereas the role prompt names `agent_notes/PLAN.md`.
+ما حفظت ملفات لأن الجلسة read-only وتعليماتك تمنع التعديل. أدناه نص البروتوكول المقترح لـ `agent_notes/PLAN.md`. ما قرأت `significance.py`، وما نفّذت merge أو إعادة تدريب.
 
-Read: `PROJECT_CONTEXT.md`, `AGENTS.md`, `DECISIONS.md`, study `PLAN.md`, benchmark README, benchmark and significance scripts, results CSV, and earlier verification notes.
+**Protocol: independent check of S1 significance**
 
-**1. Scope and hypothesis**
+1. **Scope and precedence**
 
-Follow the latest decision: outage forecasting only, BG and KR, horizons \(h\in\{1,6\}\) hours, with all existing algorithms, settings, features and splits frozen.
+The 29 October task specification supersedes the earlier preservation gate and broader study plan. Analyze BG and KR at horizons \(h\in\{1,6\}\) hours, conditional on the saved original-run forecasts. No refitting, tuning, alternative seeds selected for favorable results, dispatch analysis, or changes to primary benchmark artifacts.
 
-Primary question: does the observed lowest-Brier algorithm outperform the other shortlisted algorithms? Secondary question: do shortlisted algorithms outperform “Same hour last 7 days”?
+Treat Windows/Linux drift as cross-platform numerical variability under the lead’s decision. This is an accepted interpretation, not an experimentally isolated cause.
 
-For each comparison:
-\[
-H_0:E[d_t]=0,\qquad H_1:E[d_t]\ne0,
-\quad d_t=(p_{A,t}-y_t)^2-(p_{B,t}-y_t)^2.
-\]
-Negative differences favor A.
+Before implementation, merge local `origin/main` without network access. Preserve main’s specified benchmark files and results; archive/remove branch rerun artifacts exactly as authorized. Implement the check independently without reading or importing main’s `significance.py`.
 
-This is **exploratory inference after observing rankings**, conditional on the fitted forecasts. It is not a newly preregistered confirmatory experiment.
+2. **Input and alignment**
 
-**2. Target, information availability and splits**
+The sole prediction input is:
 
-Use the existing target:
+`studies/S1_outage_forecasting/benchmark/results/hourly_predictions_top6.csv.gz`
+
+I inspected its `origin/main` version. Columns are:
+
+`site, h, time, y, Extra Trees, Random Forest, CatBoost, LightGBM, XGBoost, Gradient Boosting, Logistic Regression, k-Nearest Neighbours`.
+
+Each case has six populated algorithm columns; other algorithm columns are entirely missing for that case. **There is no reference column.** Consequently, perform 15 unordered algorithm comparisons per case and skip reference comparisons explicitly. Do not reconstruct baselines or obtain their predictions elsewhere.
+
+Validate unique `(site,h,time)` keys, binary labels, finite probabilities in \([0,1]\), six complete algorithm columns per case, and consecutive hourly timestamps. Reject partially missing algorithm columns; never perform pair-specific row deletion. Record input hash, revision, software versions, row counts, and time ranges.
+
+Treat `time` as forecast-origin time under the benchmark convention; derive target time as `time + h hours`. The export alone cannot independently establish training provenance or absence of feature leakage.
+
+3. **Target and temporal evaluation**
+
+The frozen target is:
+
 \[
 y_{t,h}=\mathbf1\{\mathrm{grid\_kwh}_{t+h}=0\}.
 \]
 
-This is a metering proxy for grid unavailability, not independently verified outage status. Predict the state at \(t+h\), not “any outage before \(t+h\).”
+This is a metering proxy for grid unavailability, predicting the state at \(t+h\), not whether any outage occurs during the intervening interval.
 
-Retain the existing hourly local-time index, missing-row exclusions and all 19 features. Features may use completed observations through origin \(t\); this assumes origin-hour metering is available when issuing the forecast. Fit preprocessing only on each training set.
+Preserve the existing expanding-window monthly evaluation, April–December 2018. For test-month start \(a_m\):
 
-For test-month start \(a_m\), April through December:
 \[
 \mathrm{Train}_{m,h}=\{t:t<a_m,\ t+h<a_m\},
+\qquad
+\mathrm{Test}_{m,h}=\{t:\operatorname{month}(t)=m\},
 \]
-\[
-\mathrm{Test}_{m,h}=\{t:\operatorname{month}(t)=m\}.
-\]
 
-Intersect both with existing eligible rows. Refit monthly; update histories causally within the month without refitting parameters. Test membership follows **origin month**; targets may enter the following month. Exclude targets beyond the available year.
+intersected with eligible feature/target rows. Training labels must be available before the test month. Test membership follows origin month; targets may cross month boundaries. Exclude targets beyond the observed year.
 
-Pool chronological test predictions within each site–horizon case. Random-split predictions are excluded from significance analysis.
+Features assume completed origin-hour metering is available. Preprocessing is fitted on training data only. Pool chronological out-of-sample forecasts; exclude random-split results.
 
-**3. Prediction export and preservation gate**
+4. **Shortlists and baselines**
 
-Export the predictions already produced by `benchmark.py`; do not refit inside `significance.py`.
+Rank each case’s six populated algorithms by pooled Brier score computed from the supplied probabilities; break exact ties alphabetically. The inspected rankings are:
 
-Required columns:
-
-`site, h, origin_time, target_time, month, y`, plus all 12 algorithm and three reference probability columns.
-
-Preserve full numerical precision and the benchmark’s existing probability clipping. Assert:
-
-- Unique `(site, h, origin_time)` keys and chronological ordering.
-- `target_time = origin_time + h hours`.
-- `month` equals origin month.
-- Binary labels and finite probabilities in \([0,1]\).
-- Identical rows for all comparisons.
-- Consecutive hourly origins within each case; fail on unexplained gaps.
-
-Before rerunning, preserve the original results artifact. Compare keyed rows, ignoring row order. Require unchanged published predictive metrics and ranks at the existing serialization precision. Report maximum differences; stop on substantive changes rather than widening tolerances or changing models.
-
-**Specification conflict:** `fit_seconds` measures runtime and will naturally change. Treat timing separately from predictive invariance and report it explicitly. Literal whole-file numerical invariance cannot be promised. Previous verification tolerances are not appropriate for this stricter preservation gate.
-
-**4. Frozen shortlist and references**
-
-Freeze the following order from the existing results and `rank_by_brier`; stored ranks resolve ties introduced by four-decimal Brier rounding.
-
-| Case | Top six, in rank order |
+| Case | Algorithms in Brier order |
 |---|---|
 | BG, 1 h | Extra Trees; Random Forest; CatBoost; LightGBM; XGBoost; Gradient Boosting |
 | BG, 6 h | Extra Trees; Random Forest; Logistic Regression; Gradient Boosting; CatBoost; XGBoost |
 | KR, 1 h | Random Forest; CatBoost; Extra Trees; XGBoost; LightGBM; Gradient Boosting |
 | KR, 6 h | Random Forest; Extra Trees; k-Nearest Neighbours; LightGBM; XGBoost; Gradient Boosting |
 
-The three exported references are:
+These are inherited test-selected shortlists, not independently selected validation sets. The wider benchmark contains persistence, always-no-outage, and seasonal references, but this artifact cannot support their independent significance checks.
+
+5. **Metrics and hypotheses**
+
+For algorithms \(A,B\), orient each unordered pair by the ranking above:
+
 \[
-p^{(0)}_{t,h}=0,\qquad p^{(\mathrm{persist})}_{t,h}=O_t,
-\qquad p^{(\mathrm{seasonal})}_{t,h}
-=\frac17\sum_{k=1}^{7}O_{t+h-24k}.
+BS_A=\frac1N\sum_t(p_{A,t}-y_t)^2,\qquad
+d_t=(p_{A,t}-y_t)^2-(p_{B,t}-y_t)^2,
+\qquad \Delta_{BS}=\bar d.
 \]
 
-Test all 15 unordered shortlist pairs plus six shortlist-versus-seasonal-reference pairs: **21 comparisons per case**. Use rank order for A/B orientation; for reference comparisons, A is the algorithm.
+Negative \(\Delta_{BS}\) favors \(A\). Test:
 
-**Input conflict resolution:** freeze these CSV-derived shortlists as configuration in `significance.py`, so its only runtime data input is `predictions.csv.gz`. Validate shortlist provenance during the preservation check. Do not dynamically select a different shortlist from rerun results.
-
-**5. Metrics and paired moving-block bootstrap**
-
-Primary metric:
 \[
-\mathrm{Brier}_A=\frac1N\sum_t(p_{A,t}-y_t)^2,\qquad
-\Delta_{\mathrm{Brier}}=\bar d.
+H_0:E[d_t]=0,\qquad H_1:E[d_t]\ne0.
 \]
 
-Secondary metric:
+Secondary discrimination metric:
+
 \[
-\mathrm{AUC}_A=
+AUC_A=
 \frac{\sum_{i:y_i=1}\sum_{j:y_j=0}
 [\mathbf1(p_{A,i}>p_{A,j})+\tfrac12\mathbf1(p_{A,i}=p_{A,j})]}
 {N_+N_-},
+\qquad
+\Delta_{AUC}=AUC_A-AUC_B.
 \]
-\[
-\Delta_{\mathrm{AUC}}=\mathrm{AUC}_A-\mathrm{AUC}_B.
-\]
-Positive AUC differences favor A. Compute pooled metrics, not averages of monthly metrics.
 
-For each case:
+Positive \(\Delta_{AUC}\) favors \(A\). Compute pooled metrics, not averages of monthly metrics. These metrics and differences are dimensionless.
 
-- Initialize `numpy.random.default_rng(42)`.
-- Draw 2,000 resamples using overlapping, noncircular blocks of 24 consecutive hours.
-- Sample block starts uniformly from \(0,\ldots,N-24\), with replacement.
-- Concatenate \(\lceil N/24\rceil\) blocks and truncate to \(N\) rows.
-- Reuse the exact same row indices for labels, every algorithm, both metrics and every pair.
-- Compute percentile intervals at 2.5% and 97.5%, using linear quantile interpolation.
+6. **Paired moving-block bootstrap**
 
-Blocks may cross adjacent monthly fold boundaries because the target analysis pools continuous test hours. Never bridge a genuine timestamp gap.
+For each case, initialize `numpy.random.default_rng(42)` and generate 2,000 resamples:
 
-If a bootstrap sample contains only one class, its AUC is undefined. Do not redraw it or substitute a numerical AUC. Record the valid count; conservatively mark the AUC interval unavailable if any required replicate is undefined. Brier analysis remains valid.
+- Use overlapping, noncircular blocks of 24 consecutive hourly rows.
+- Sample starts uniformly with replacement from \(0,\ldots,N-24\).
+- Concatenate \(\lceil N/24\rceil\) blocks and truncate to \(N\).
+- Reuse identical sampled indices for labels, all algorithms, all pairs, and both metrics.
+- Calculate marginal percentile 95% intervals using the 0.025 and 0.975 quantiles with linear interpolation.
 
-These are marginal intervals, not simultaneous confidence intervals.
+Blocks may cross contiguous monthly boundaries, but must never bridge missing hours. Reject unexplained timestamp gaps rather than silently compressing time.
 
-**6. Diebold–Mariano test**
+A single-class replicate has undefined AUC. Do not redraw or substitute a value. Record valid replicate counts; conservatively mark its AUC interval unavailable if any replicate is undefined. Brier calculations remain available.
 
-Let \(z_t=d_t-\bar d\). Use:
+7. **Diebold–Mariano test**
+
+Let \(z_t=d_t-\bar d\). Use Newey–West Bartlett weights:
+
 \[
 \hat\gamma_k=\frac1N\sum_{t=k+1}^{N}z_tz_{t-k},
 \]
+
 \[
 \hat\Omega=\hat\gamma_0+
 2\sum_{k=1}^{L}\left(1-\frac{k}{L+1}\right)\hat\gamma_k,
 \qquad L=h-1+24.
 \]
 
-Thus the fixed HAC lags are 24 and 29 hourly steps. The choice adds daily dependence to the horizon-related lag allowance; it is not selected using significance results.
+Thus \(L=24\) for 1-hour forecasts and \(L=29\) for 6-hour forecasts.
 
 Apply the Harvey–Leybourne–Newbold correction:
+
 \[
 DM_{\mathrm{HLN}}=
 \frac{\bar d}{\sqrt{\hat\Omega/N}}
 \sqrt{\frac{N+1-2h+h(h-1)/N}{N}},
 \]
+
 \[
-p=2\,\Pr(T_{N-1}\ge|DM_{\mathrm{HLN}}|).
+p=2\,\Pr(T_{N-1}\ge |DM_{\mathrm{HLN}}|).
 \]
 
-Use forecast horizon \(h\), not HAC lag \(L\), in the correction.
+Use forecast horizon \(h\), not HAC lag, in the correction.
 
-Edge conventions:
+Identically zero loss differences return mean difference zero, statistic zero, and \(p=1\). For other zero, negative, or nonfinite variance cases, return an explicit invalid/degenerate status and unavailable inferential result; do not silently manufacture significance. Require sufficient sample length for the specified lag.
 
-- Identically zero differences: statistic \(0\), \(p=1\).
-- Exactly constant nonzero differences: signed infinite statistic and limiting \(p=0\), explicitly flagged as degenerate.
-- Other nonpositive or nonfinite variance estimates: report an invalid test; do not silently repair them or declare significance.
-- Reject insufficient sample lengths.
+8. **Multiplicity and top groups**
 
-**7. Multiplicity and top-group definition**
+Apply Holm correction over all \(M=15\) Brier tests within each case:
 
-Apply Holm correction to all 21 Brier-test p-values within each case. For sorted p-values:
 \[
-p^{\mathrm{adj}}_{(i)}
-=\min\left(1,\max_{j\le i}\{(M-j+1)p_{(j)}\}\right),
-\qquad M=21.
+p^{adj}_{(i)}
+=\min\left(1,\max_{j\le i}\{(M-j+1)p_{(j)}\}\right).
 \]
 
-Do not reduce the correction family to comparisons against the best. No cross-case correction is specified, so avoid study-wide familywise claims.
+Preserve the full family when a test is invalid: use 1 conservatively for adjustment while retaining its invalid status. No correction across cases is claimed.
 
-Include the descriptive best in its top group. Include another shortlisted algorithm when its comparison against the best has:
+The descriptive best belongs to the top group. Exclude a competitor only when the best-minus-competitor Brier difference has both:
 
-- Holm-adjusted \(p\ge0.05\), **or**
-- A Brier-difference interval containing zero, including endpoints.
+- Holm-adjusted \(p<0.05\);
+- bootstrap upper bound strictly below zero.
 
-Declare an algorithm worse only when both criteria support the best in the correct direction. Invalid tests remain “unresolved.”
+Otherwise retain it as “not distinguished from the best”; identify invalid comparisons separately as unresolved. AUC does not determine membership.
 
-“Not distinguished from the best” does **not** establish equivalence. Top-group membership is not transitive and does not imply that every member is indistinguishable from every other member. AUC is descriptive and does not redefine this group.
+**Non-rejection is not equivalence.** These are exploratory within-case results; the group is not a claim of pairwise equivalence among all members.
 
-**8. Seeds, falsification and validity limits**
+9. **Comparison with main**
 
-Keep benchmark seed 42 and bootstrap seed 42. Bootstrap replicates are not independent model-training runs. Earlier seed-sensitivity evidence does not establish robustness for all algorithms; the broader multiple-run requirement remains unresolved within this frozen task.
+Read main’s `significance.csv` and README only for comparison after calculating the independent results. Main’s reported groups, including the best, are:
 
-A unique-winner claim is unsupported if any shortlisted competitor remains in the top group. A significant difference in the opposite direction contradicts the claimed superiority. Failure to beat the seasonal reference leaves added predictive value unsupported. Neither nonsignificance nor a zero-covering interval proves equality.
+| Case | Main’s top group |
+|---|---|
+| BG, 1 h | Extra Trees; Random Forest; CatBoost; LightGBM; XGBoost |
+| BG, 6 h | Extra Trees; Random Forest; Logistic Regression; Gradient Boosting |
+| KR, 1 h | Random Forest; CatBoost; Extra Trees; XGBoost; LightGBM |
+| KR, 6 h | Random Forest; Extra Trees; k-Nearest Neighbours; LightGBM; XGBoost; Gradient Boosting |
 
-Leakage, misalignment or substantive benchmark drift invalidates this analysis regardless of favorable p-values.
+Generate `COMPARISON.md` with both sets, exact membership agreement/disagreement, and unresolved statuses per case.
 
-Principal threats are test-set shortlist selection, prior visibility of significance results, seasonal nonstationarity, dependence longer than the fixed block/HAC windows, shared expanding training histories, single-seed training uncertainty, proxy-label error, assumed timestamps and metering availability, class imbalance, and only one year per household. Separately trained household models do not demonstrate geographic transfer. HLN correction does not remove these limitations.
+Explain differences using the specified methodological contrasts: 24-hour versus 168-hour bootstrap blocks, horizon-dependent versus fixed HAC lag, HLN versus no HLN, and Holm over 15 versus five comparisons. Main reports accuracy intervals rather than the requested AUC intervals. Normalize difference signs before comparing estimates.
 
-**9. Implementation acceptance and reporting**
+Do not claim that any single method change caused a disagreement without isolating it. Saved probability rounding can also produce small numerical differences from calculations using unrounded predictions.
 
-Required tests:
+10. **Seeds, falsification, and validity**
 
-- Identical forecasts produce \(DM=0,\ p=1\).
-- A clearly better synthetic forecast with nonzero loss variance produces the expected sign and small p-value.
-- A hand-calculated nondegenerate example verifies HAC weights, HLN correction and Student-t p-value.
-- Fixed-seed bootstrap intervals repeat exactly and use paired contiguous blocks.
-- Holm example: raw `[0.01, 0.04, 0.03]` maps to `[0.03, 0.06, 0.06]`.
-- Export alignment, comparison completeness and invalid-input handling.
+Preserve benchmark seed 42; bootstrap seed is 42. Bootstrap replicates are not independent training runs. This check cannot satisfy the broader study’s multiple-training-seed requirement.
 
-During implementation, run `python -m pytest -q` without network access or installation.
+A unique-winner claim is unsupported whenever another algorithm remains in the top group. A reliable effect in the opposite direction contradicts a claimed directional advantage. Failure to reject does not falsify equality or prove equivalence. Claims of improvement over a reference cannot be evaluated because reference predictions are absent.
 
-Produce `results/significance_pairs.csv` with effect estimates, intervals, test statistics, raw/adjusted p-values, sample counts and validity flags; generate `results/significance_summary.md` and the README section from those outputs. Replace the existing significance conclusions: they used a different protocol and cannot be carried forward.
+Threats include test-selected shortlists, prior exposure to significance results, temporal nonstationarity, dependence beyond 24 hours, shared expanding training sets, monthly model changes, single-seed training, rounded probabilities, proxy-label error, metering latency, class imbalance, and one year per household. Separate site-specific training is not evidence of geographic transfer. HLN is an approximate correction and does not eliminate these limitations.
 
-No benchmark rerun, tests, new significance results or top-group conclusions were produced in this read-only methodology turn.
+11. **Deliverables and acceptance**
+
+The implementation must produce:
+
+- `significance_check/check.py`: independent analysis.
+- `significance_check/pairs.csv`: 60 pair rows with effects, intervals, DM statistics, raw/adjusted p-values, sample counts, and validity flags.
+- `significance_check/COMPARISON.md`: per-case group comparison and limitations.
+- `tests/test_s1_sig_check.py`: identical-forecast handling, clearly better nondegenerate forecasts, repeatable bootstrap, and hand-computed Holm correction.
+- `agent_notes/S1_bench_step1/REPRO_NOTE.md`: archived Linux/Windows metric differences, affected algorithms, maximum absolute difference per metric, and maximum rank change.
+
+For Holm, raw `[0.01, 0.04, 0.03]` must yield `[0.03, 0.06, 0.06]`. Also verify HAC/HLN arithmetic, paired contiguous resampling, and comparison completeness.
+
+Reproduction-note values must come from archived keyed comparisons, excluding timing from predictive drift. Do not rerun models or adjust settings to recover agreement. No methodological citations were verified in this offline turn.
+
+**Execution status:** no edits, merge, model fitting, or significance results were produced. Attempted `python -m pytest -q -p no:cacheprovider` with bytecode disabled; pytest failed before collection because no writable temporary directory was available. A passing suite remains required during implementation.
