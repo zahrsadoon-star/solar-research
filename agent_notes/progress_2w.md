@@ -53,3 +53,15 @@
 ## 2026-10-29 02:55 (lead, late 22:36 run)
 - PC asleep ~02:15 24 Oct to ~02:50 29 Oct: no engine runs, no check-ins for 5 days.
 - Codex step1-significance: NOT merged (MAJOR_REVISION, gate stopped it). Windows rerun of benchmark.py drifts from the published Linux numbers (max Brier 0.0013, mostly XGBoost/GB, max rank change 3). Lead decision: cross-platform variability, document it. Fix task queued: independent significance check on the original predictions, compare top groups with main (cec3552).
+
+## 2026-11-21 04:31 Baghdad (lead, 00:36 run fired late; PC clock shows +08:00)
+- No check-ins 17-20 Nov (pause until 19 Nov, then PC/schedule). All 4 tasks queued on 16 Nov failed on 17 Nov:
+  p08-config and p09-ci because Codex lost network (transient); step2-tuning hit the Codex timeout while running the
+  full grid (code + partial outputs committed on its branch, NOT reviewed, NOT merged); fix2-significance never started
+  (branch locked by a stale worktree).
+- Product: MERGED p04 economics and p07 optimisers into solar-sizing-tool main (fixer closed both MUST-FIX; lead
+  re-ran merged suite 535 passed, ruff clean; ROADMAP 1.4/1.5 ticked). p06 EMS held: lead decision = self-discharge
+  capped at C_min (consistent with battery.py and legacy); fix task queued.
+- Queued 5: fix-p06-ems, 20261121-p08-config, 20261121-p09-ci, 20261121-s1-bench-step2-finish (make tuning resumable,
+  only K=1 sanity check inside Codex; lead runs the full grid on the PC afterwards), fix3-step1-significance.
+- No S1 numbers changed this run. No Claude agents used.
