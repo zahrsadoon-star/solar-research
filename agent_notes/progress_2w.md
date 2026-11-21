@@ -65,3 +65,5 @@
 - Queued 5: fix-p06-ems, 20261121-p08-config, 20261121-p09-ci, 20261121-s1-bench-step2-finish (make tuning resumable,
   only K=1 sanity check inside Codex; lead runs the full grid on the PC afterwards), fix3-step1-significance.
 - No S1 numbers changed this run. No Claude agents used.
+
+- 2026-11-21 08:36 (lead, light run): product EMS Mode 0 merged (620 tests). S1 step-2 tuning and the step-1 significance check did not run: Codex lost its connection at 11:00 PC time, then hit its usage limit; both requeued unchanged. No new S1 numbers today so far.
