@@ -1,9 +1,6 @@
-تمّت المعالجة والتوثيق.
+صلّحت التقارير والتحقق من checkpoints، وأعدت sanity فقط؛ الـfull grid ما شغّلته.
 
-- **REPRODUCED:** نجحت المقارنات الـ80، والاختبارات الـ68.
-- أضفت حماية للنتائج الأصلية وفحوصات للمقارنات الناقصة والمكررة.
-- سبب فرق RF يبقى غير محسوم، رغم أنه ضمن السماح.
+- **90 اختبار ناجح**، وRuff للملفات المعدّلة ناجح.
+- القبول بعده معلّق: الدمج محجوب بالـsandbox، Ruff العام بيه **397 مخالفة**، وLR يفشل شرط ‎`1e-9`.
 
-التوثيق: [README](studies/S1_outage_forecasting/benchmark/verify/results/README.md)، [FIX_REPORT](agent_notes/S1_bench_verify/FIX_REPORT.md)، [CODEX_REPORT](agent_notes/S1_bench_verify/CODEX_REPORT.md).
-
-التقارير بقيت بالمسار المسموح. ما عدّلت البيانات أو البنچمارك الأصلي، وما سويت commit.
+التفاصيل بـ[FIX_REPORT.md](agent_notes/FIX_REPORT.md)، وأمر التشغيل الكامل بـ[RUN.md](agent_notes/S1_bench_step2/RUN.md). كتبت أيضاً `CODEX_REPORT.md` ووثّقت النتائج وحدودها.

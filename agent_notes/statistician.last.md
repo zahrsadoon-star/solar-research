@@ -1,5 +1,9 @@
-**REPRODUCED:** all 80 benchmark comparisons pass. No chronological leakage found; all 62 tests pass.
+كملت التدقيق وكتبت [STATS_REPORT.md](agent_notes/STATS_REPORT.md) و[CODEX_REPORT.md](CODEX_REPORT.md).
 
-Seed 43 exposed one sensitivity: Karbala 6-hour F1 changed by 0.00794, exceeding 0.005. The other 15 metric differences stayed below that threshold.
+- **87 اختبار نجح**؛ Ruff للملفات المعدّلة نظيف.
+- نتائج K=1 تطابقت بفروق تقريب عددي فقط. تغيير البذرة إلى 43 غيّر RF Brier بمقدار `0.000261`.
+- ما ظهر تسريب بالميزات أو الـscaling ضمن الفحوص.
+- شرط LR الحرفي بقي فاشل رغم التطابق بعد التقريب.
+- الدمج تعذّر بسبب صلاحيات sandbox؛ Ruff العام بقي يفشل بـ397 مخالفة موجودة.
 
-Details: [STATS_REPORT.md](agent_notes/S1_bench_verify/STATS_REPORT.md). Protected files unchanged; no commits.
+ما شغّلت الشبكة الكاملة، ولا سويت commit أو push.

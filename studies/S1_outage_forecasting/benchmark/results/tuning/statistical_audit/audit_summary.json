@@ -1,0 +1,33 @@
+{
+  "all_splits_have_both_classes": true,
+  "max_pooled_metric_discrepancy": 5.551115123125783e-17,
+  "test_prevalence_ranges": {
+    "BG": {
+      "min": 0.1545698924731182,
+      "max": 0.803763440860215
+    },
+    "KR": {
+      "min": 0.0268817204301075,
+      "max": 0.3172043010752688
+    }
+  },
+  "seeds": [
+    42,
+    43
+  ],
+  "site": "BG",
+  "h": 1,
+  "K": 1,
+  "months": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "inference": "descriptive only"
+}

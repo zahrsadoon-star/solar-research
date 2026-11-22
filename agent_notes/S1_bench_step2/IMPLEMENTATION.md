@@ -1,3 +1,11 @@
+# Continuation notice (20261122)
+
+The historical instructions below describe the interrupted implementation. For the
+current resumable CLI, use RUN.md; --run-only and --report-only are superseded.
+See SANITY.md and CODEX_REPORT.md for current checks and unresolved constraints.
+No full grid was run during this continuation.
+
+---
 # S1 benchmark step 2 implementation notes
 
 Follow agent_notes/PLAN.md and the task-specific write allowlist. No src/ or experiments/ edits.

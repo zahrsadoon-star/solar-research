@@ -42,15 +42,15 @@ Top six algorithms per case, re-run with the same protocol, hourly predictions k
 Diebold-Mariano on hourly Brier loss (Newey-West, lag 24 h, Holm over 5 comparisons) and 7-day moving-block bootstrap
 (2,000 replicates) 95 % CI. "Really better" = Holm p < 0.05 and CI above 0.
 
-| Case | Best | Statistically tied with the best | Significantly worse than the best |
+| Case | Lowest observed Brier | Difference criterion not met | Significantly worse than the best |
 |---|---|---|---|
 | Baghdad 1 h | Extra Trees | Random Forest, CatBoost, LightGBM, XGBoost | Gradient Boosting |
 | Baghdad 6 h | Extra Trees | Random Forest, Logistic Regression, Gradient Boosting | CatBoost, XGBoost |
 | Karbala 1 h | Random Forest | CatBoost, Extra Trees, XGBoost, LightGBM | Gradient Boosting |
 | Karbala 6 h | Random Forest | Extra Trees, kNN, LightGBM, XGBoost, Gradient Boosting | - |
 
-**Conclusion:** there is no single winner. Random Forest and Extra Trees form a top group that is never separable
-(accuracy differences 0.1-0.2 points); the boosting models are usually tied with them too. The honest headline is
-"bagged tree ensembles (Random Forest / Extra Trees) are the best choice; most boosting methods are statistically
-equivalent; Naive Bayes, Decision Tree, SVM and MLP are clearly behind". At Baghdad 6 h even Logistic Regression is
-tied with the best - the extra value of complex models shrinks at longer horizons.
+**Interpretation:** these default-model comparisons did not meet the stated difference criterion for
+Random Forest versus Extra Trees, or for several boosting models versus each case's observed leader.
+Failure to detect a difference does not establish equivalence or recommend a best model. Only the
+listed comparisons were tested; the table supports no inference about untested models or tuned models.
+At Baghdad 6 h, Logistic Regression also did not meet the difference criterion against Extra Trees.

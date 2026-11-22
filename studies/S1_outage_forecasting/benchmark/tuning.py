@@ -5,23 +5,24 @@ are drawn with replacement, once per algorithm, before any outer predictions.
 """
 from __future__ import annotations
 
+import argparse
+import hashlib
 import json
 import os
-import sys
 import platform
 import time
 import warnings
 from concurrent.futures import ProcessPoolExecutor
+from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 import pandas as pd
+from benchmark import HORIZONS, SEED, algorithms, features, load, scores
 from sklearn.base import clone
 from sklearn.metrics import brier_score_loss
 from threadpoolctl import threadpool_limits
-
-from benchmark import HORIZONS, SEED, algorithms, features, load, scores
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "results" / "tuning"
@@ -126,8 +127,8 @@ def timing_budget(cases: dict, candidates: dict) -> dict:
                 model = estimator(name, candidates[name][i], i)
                 model.fit(x[inner], y[inner])
                 probabilities(model, x[valid])
-                rows.append(dict(site=site, h=h, algorithm=name, config_index=i,
-                                 seconds=time.perf_counter() - start))
+                rows.append({"site": site, "h": h, "algorithm": name, "config_index": i,
+                                 "seconds": time.perf_counter() - start})
             print(f"timing {site} h={h} {name}", flush=True)
     timings = pd.DataFrame(rows)
     timings.to_csv(OUT / "timings.csv", index=False)
@@ -137,45 +138,51 @@ def timing_budget(cases: dict, candidates: dict) -> dict:
                  for k in range(8, 21)}
     feasible = [k for k, seconds in estimates.items() if seconds <= 80 * 60]
     k = max(feasible) if feasible else 8
-    decision = dict(K=k, feasible=bool(feasible), estimated_seconds=estimates,
-                    formula="1.25 * (9*(K+2)*sum(case/algorithm max timing) + 9*3*sum(BG1 LR/RF max timing))",
-                    overhead="25%; full-training refit costs twice the late inner fit; sanity includes selection + refit",
-                    timing_seconds=float(timings.seconds.sum()))
+    decision = {"K": k, "feasible": bool(feasible), "estimated_seconds": estimates,
+                    "formula": "1.25 * (9*(K+2)*sum(case/algorithm max timing) + 9*3*sum(BG1 LR/RF max timing))",
+                    "overhead": "25%; full-training refit costs twice the late inner fit; sanity includes selection + refit",
+                    "timing_seconds": float(timings.seconds.sum())}
     (OUT / "budget.json").write_text(json.dumps(decision, indent=2), encoding="utf-8")
     return decision
 
 
-def evaluate(site: str, h: int, x: pd.DataFrame, y: pd.Series, candidates: dict,
-             prefix: str = "") -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Evaluate all nine outer folds; persist fold checkpoints inside tuning outputs."""
-    predictions, selected = [], []
-    seconds = dict.fromkeys(candidates, 0.0)
-    for month in range(4, 13):
-        outer, test, inner, valid = split_masks(x.index, h, month)
-        fold = pd.DataFrame(dict(site=site, h=h, origin_time=x.index[test],
-                                 target_time=x.index[test] + pd.Timedelta(hours=h),
-                                 month=month, y=y[test].values))
-        for name, configs in candidates.items():
-            start = time.perf_counter()
-            chosen, losses = select_config(name, configs, x, y, inner, valid)
-            model = estimator(name, configs[chosen], chosen)
-            model.fit(x[outer], y[outer])
-            fold[name] = probabilities(model, x[test])
-            seconds[name] += time.perf_counter() - start
-            print(f"{prefix or 'tuning'} {site} h={h} month={month} {name} complete", flush=True)
-            selected.append(dict(site=site, h=h, test_month=month, algorithm=name,
-                                 config_index=chosen, config_json=json.dumps(json_params(model), sort_keys=True),
-                                 inner_brier=losses[chosen], inner_briers_json=json.dumps(losses)))
-        predictions.append(fold)
-        print(f"{prefix or 'tuning'} {site} h={h} month={month} complete", flush=True)
-        pd.concat(predictions).to_csv(OUT / f"{prefix}{site}_{h}_predictions.csv.gz", index=False)
-        pd.DataFrame(selected).to_csv(OUT / f"{prefix}{site}_{h}_configs.csv", index=False)
-    prediction = pd.concat(predictions, ignore_index=True)
-    validate_predictions(prediction, list(candidates))
-    rows = [dict(site=site, h=h, algorithm=name, K=len(configs), kind="algorithm",
-                 **scores(prediction.y.values, prediction[name].values), fit_seconds=seconds[name])
-            for name, configs in candidates.items()]
-    return pd.DataFrame(rows), pd.DataFrame(selected), prediction
+SCHEMA = 1
+
+
+def digest(value: Any) -> str:
+    """Hash canonical JSON without dropping floating point precision."""
+    return hashlib.sha256(json.dumps(value, sort_keys=True, allow_nan=False).encode()).hexdigest()
+
+
+def atomic_json(path: Path, value: dict) -> None:
+    """Publish a complete JSON document atomically on the same filesystem."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(".tmp")
+    with temporary.open("w", encoding="utf-8") as stream:
+        json.dump(value, stream, sort_keys=True, allow_nan=False)
+        stream.flush()
+        os.fsync(stream.fileno())
+    temporary.replace(path)
+
+
+def provenance(x: pd.DataFrame, y: pd.Series, candidates: dict) -> dict:
+    """Fingerprint eligible inputs, source, ordered candidates and environment."""
+    data_hash = hashlib.sha256(pd.util.hash_pandas_object(x, index=True).values.tobytes()
+                               + pd.util.hash_pandas_object(y, index=True).values.tobytes()).hexdigest()
+    return {"schema": SCHEMA, "seed": SEED, "input_sha256": data_hash,
+                "columns": list(x.columns), "dtypes": [str(d) for d in x.dtypes],
+                "source_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
+                               for p in [Path(__file__), HERE / "benchmark.py",
+                                         HERE / "results/benchmark_results.csv"]},
+                "raw_sha256": {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
+                            for p in [HERE.parents[2] / "data/raw/BG18760_with_analysis.xlsx",
+                                      HERE.parents[2] / "data/raw/KR-8760.xlsx"]},
+                "python": platform.python_version(), "platform": platform.platform(),
+                "versions": {p: version(p) for p in ["numpy", "pandas", "scipy", "scikit-learn",
+                                                "xgboost", "lightgbm", "catboost", "joblib", "threadpoolctl"]},
+                "candidates": candidates,
+                "effective_parameters": {n: [json_params(estimator(n, c, i)) for i, c in enumerate(cs)]
+                                      for n, cs in candidates.items()}}
 
 
 def validate_predictions(frame: pd.DataFrame, names: list[str]) -> None:
@@ -187,27 +194,119 @@ def validate_predictions(frame: pd.DataFrame, names: list[str]) -> None:
         raise ValueError("Invalid or missing prediction")
 
 
-def evaluate_worker(args: tuple) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Isolate each case's diagnostics; limit BLAS oversubscription, not estimator jobs."""
-    site, h, x, y, candidates = args
-    work = OUT / f"worker_{site}_{h}"
-    work.mkdir(exist_ok=True)
-    os.chdir(work)
-    # Equal worker CPU budgets avoid four all-core estimators oversubscribing.
-    # Estimator n_jobs=-1 remains unchanged; joblib/LightGBM see this CPU limit.
-    cpu_budget = max(1, (os.cpu_count() or 1) // 4)
-    os.environ["LOKY_MAX_CPU_COUNT"] = str(cpu_budget)
-    with (work / "warnings.log").open("w", encoding="utf-8") as log:
-        def emit(message: Any, category: type, filename: str, lineno: int,
-                 file: Any = None, line: Any = None) -> None:
-            log.write(warnings.formatwarning(message, category, filename, lineno))
-            log.flush()
-        warnings.showwarning = emit
-        warnings.simplefilter("always")
-        from joblib import parallel_backend
-        with threadpool_limits(limits=1, user_api="blas"), threadpool_limits(
-                limits=cpu_budget, user_api="openmp"), parallel_backend("threading"):
-            return evaluate(site, h, x, y, candidates)
+def read_checkpoint(path: Path, identity: dict, manifest: dict, rows: dict,
+                    name: str) -> dict:
+    """Reject corrupt, incomplete or incompatible units before reusing predictions."""
+    try:
+        envelope = json.loads(path.read_text(encoding="utf-8"))
+        unit = envelope["payload"]
+        if envelope["sha256"] != digest(unit):
+            raise ValueError("checksum")
+        # JSON normalizes tuple-valued estimator parameters to lists.
+        if (unit["status"] != "complete" or unit["identity"] != identity
+                or digest(unit["manifest"]) != digest(manifest) or unit["rows"] != rows):
+            raise ValueError("identity, inputs, protocol or completion mismatch")
+        losses = np.asarray(unit["losses"], dtype=float)
+        chosen = unit["chosen"]
+        if (len(losses) != len(manifest["candidates"][name]) or not np.isfinite(losses).all()
+                or chosen != int(np.argmin(losses))):
+            raise ValueError("invalid selection")
+        if digest(unit["parameters"]) != digest(manifest["effective_parameters"][name][chosen]):
+            raise ValueError("invalid parameters")
+        probabilities_ = np.asarray(unit["probabilities"], dtype=float)
+        if (probabilities_.shape != (len(rows["y"]),) or not np.isfinite(probabilities_).all()
+                or ((probabilities_ < 0) | (probabilities_ > 1)).any()
+                or not np.isfinite(unit["elapsed_seconds"]) or unit["elapsed_seconds"] < 0
+                or not isinstance(unit["warnings"], list)):
+            raise ValueError("invalid predictions or metadata")
+        return unit
+    except (KeyError, TypeError, ValueError, IndexError) as error:
+        raise ValueError(f"Invalid checkpoint {path}: {error}") from error
+
+
+def evaluate(site: str, h: int, x: pd.DataFrame, y: pd.Series, candidates: dict,
+             out: Path = OUT, months: tuple[int, ...] = tuple(range(4, 13)),
+             read_only: bool = False) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Resume atomic (site, horizon hours, month, algorithm) units and pool predictions."""
+    out = Path(out)
+    manifest = provenance(x, y, candidates)
+    manifest_path = out / "checkpoints" / f"{site}_{h}_manifest.json"
+    if manifest_path.exists():
+        if digest(json.loads(manifest_path.read_text(encoding="utf-8"))) != digest(manifest):
+            raise ValueError("Incompatible checkpoint manifest; use a separate --out directory")
+    elif read_only:
+        raise ValueError("Missing checkpoint manifest")
+    else:
+        atomic_json(manifest_path, manifest)
+    expected_files = {f"{site}_{h}_{m}_{digest(n)[:16]}.json"
+                      for m in range(4, 13) for n in candidates}
+    actual_files = {p.name for p in (out / "checkpoints").glob(f"{site}_{h}_*.json")}
+    if actual_files - expected_files - {manifest_path.name}:
+        raise ValueError("Unexpected or duplicate checkpoint unit")
+    predictions, selected = [], []
+    seconds = dict.fromkeys(candidates, 0.0)
+    for month in months:
+        outer, test, inner, valid = split_masks(x.index, h, month)
+        if not all(mask.any() for mask in (outer, test, inner, valid)):
+            raise ValueError("Empty temporal split")
+        rows = {"origin_time": x.index[test].astype(str).tolist(),
+                    "target_time": (x.index[test] + pd.Timedelta(hours=h)).astype(str).tolist(),
+                    "y": y[test].tolist()}
+        fold = pd.DataFrame(dict(site=site, h=h, month=month, **rows))
+        for name, configs in candidates.items():
+            identity = {"site": site, "h": h, "test_month": month, "algorithm": name}
+            path = out / "checkpoints" / f"{site}_{h}_{month}_{digest(name)[:16]}.json"
+            if not path.exists():
+                if read_only:
+                    raise ValueError(f"Missing checkpoint {identity}")
+                start = time.perf_counter()
+                with warnings.catch_warnings(record=True) as caught:
+                    warnings.simplefilter("always")
+                    chosen, losses = select_config(name, configs, x, y, inner, valid)
+                    model = estimator(name, configs[chosen], chosen)
+                    model.fit(x[outer], y[outer])
+                    p = probabilities(model, x[test])
+                unit = {"status": "complete", "identity": identity, "manifest": manifest, "rows": rows,
+                            "chosen": chosen, "losses": losses, "parameters": json_params(model),
+                            "probabilities": p.tolist(), "elapsed_seconds": time.perf_counter() - start,
+                            "warnings": [str(w.message) for w in caught]}
+                atomic_json(path, {"payload": unit, "sha256": digest(unit)})
+                print(f"completed {site} h={h} month={month} {name}", flush=True)
+            unit = read_checkpoint(path, identity, manifest, rows, name)
+            fold[name] = unit["probabilities"]
+            seconds[name] += unit["elapsed_seconds"]
+            selected.append(dict(**identity, config_index=unit["chosen"],
+                                 config_json=json.dumps(unit["parameters"], sort_keys=True),
+                                 inner_brier=unit["losses"][unit["chosen"]],
+                                 inner_briers_json=json.dumps(unit["losses"])))
+        predictions.append(fold)
+    prediction = pd.concat(predictions, ignore_index=True)
+    prediction["origin_time"] = pd.to_datetime(prediction.origin_time)
+    prediction["target_time"] = pd.to_datetime(prediction.target_time)
+    validate_predictions(prediction, list(candidates))
+    results = []
+    for name, configs in candidates.items():
+        if prediction.y.nunique() < 2:
+            raise ValueError("Single-class pooled target: AUC is undefined; no complete summary")
+        results.append(dict(site=site, h=h, algorithm=name, K=len(configs), kind="algorithm",
+                            **scores(prediction.y.values, prediction[name].values), fit_seconds=seconds[name]))
+    return pd.DataFrame(results), pd.DataFrame(selected), prediction
+
+
+def evaluate_worker(args: tuple) -> None:
+    """Run one case with fixed native limits; estimator parameters remain unchanged."""
+    site, h, x, y, candidates, out = args
+    work = out / f"worker_{site}_{h}"
+    work.mkdir(parents=True, exist_ok=True)
+    previous = Path.cwd()
+    os.chdir(work)  # CatBoost default diagnostic files must stay in this output tree.
+    os.environ["LOKY_MAX_CPU_COUNT"] = "1"
+    from joblib import parallel_backend
+    try:
+        with threadpool_limits(limits=1), parallel_backend("threading", n_jobs=1):
+            evaluate(site, h, x, y, candidates, out)
+    finally:
+        os.chdir(previous)
 
 
 def table(frame: pd.DataFrame) -> str:
@@ -225,12 +324,16 @@ def reports(results: pd.DataFrame, selected: pd.DataFrame, sanity: pd.DataFrame,
             budget: dict, candidates: dict) -> None:
     """Generate the summary, README section and figure from computed results."""
     k = budget["K"]
+    expected = {(s, h, n) for s in ("BG", "KR") for h in HORIZONS for n in SEARCH_SPACES}
+    complete_design = set(results[["site", "h", "algorithm"]].itertuples(index=False, name=None)) == expected
     lines = ["# Step 2 tuning", f"K={k} for every algorithm, seed={SEED}; draws with replacement.",
              f"Estimated runtime: {budget['estimated_seconds'][k] / 60:.2f} minutes; feasible: {budget['feasible']}.",
              budget["formula"], budget["overhead"],
              "Config 0 is unchanged. Other configs use n_jobs=-1 where supported (CatBoost thread_count=-1).",
-             "Four independent cases execute in separate processes with BLAS threads limited to one per process. Each worker exposes max(1, cpu_count // 4) CPUs to joblib/LightGBM and OpenMP, using joblib's threading backend; estimator n_jobs settings are unchanged. CatBoost retains its own thread management. The timing estimate is sequential time, not a measured parallel runtime.",
+             "Cases execute in separate processes as requested by --n-jobs. Native BLAS/OpenMP limits and LOKY_MAX_CPU_COUNT are one; estimator parameters are unchanged. Explicit estimator parallelism and CatBoost may manage additional threads. The timing estimate is sequential, not measured parallel wall time.",
              "Default CSV metrics have four-decimal precision. Differences use those stored values.",
+             "Small differences cannot establish improvements beyond baseline rounding and reproducibility uncertainty. The literal LR reproduction gate remains unresolved unless the lead explicitly changes the criterion or supplies a verified full-precision baseline.",
+             "Complete benchmark design." if complete_design else "SUBSET ONLY: rankings apply only to the evaluated algorithms and cases; no full-benchmark dominance conclusion is supported.",
              "No significance tests were run. This is one seed, not multiple independent runs; temporal folds are dependent.",
              "Step 1 inference does not transfer to tuned models. MLP early stopping and SVM calibration retain benchmark internal splitting.",
              "Limitations: metering-proxy labels, completed-origin-hour availability, one year per site, seasonal drift, dependent losses, overlapping training, class imbalance, unequal search-space coverage and prior inspection of this test year.",
@@ -248,8 +351,15 @@ def reports(results: pd.DataFrame, selected: pd.DataFrame, sanity: pd.DataFrame,
     changed_top_two = []
     for (site, h), group in results.groupby(["site", "h"]):
         group = group.sort_values("brier")
-        pair_persists &= set(group.head(2).algorithm) == {"Random Forest", "Extra Trees"}
-        if set(group.head(2).algorithm) != set(group.sort_values("default_rank_by_brier").head(2).algorithm):
+        if group.brier.duplicated(keep=False).any():
+            lines.append(f"Exact Brier ties for {site} h={h}: "
+                         + ", ".join(group.loc[group.brier.duplicated(keep=False), "algorithm"]))
+        tuned_top = top_two_members(group, "brier")
+        default_top = top_two_members(group, "default_brier")
+        if len(tuned_top) > 2 or len(default_top) > 2:
+            lines.append("Second-place boundary tie: all tied members are included; no unique leading pair.")
+        pair_persists &= tuned_top == {"Random Forest", "Extra Trees"}
+        if tuned_top != default_top:
             changed_top_two.append(f"{site} h={h}")
         lines += [f"## {site}, h={h} hours", table(group[["algorithm", "brier", "default_brier", "delta_brier", "rank_by_brier", "default_rank_by_brier"]]),
                   "Changed rank: " + ", ".join(group.loc[group.rank_by_brier != group.default_rank_by_brier, "algorithm"])]
@@ -258,22 +368,26 @@ def reports(results: pd.DataFrame, selected: pd.DataFrame, sanity: pd.DataFrame,
         readme += [f"### {site}, h={h} hours (top six by tuned Brier)", table(group.head(6)[["algorithm", "default_brier", "brier", "default_accuracy", "accuracy"]])]
     verdict = ("Top-two membership by Brier changes versus the stored defaults in: " + ", ".join(changed_top_two) + "."
                if changed_top_two else "Top-two membership by Brier is unchanged versus the stored defaults in every case.")
-    verdict += (" Random Forest and Extra Trees occupy the first two ranks in every tuned case." if pair_persists else
-                " Random Forest and Extra Trees do not occupy both first two ranks in every tuned case.")
+    if complete_design:
+        verdict += (" Random Forest and Extra Trees form the unique leading pair in every tuned case." if pair_persists else
+                    " Random Forest and Extra Trees do not form a unique leading pair in every tuned case.")
+    else:
+        verdict = "Subset only. " + verdict + " No full-benchmark dominance claim is made."
     readme += [verdict + " These rankings are descriptive; significance on tuned predictions is a later step.",
                "The literal LR 1e-9 CSV check and four-decimal comparison are reported separately in tuning_summary.md; the stored baseline has limited precision. Only one tuning seed was run."]
     execution_path = OUT / "execution.json"
     if execution_path.exists():
         execution = json.loads(execution_path.read_text(encoding="utf-8"))
-        actual = f"Measured final parallel evaluation plus sanity runtime: {execution['elapsed_seconds'] / 60:.2f} minutes (excludes initial timing and interrupted attempts)."
+        actual = f"Measured invocation runtime (including reuse and assembly, excluding historical timing probe): {execution['elapsed_seconds'] / 60:.2f} minutes (excludes initial timing and interrupted attempts)."
         lines.append(actual)
         readme.append(actual)
     lines += [verdict, "## K=1 sanity: BG h=1", table(sanity),
               "LR literal tolerance is 1e-9 for each metric; RF tolerance is 0.005 for Brier. Raw differences are reported without causal attribution. Four-decimal equality is a separate diagnostic."]
     (OUT / "tuning_summary.md").write_text("\n\n".join(lines) + "\n", encoding="utf-8")
-    path = HERE / "README.md"
-    original = path.read_text(encoding="utf-8").split("\n## Step 2 - tuning")[0]
-    path.write_text(original.rstrip() + "\n\n" + "\n\n".join(readme) + "\n", encoding="utf-8")
+    if complete_design:
+        path = HERE / "README.md"
+        original = path.read_text(encoding="utf-8").split("\n## Step 2 - tuning")[0]
+        path.write_text(original.rstrip() + "\n\n" + "\n\n".join(readme) + "\n", encoding="utf-8")
     import matplotlib.pyplot as plt
     fig, axes = plt.subplots(1, 4, figsize=(18, 6))
     for ax, ((site, h), group) in zip(axes, results.groupby(["site", "h"])):
@@ -289,81 +403,125 @@ def reports(results: pd.DataFrame, selected: pd.DataFrame, sanity: pd.DataFrame,
     plt.close(fig)
 
 
-def main() -> None:
-    """Freeze timing budget, run nested tuning, sanity checks and generated reporting."""
-    OUT.mkdir(exist_ok=True)
-    # CatBoost's unchanged defaults write diagnostics relative to the working directory.
-    os.chdir(OUT)
-    if "--report-only" in sys.argv:
-        budget = json.loads((OUT / "budget.json").read_text(encoding="utf-8"))
-        budget["estimated_seconds"] = {int(k): v for k, v in budget["estimated_seconds"].items()}
-        reports(pd.read_csv(OUT / "tuned_results.csv"), pd.read_csv(OUT / "selected_configs.csv"),
-                pd.read_csv(OUT / "sanity.csv"), budget,
-                {name: configurations(name, budget["K"]) for name in algorithms()})
-        return
-    resume = "--run-only" in sys.argv
-    if (OUT / "budget.json").exists() and not resume:
-        raise FileExistsError("Existing run: preserve outputs before starting another run")
-    if resume and (OUT / "tuned_results.csv").exists():
-        raise FileExistsError("Completed results exist")
-    with (OUT / "warnings.log").open("w", encoding="utf-8") as warning_file:
-        def log_warning(message: Any, category: type, filename: str, lineno: int,
-                        file: Any = None, line: Any = None) -> None:
-            warning_file.write(warnings.formatwarning(message, category, filename, lineno))
-            warning_file.flush()
-        warnings.showwarning = log_warning
-        warnings.simplefilter("always")
-        cases = {(site, h): case_data(site, h) for site in ["BG", "KR"] for h in HORIZONS}
-        candidates = {name: configurations(name) for name in algorithms()}
-        manifest = dict(seed=SEED, python=platform.python_version(), search_spaces=SEARCH_SPACES,
-                        candidates=candidates, defaults={n: json_params(m) for n, m in algorithms().items()})
-        from importlib.metadata import version
-        manifest["versions"] = {p: version(p) for p in ["numpy", "pandas", "scipy", "scikit-learn", "xgboost", "lightgbm", "catboost"]}
-        if resume:
-            existing = json.loads((OUT / "configurations.json").read_text(encoding="utf-8"))
-            if json.dumps(existing, sort_keys=True) != json.dumps(manifest, sort_keys=True):
-                raise ValueError("Frozen configuration/environment mismatch")
-            budget = json.loads((OUT / "budget.json").read_text(encoding="utf-8"))
-            budget["estimated_seconds"] = {int(k): v for k, v in budget["estimated_seconds"].items()}
-        else:
-            (OUT / "configurations.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-            budget = timing_budget(cases, candidates)
-        candidates = {n: c[:budget["K"]] for n, c in candidates.items()}
-        print(f"Frozen budget K={budget['K']}, feasible={budget['feasible']}", flush=True)
-        baseline = pd.read_csv(HERE / "results" / "benchmark_results.csv")
-        started = time.perf_counter()
-        with ProcessPoolExecutor(max_workers=4) as pool:
-            parts = list(pool.map(evaluate_worker,
-                                 [(site, h, x, y, candidates) for (site, h), (x, y) in cases.items()]))
-        results, selected, predictions = [pd.concat([p[i] for p in parts], ignore_index=True) for i in range(3)]
-        results["rank_by_brier"] = results.groupby(["site", "h"]).brier.rank(method="average")
-        keys = ["site", "h", "algorithm"]
-        results = results.merge(baseline.rename(columns={c: "default_" + c for c in baseline if c not in keys}), on=keys, validate="one_to_one")
+def top_two_members(group: pd.DataFrame, metric: str) -> set[str]:
+    """Include all exact ties at the second order statistic of a unitless loss."""
+    cutoff = group[metric].nsmallest(min(2, len(group))).max()
+    return set(group.loc[group[metric] <= cutoff, "algorithm"])
+
+
+def validated_sanity(baseline: pd.DataFrame) -> pd.DataFrame:
+    """Rebuild sanity evidence only from checkpoints matching current provenance."""
+    path = HERE / "results/tuning/sanity"
+    candidates = {n: configurations(n, 1) for n in ("Logistic Regression", "Random Forest")}
+    try:
+        x, y = case_data("BG", 1)
+        results, _, _ = evaluate("BG", 1, x, y, candidates, path, read_only=True)
+    except (ValueError, OSError) as exc:
+        return pd.DataFrame({"status": [f"Unavailable: sanity checkpoints not validated: {exc}"]})
+    return sanity_comparison(results, baseline)
+
+
+def frozen_budget() -> dict:
+    """Recompute the frozen budget from the historical timing probe (seconds)."""
+    timings = pd.read_csv(HERE / "results/tuning/timing_probe_20261116.csv")
+    slow = timings.groupby(["site", "h", "algorithm"]).seconds.max()
+    sanity = sum(slow.loc[("BG", 1, n)] for n in ["Logistic Regression", "Random Forest"])
+    estimates = {k: float(1.25 * (9 * (k + 2) * slow.sum() + 27 * sanity)) for k in range(1, 21)}
+    feasible = [k for k in range(8, 21) if estimates[k] <= 80 * 60]
+    return {"K": max(feasible) if feasible else 8, "feasible": bool(feasible), "estimated_seconds": estimates,
+                "formula": "1.25 * (9*(K+2)*sum(max probe seconds per case/model) + 27*sum(BG1 LR/RF max seconds))",
+                "overhead": "25% overhead; outer refit allowance twice late inner fit; includes sanity cost"}
+
+
+def sanity_comparison(results: pd.DataFrame, baseline: pd.DataFrame) -> pd.DataFrame:
+    """Compare full precision K=1 metrics with the four-decimal stored baseline."""
+    rows = []
+    for _, row in results.iterrows():
+        default = baseline[(baseline.site == "BG") & (baseline.h == 1)
+                           & (baseline.algorithm == row.algorithm)].iloc[0]
         for metric in METRICS:
-            results["delta_" + metric] = results[metric] - results["default_" + metric]
-        results.to_csv(OUT / "tuned_results.csv", index=False)
-        selected.to_csv(OUT / "selected_configs.csv", index=False)
-        validate_predictions(predictions, list(candidates))
-        predictions.to_csv(OUT / "tuned_predictions.csv.gz", index=False)
-        baseline[baseline.kind == "reference"].to_csv(OUT / "default_references.csv", index=False)
-        sanity_result, _, _ = evaluate("BG", 1, *cases[("BG", 1)],
-                                       {n: [{}] for n in ["Logistic Regression", "Random Forest"]}, "sanity_")
-        sanity_rows = []
-        for _, row in sanity_result.iterrows():
-            default = baseline[(baseline.site == "BG") & (baseline.h == 1) & (baseline.algorithm == row.algorithm)].iloc[0]
-            for metric in METRICS:
-                diff = row[metric] - default[metric]
-                tolerance = 1e-9 if row.algorithm == "Logistic Regression" else (0.005 if metric == "brier" else None)
-                sanity_rows.append(dict(algorithm=row.algorithm, metric=metric, recomputed=row[metric],
-                                        stored=default[metric], difference=diff, absolute_difference=abs(diff),
-                                        tolerance=tolerance, literal_pass=abs(diff) <= tolerance if tolerance is not None else "not prescribed",
-                                        equal_after_4dp=round(row[metric], 4) == default[metric]))
-        sanity = pd.DataFrame(sanity_rows)
+            diff = row[metric] - default[metric]
+            tolerance = 1e-9 if row.algorithm == "Logistic Regression" else (0.005 if metric == "brier" else None)
+            rows.append({"algorithm": row.algorithm, "metric": metric, "recomputed": row[metric],
+                             "stored": default[metric], "difference": diff, "absolute_difference": abs(diff),
+                             "tolerance": tolerance,
+                             "literal_pass": abs(diff) <= tolerance if tolerance is not None else "not prescribed",
+                             "equal_after_4dp": round(row[metric], 4) == default[metric]})
+    return pd.DataFrame(rows)
+
+
+def main() -> None:
+    """Run only requested cases; reuse checked units, then assemble complete outputs."""
+    global OUT
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--sites", nargs="+", choices=["BG", "KR"], default=["BG", "KR"])
+    parser.add_argument("--horizons", nargs="+", type=int, choices=HORIZONS, default=HORIZONS)
+    parser.add_argument("--K", type=int, default=8)
+    parser.add_argument("--n-jobs", type=int, default=1, help="Number of concurrent case processes")
+    parser.add_argument("--out", type=Path, default=OUT)
+    parser.add_argument("--sanity", action="store_true", help="Only K=1 BG h=1 LR/RF, all nine months")
+    args = parser.parse_args()
+    if args.n_jobs < 1 or not 1 <= args.K <= 20:
+        parser.error("--n-jobs must be positive and --K must be between 1 and 20")
+    if len(set(args.sites)) != len(args.sites) or len(set(args.horizons)) != len(args.horizons):
+        parser.error("Duplicate sites or horizons")
+    if args.sanity and (args.K != 1 or args.sites != ["BG"] or args.horizons != [1]):
+        parser.error("--sanity requires --K 1 --sites BG --horizons 1")
+    OUT = args.out.resolve()
+    root = HERE.parents[2].resolve()
+    if not OUT.is_relative_to(root) or any(OUT.is_relative_to(root / p) for p in ["data", "legacy"]):
+        parser.error("--out must be inside the repository and outside data/ and legacy/")
+    OUT.mkdir(parents=True, exist_ok=True)
+    names = ["Logistic Regression", "Random Forest"] if args.sanity else list(algorithms())
+    candidates = {n: configurations(n, args.K) for n in names}
+    cases = {(site, h): case_data(site, h) for site in args.sites for h in args.horizons}
+    request = {"schema": SCHEMA, "sites": args.sites, "horizons": args.horizons, "K": args.K,
+                   "algorithms": names, "months": list(range(4, 13))}
+    request_path = OUT / "request.json"
+    if request_path.exists() and json.loads(request_path.read_text()) != request:
+        raise ValueError("Incompatible output request; use a separate --out directory")
+    atomic_json(request_path, request)
+    started = time.perf_counter()
+    workers = min(args.n_jobs, len(cases))
+    jobs = [(s, h, x, y, candidates, OUT) for (s, h), (x, y) in cases.items()]
+    if workers == 1:
+        for job in jobs:
+            evaluate_worker(job)
+    else:
+        with ProcessPoolExecutor(max_workers=workers) as pool:
+            list(pool.map(evaluate_worker, jobs))
+    # Read every required unit again. Missing/corrupt units prevent final publication.
+    parts = [evaluate(s, h, x, y, candidates, OUT, read_only=True) for (s, h), (x, y) in cases.items()]
+    results, selected, predictions = [pd.concat([p[i] for p in parts], ignore_index=True) for i in range(3)]
+    validate_predictions(predictions, names)
+    baseline = pd.read_csv(HERE / "results/benchmark_results.csv")
+    results["rank_by_brier"] = results.groupby(["site", "h"]).brier.rank(method="average")
+    keys = ["site", "h", "algorithm"]
+    results = results.merge(baseline.rename(columns={c: "default_" + c for c in baseline if c not in keys}),
+                            on=keys, validate="one_to_one")
+    for metric in METRICS:
+        results["delta_" + metric] = results[metric] - results["default_" + metric]
+    results.to_csv(OUT / "tuned_results.csv", index=False)
+    selected.to_csv(OUT / "selected_configs.csv", index=False)
+    predictions.to_csv(OUT / "tuned_predictions.csv.gz", index=False)
+    baseline[baseline.kind == "reference"].to_csv(OUT / "default_references.csv", index=False)
+    sanity = validated_sanity(baseline) if not args.sanity else pd.DataFrame()
+    if args.sanity:
+        sanity = sanity_comparison(results, baseline)
         sanity.to_csv(OUT / "sanity.csv", index=False)
-        (OUT / "execution.json").write_text(json.dumps(dict(
-            workers=4, blas_threads_per_worker=1, elapsed_seconds=time.perf_counter() - started,
-            reused_frozen_budget=resume), indent=2), encoding="utf-8")
-        reports(results, selected, sanity, budget, candidates)
+        note = ("# K=1 sanity: BG, h=1, LR and RF\n\n" + table(sanity)
+                + "\n\nLR literal tolerance: 1e-9; RF Brier tolerance: 0.005. "
+                "Four-decimal equality is a separate check; rounding does not waive literal failures. "
+                "No cause is assigned to RF differences. Seed 42; nine dependent monthly folds, "
+                "one realization; no inferential test or full tuning grid was run.\n")
+        (root / "agent_notes/S1_bench_step2/SANITY.md").write_text(note, encoding="utf-8")
+    atomic_json(OUT / "execution.json", {"workers": workers, "requested_workers": args.n_jobs,
+                "blas_threads_per_worker": 1, "openmp_threads_per_worker": 1, "loky_max_cpu_count": 1,
+                "estimator_parameters_unchanged": True, "elapsed_seconds": time.perf_counter() - started})
+    budget = frozen_budget()
+    budget["K"] = args.K
+    atomic_json(OUT / "runtime_estimate.json", budget)
+    reports(results, selected, sanity, budget, candidates)
 
 
 if __name__ == "__main__":

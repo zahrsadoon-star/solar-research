@@ -1,112 +1,288 @@
-Protocol for `20261116-s1-bench-step2-tuning`. No files were edited or saved because this session is read-only. The requested `agent_notes/PLAN.md` also falls outside the task’s narrower notes allowlist, `agent_notes/S1_bench_step2/`.
+# Frozen Step 2 protocol (continuation)
 
-Read: `PROJECT_CONTEXT.md`, `AGENTS.md`, `DECISIONS.md`, study `PLAN.md`, benchmark README, `benchmark.py`, `significance.py`, and earlier benchmark verification notes.
+Execution-only changes; no full grid in this session. See S1_bench_step2/RUN.md for commands.
 
-**1. Scope and hypothesis**
+**1. Scope and hypotheses**
 
-Follow the latest decision: outage forecasting only, BG and KR, horizons \(h\in\{1,6\}\) hours, and the twelve existing algorithms. Older study-plan provisions for dispatch, additional targets, models and horizons are outside this task.
+Preserve the original Step 2 protocol: BG and KR; horizons \(h\in\{1,6\}\) hours; all twelve existing algorithms; expanding monthly evaluation from April through December 2018. The latest decisions supersede the broader study plan’s dispatch, duration targets, additional horizons and model families.
 
-The descriptive question is whether equal-budget tuning changes Brier scores and algorithm rankings relative to existing defaults. No improvement is assumed.
+This continuation changes execution and recovery, not the experiment.
 
-Operational hypotheses:
+- Tuning improves a case only if \(\Delta B=B_{\mathrm{tuned}}-B_{\mathrm{default}}<0\). A nonnegative difference contradicts improvement for that case.
+- RF/Extra Trees dominance persists only if they occupy the first two Brier ranks in every case. A different leading pair contradicts that descriptive claim; ties must be disclosed.
+- Resumability succeeds only if interrupted and uninterrupted runs produce identical selected configurations, predictions and derived metrics for the same frozen inputs. Execution times and compression metadata need not match.
 
-- For each algorithm and case, tuning improves predictive probability accuracy if \(\Delta B=B_{\text{tuned}}-B_{\text{default}}<0\). A nonnegative difference contradicts improvement for that case.
-- Define the existing leading pair as Random Forest and Extra Trees. Its descriptive dominance persists only if both occupy the first two Brier ranks in every case; any other outcome contradicts that specific claim.
-- These are descriptive criteria, not statistical significance or equivalence tests.
+These are descriptive criteria, not significance or equivalence tests.
 
-**2. Data, target and predictors**
+**2. Data, targets and predictors**
 
-Import `load`, `features`, `algorithms`, `scores`, `HORIZONS`, and `SEED` from `benchmark.py`. Do not independently alter preprocessing.
+Use unchanged `benchmark.load`, `features`, `algorithms`, `scores`, `HORIZONS` and `SEED`.
 
-For observed grid energy \(G_t\):
+For grid energy \(G_t\), measured in kWh:
 
 \[
 O_t=\mathbf1(G_t=0),\qquad Y_{t,h}=O_{t+h}.
 \]
 
-The target is outage status at the future hour, not “any outage during the next \(h\) hours.” It is a metering proxy, not independently verified utility availability.
+This predicts the metering proxy at the future hour, not whether any outage occurs during the intervening period. Use BG’s analysis workbook and KR’s existing workbook through the benchmark loader. Exclude BS.
 
-Preserve the assigned hourly local-time chronology, all nineteen existing features, and the benchmark eligibility mask: all features and the shifted target must be observed. Use identical eligible observations for every algorithm.
+Preserve all nineteen features and the existing eligibility mask: every feature and shifted target must be observed. Every algorithm in a case must evaluate identical rows.
 
-Forecast issuance assumes measurements through origin \(t\) are complete and available. Current-hour features require that assumption. Historical features may update during a test month as observations become available; fitted models may not.
+Forecast origin \(t\) means the current hour’s measurements are complete and available. Features may incorporate newly observed history during a test month; model parameters remain fixed throughout that month. Preserve the benchmark’s assigned local hourly chronology.
 
-**3. Exact nested temporal splits**
+**3. Nested temporal splits**
 
-For outer test month \(m\in\{\text{April},\ldots,\text{December}\}\), let \(a_m\) denote its start and \(v_m=a_{m-1}\) the preceding month’s start. Intersect all sets below with eligible observations.
+Let \(a_m\) be the start of test month \(m\), and \(v_m=a_{m-1}\). Intersect these sets with eligible observations:
 
 \[
 T_m=\{t:t<a_m,\ t+h<a_m\},
 \]
-
 \[
 E_m=\{t:a_m\le t<a_{m+1}\},
 \]
-
 \[
 I_m=\{t\in T_m:t<v_m,\ t+h<v_m\},
 \]
-
 \[
 V_m=\{t\in T_m:v_m\le t<a_m\}.
 \]
 
-Thus April uses March validation. Validation excludes preceding-month origins whose targets reach the outer test month.
+April therefore validates on March. Both training boundaries exclude labels reaching the subsequent evaluation period.
 
-Outer test membership follows **origin month**, matching the benchmark. Targets may enter the following month; unavailable year-end targets are excluded.
+For each candidate, fit exclusively on \(I_m\), including scalers; evaluate Brier loss on \(V_m\). Choose the smallest loss, breaking exact ties by lowest candidate index. Fit a fresh selected estimator on \(T_m\), then predict \(E_m\).
 
-For every configuration:
+Test membership follows origin month. Test targets may enter the next month; unavailable year-end targets are excluded. No test scores, labels, rankings or observed failures may guide search-space changes.
 
-1. Clone the benchmark estimator and apply its configuration.
-2. Fit exclusively on \(I_m\), including pipeline scalers.
-3. Predict \(V_m\) and calculate Brier loss.
-4. Select the smallest validation Brier; break exact ties by lowest configuration index.
-5. Fit a fresh selected estimator on \(T_m\).
-6. Predict \(E_m\) once.
+**4. Frozen candidates, seeds and budget**
 
-No outer-test metric, label, rank or convergence outcome may guide configuration selection. Later folds may use previously observed months, as required by expanding-window evaluation.
+Retain these exact ordered search spaces, mirrored in `tuning.py::SEARCH_SPACES`. Do not change parameter values, ordering, defaults or sampling. JSON arrays for MLP hidden layers denote Python tuples.
 
-**4. Frozen search and equal budget**
+```json
+{
+  "Logistic Regression": {
+    "logisticregression__C": [
+      0.01,
+      0.1,
+      1,
+      10,
+      100
+    ]
+  },
+  "Naive Bayes": {
+    "gaussiannb__var_smoothing": [
+      1e-12,
+      1e-11,
+      1e-10,
+      1e-09,
+      1e-08,
+      1e-07,
+      1e-06,
+      1e-05
+    ]
+  },
+  "k-Nearest Neighbours": {
+    "kneighborsclassifier__n_neighbors": [
+      5,
+      15,
+      25,
+      51
+    ],
+    "kneighborsclassifier__weights": [
+      "uniform",
+      "distance"
+    ]
+  },
+  "Decision Tree": {
+    "max_depth": [
+      3,
+      5,
+      8,
+      null
+    ],
+    "min_samples_leaf": [
+      5,
+      20,
+      50
+    ]
+  },
+  "Random Forest": {
+    "n_estimators": [
+      100,
+      300
+    ],
+    "max_depth": [
+      8,
+      16,
+      null
+    ],
+    "min_samples_leaf": [
+      1,
+      5,
+      20
+    ],
+    "max_features": [
+      "sqrt",
+      0.5,
+      1.0
+    ]
+  },
+  "Extra Trees": {
+    "n_estimators": [
+      100,
+      300
+    ],
+    "max_depth": [
+      8,
+      16,
+      null
+    ],
+    "min_samples_leaf": [
+      1,
+      5,
+      20
+    ],
+    "max_features": [
+      "sqrt",
+      0.5,
+      1.0
+    ]
+  },
+  "Gradient Boosting": {
+    "learning_rate": [
+      0.03,
+      0.1
+    ],
+    "n_estimators": [
+      100,
+      300
+    ],
+    "max_depth": [
+      2,
+      3,
+      5
+    ],
+    "subsample": [
+      0.8,
+      1.0
+    ]
+  },
+  "XGBoost": {
+    "learning_rate": [
+      0.03,
+      0.05,
+      0.1
+    ],
+    "n_estimators": [
+      100,
+      300
+    ],
+    "max_depth": [
+      3,
+      5,
+      7
+    ],
+    "subsample": [
+      0.8,
+      1.0
+    ]
+  },
+  "LightGBM": {
+    "learning_rate": [
+      0.01,
+      0.03,
+      0.1
+    ],
+    "n_estimators": [
+      100,
+      300
+    ],
+    "num_leaves": [
+      15,
+      31,
+      63
+    ],
+    "subsample": [
+      0.8,
+      1.0
+    ]
+  },
+  "CatBoost": {
+    "learning_rate": [
+      0.03,
+      0.1
+    ],
+    "iterations": [
+      100,
+      300
+    ],
+    "depth": [
+      4,
+      6,
+      8
+    ]
+  },
+  "SVM": {
+    "svc__C": [
+      0.1,
+      1,
+      10
+    ],
+    "svc__gamma": [
+      "scale",
+      0.001,
+      0.01,
+      0.1
+    ]
+  },
+  "Neural Network (MLP)": {
+    "mlpclassifier__hidden_layer_sizes": [
+      [
+        32
+      ],
+      [
+        64,
+        32
+      ],
+      [
+        64
+      ]
+    ],
+    "mlpclassifier__alpha": [
+      0.0001,
+      0.001,
+      0.01
+    ]
+  }
+}
+```
 
-Configuration 0 is an unchanged clone of `algorithms()[name]`, including pipeline structure, stochastic settings and estimator defaults. Record its full parameters.
+- Candidate 0 is an unchanged clone of the benchmark estimator.
+- Each algorithm receives its own `numpy.random.default_rng(42)`.
+- Generate nineteen random configurations with replacement, sampling parameters in their frozen order.
+- Reuse the same candidate-list prefix across sites, horizons and folds.
+- Duplicate draws count against the budget and must be reported.
+- Preserve benchmark estimator seeds and pipeline behavior.
 
-Use these explicit candidate lists for configurations 1 onward; all unlisted settings remain at benchmark defaults. Pipeline parameters require the corresponding estimator prefix.
+The stored timing rule is:
 
-| Algorithm | Random-search space |
-|---|---|
-| Logistic Regression | `C=[0.01,0.1,1,10,100]` |
-| Naive Bayes | `var_smoothing=[1e-12,1e-11,1e-10,1e-9,1e-8,1e-7,1e-6,1e-5]` |
-| k-Nearest Neighbours | `n_neighbors=[5,15,25,51]`, `weights=["uniform","distance"]` |
-| Decision Tree | `max_depth=[3,5,8,None]`, `min_samples_leaf=[5,20,50]` |
-| Random Forest | `n_estimators=[100,300]`, `max_depth=[8,16,None]`, `min_samples_leaf=[1,5,20]`, `max_features=["sqrt",0.5,1.0]` |
-| Extra Trees | Same space as Random Forest |
-| Gradient Boosting | `learning_rate=[0.03,0.1]`, `n_estimators=[100,300]`, `max_depth=[2,3,5]`, `subsample=[0.8,1.0]` |
-| XGBoost | `learning_rate=[0.03,0.05,0.1]`, `n_estimators=[100,300]`, `max_depth=[3,5,7]`, `subsample=[0.8,1.0]` |
-| LightGBM | `learning_rate=[0.01,0.03,0.1]`, `n_estimators=[100,300]`, `num_leaves=[15,31,63]`, `subsample=[0.8,1.0]` |
-| CatBoost | `learning_rate=[0.03,0.1]`, `iterations=[100,300]`, `depth=[4,6,8]` |
-| SVM | `C=[0.1,1,10]`, `gamma=["scale",0.001,0.01,0.1]` |
-| Neural Network (MLP) | `hidden_layer_sizes=[(32,),(64,32),(64,)]`, `alpha=[0.0001,0.001,0.01]` |
+\[
+\widehat T(K)=1.25\left[
+9(K+2)\sum_{s,h,a}\max_{c\in\{0,1\}}t_{s,h,a,c}
++27\sum_{a\in\{\mathrm{LR,RF}\}}\max_c t_{\mathrm{BG},1,a,c}
+\right].
+\]
 
-Initialize one `numpy.random.default_rng(42)` per algorithm. Sample each parameter uniformly from its list, in the displayed order. Generate nineteen random configurations once and reuse the same ordered candidates across all sites, horizons and folds.
+It includes 25% overhead, a refit allowance twice the late inner-fit cost, and sanity-run costs.
 
-Draw **with replacement**: repeated configurations count against the budget and are reported. This permits the required twenty evaluations even for smaller finite spaces. Equal configuration counts do not imply equal numbers of unique configurations or equal computation.
+The existing `budget.json` records **K=8, feasible=false**, with an estimated **30,222.667541250412 seconds**. No budget in the prescribed range met the 80-minute target. Retain K=8 as the previously frozen minimum and report this infeasibility explicitly. The estimate is sequential, not a measured parallel wall time or a guaranteed upper bound.
 
-Use \(K=20\) unless the timing rule reduces it for all algorithms equally. A smaller budget uses the same candidate-list prefix.
+Preserve `timings.csv` as `timing_probe_20261116.csv`. Do not choose K again using interrupted-run performance.
 
-Keep configuration 0 unchanged even where adding `n_jobs=-1` would change its parameters. Use available parallel settings for other configurations, record them, and flag this conflict between exact-default preservation and the blanket parallelism instruction.
+Define `--n-jobs` as execution concurrency without silently changing candidate 0’s estimator parameters. Record worker and native-thread limits.
 
-**5. Timing rule**
+**5. Metrics and baselines**
 
-Before evaluating outer-test performance, time configurations 0 and 1 on a fixed late inner split for all four cases and twelve algorithms. Use only training and validation data.
-
-Estimate total runtime conservatively using the slower timed configuration per algorithm/case, accounting for all nine folds, \(K\) candidate fits, full-training refits, and the required sanity reruns. Record the formula, timings and overhead assumption.
-
-Choose the largest integer \(K\in[8,20]\) estimated to fit approximately eighty minutes. If even \(K=8\) exceeds that estimate, report the infeasibility; do not reduce below eight, selectively shorten models, or drop folds.
-
-Freeze \(K\) before inspecting outer performance. Timing fits are not additional selection candidates.
-
-**6. Metrics and baselines**
-
-Pool all outer predictions within each site–horizon–algorithm case; do not average monthly metrics. Use `scores`, with \(\hat y_i=\mathbf1(p_i\ge0.5)\).
+Pool all outer predictions within each site–horizon–algorithm case; do not average monthly scores. Let \(\hat y_i=\mathbf1(p_i\ge0.5)\).
 
 \[
 B=\frac1N\sum_i(p_i-y_i)^2,\qquad
@@ -114,12 +290,12 @@ A=\frac1N\sum_i\mathbf1(\hat y_i=y_i),
 \]
 
 \[
-P=\frac{TP}{TP+FP},\quad
-R=\frac{TP}{TP+FN},\quad
+P=\frac{TP}{TP+FP},\qquad
+R=\frac{TP}{TP+FN},\qquad
 F_1=\frac{2TP}{2TP+FP+FN}.
 \]
 
-Follow `scores` by assigning zero to undefined precision, recall or F1.
+Use the benchmark’s zero convention for undefined precision, recall and F1.
 
 \[
 \mathrm{AUC}=
@@ -127,67 +303,83 @@ Follow `scores` by assigning zero to undefined precision, recall or F1.
 [\mathbf1(p_i>p_j)+\tfrac12\mathbf1(p_i=p_j)]}{N_+N_-}.
 \]
 
-Single-class AUC is undefined; flag it rather than fabricate a value.
+Single-class AUC is undefined and must be flagged.
 
-Primary comparators are each algorithm’s stored default results. Retain existing reference scores for always no outage, persistence and same-hour history as context. Do not tune these references or run another random split.
+Primary comparisons are against each algorithm’s stored default metrics. Retain always-no-outage, persistence and same-hour-last-seven-days references as context. Do not rerun random splits; any copied random-split accuracy remains explicitly default-only.
 
-Report tuned-minus-default differences for predictive metrics. Negative Brier differences indicate improvement; positive accuracy differences indicate improvement. Clearly identify the default CSV’s limited precision.
+Report tuned-minus-default differences and average ranks for exact ties. Stored default metrics have four-decimal precision; very small differences or rank distinctions may be unresolved by that precision.
 
-**7. Reproduction gate**
+**6. Checkpoint protocol**
 
-Run \(K=1\) for LR and RF in BG, \(h=1\), across all outer folds.
+One completed unit is `(site, h, test_month, algorithm)`. A checkpoint becomes reusable only after candidate selection, outer refitting, prediction and validation all succeed.
 
-Report the literal requested comparisons:
+Each checkpoint must contain or reference:
 
-- LR: absolute metric differences against `benchmark_results.csv`, tolerance \(10^{-9}\).
-- RF: absolute Brier difference, tolerance \(0.005\).
+- Unit identity and protocol/schema version.
+- K, ordered candidates, effective estimator parameters and seeds.
+- Input, relevant source-code and environment fingerprints.
+- All candidate validation losses and selected index.
+- Origin times, target times, truth and full-precision probabilities.
+- Warnings, completion status and elapsed time.
 
-**The LR requirement has a precision conflict:** `benchmark.py` saves metrics rounded to four decimal places. Raw recomputed metrics cannot generally equal these values within \(10^{-9}\).
+Write atomically. A filename alone is not evidence of completion.
 
-Therefore report separately:
+On restart, skip only checkpoints matching the frozen experiment and expected row identities. Reject corrupt, incomplete, duplicate or incompatible units; never silently combine different K values, datasets, candidate manifests or implementations. In particular, isolate K=1 sanity checkpoints from K=8 production checkpoints.
 
-- Raw differences and literal pass/fail.
-- Equality after the same four-decimal serialization.
-- A fresh unchanged-default rerun comparison at full precision, if performed.
+Assemble outputs deterministically from the requested complete set. Require unique keys, identical truth and evaluation rows across algorithms, and finite probabilities in \([0,1]\). Missing units must prevent publication of a complete-grid summary.
 
-The latter checks help diagnose reproduction but do not replace or silently relax the requested CSV check. Report RF differences without attributing them to threading without evidence.
+Old cumulative partial CSVs are not valid new-format checkpoints. The implementer must remove the interrupted prediction/result artifacts as specified, while retaining timing evidence and the frozen protocol provenance. No partial output may be presented as completed results.
 
-**8. Seeds, inference and failures**
+**7. Sanity gate and required checks**
 
-Use seed 42 for candidate generation and preserve benchmark estimator seeds. This is one tuning realization; nine temporal folds are not nine independent stochastic runs.
+Run only K=1, BG, h=1, LR and RF, across all nine outer folds.
 
-The general requirement for multiple independent runs remains unmet by the specified single-seed task. State this limitation explicitly rather than expanding the experiment silently.
+In `agent_notes/S1_bench_step2/SANITY.md`, report:
 
-Run no inferential tests in Step 2. Step 1 uses two-sided Diebold–Mariano tests with Newey–West lag 24, Holm adjustment within each case, and a seven-day moving-block bootstrap with 2,000 replicates. Those findings do not transfer to tuned models. Failure to reject a difference also does not establish equivalence.
+- LR absolute differences for all six metrics against `benchmark_results.csv`, with literal tolerance \(10^{-9}\).
+- RF absolute Brier difference, tolerance \(0.005\).
+- Separately, equality after four-decimal serialization.
 
-Record warnings and failures. Nonfinite validation predictions or failed candidate fits make the planned comparison incomplete; investigate without replacing candidates after seeing scores. Preserve failed-run evidence.
+The LR tolerance conflicts with the stored CSV’s rounding. Report literal pass/fail honestly; rounded agreement does not replace the requested check. Do not attribute discrepancies to threading without evidence.
 
-**9. Outputs and checks for implementation**
+Preserve the four existing test groups:
 
-Within `results/tuning/`, save:
+1. Exact default identity and reproducible, in-space candidate draws.
+2. Nested origin-time and target-time boundaries.
+3. Minimum-Brier selection and first-index ties.
+4. Prediction integrity.
 
-- `tuned_results.csv`: tuned metrics, \(K\), corresponding default columns and metric differences. Label copied random-split accuracy as default-only.
-- `selected_configs.csv`: case, outer month, configuration index, JSON parameters and inner Brier.
-- `tuned_predictions.csv.gz`: requested keys, truth and all twelve probabilities at full precision.
-- `tuning_summary.md`: rankings, rank changes, configuration-0 selection counts and denominators, duplicate counts, runtime decision and sanity results.
+Add a tiny interrupted/resumed-run test proving completed units are not fitted again and assembled scientific outputs equal an uninterrupted run. Include rejection of incompatible or incomplete checkpoints.
 
-Use average ranks for exact ties. For the README, report the six lowest tuned-Brier algorithms per case, with default/tuned Brier and accuracy. Describe changes without significance claims.
+The implementer must run `python -m pytest -q` and `ruff check` using the installed environment, without network access or installation. Do not launch the full grid.
 
-Fast tests must cover default-parameter identity, reproducible in-space draws, both origin and target split boundaries, and minimum-Brier selection including tie handling. Also verify unique prediction keys, shared evaluation rows and finite probabilities in \([0,1]\).
+**8. Deliverables and inference**
 
-Implementation must run `python -m pytest -q` and record its outcome. No tests or experiments were run during this methodology-only review.
+The eventual complete run must assemble:
 
-**10. Threats to validity**
+- `tuned_results.csv`
+- `selected_configs.csv`
+- `tuned_predictions.csv.gz`
+- `tuning_summary.md`
 
-Principal limitations are proxy-label error, assumed timestamp and metering availability, one year per household, seasonal drift, dependent hourly losses, overlapping training sets, class imbalance, single-seed variability, unequal search-space coverage, and historical result precision.
+Retain the original reporting requirements, including rankings, metric differences, duplicate counts, configuration-0 selection frequencies and provenance.
 
-Additional concerns:
+`RUN.md` must give the tested PowerShell command using the implemented `--sites`, `--horizons`, `--K`, `--n-jobs` and `--out` syntax, K=8, and the timing caveats above. These flags are implemented; the restricted sanity CLI has been exercised. Full-grid execution is deferred to the lead.
 
-- A single preceding validation month can favor transient regimes.
-- MLP internal early stopping and SVM probability calibration retain benchmark internal non-temporal splitting; neither may access the external validation or test sets.
-- Previously viewed benchmark outcomes mean this protocol is not blinded.
-- Repeated benchmark development on the same test year can create researcher-level adaptation.
-- Separate fitting at two households does not demonstrate geographic transfer.
-- Equal configuration budgets do not establish equal optimization opportunity or runtime.
+**No inferential statistical tests are authorized in this continuation.** Earlier default-model inference cannot establish significance for tuned models. The specified single seed does not satisfy the broader requirement for multiple independent runs; temporal folds are dependent and cannot substitute for independent seeds. State this limitation rather than silently expanding the experiment.
 
-Any future-information use, unequal candidate budget, missing outer folds, or outcome-driven search revision invalidates the intended comparison, regardless of the resulting scores.
+**9. Threats to validity**
+
+- Metering-proxy errors and uncertain real-time availability of current-hour measurements.
+- Assigned timestamps, one year per household, seasonal drift and limited geographic generalizability.
+- Dependent hourly losses and overlapping expanding training sets.
+- A single validation month favoring transient regimes.
+- Class imbalance and threshold-dependent secondary metrics.
+- Single-seed variability; unequal effective search coverage despite equal candidate counts.
+- Benchmark-internal MLP early stopping and SVM calibration splits.
+- Prior inspection and repeated reuse of the same test year.
+- Rounded baseline metrics obscuring small differences.
+- Stale checkpoints, incomplete aggregation or mixed execution environments.
+- Timing extrapolation from only two configurations and uncertain parallel scaling.
+
+Any future-information leakage, outcome-driven search revision, unequal K, omitted folds or incompatible checkpoint reuse invalidates the intended comparison, regardless of scores.

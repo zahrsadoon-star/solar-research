@@ -12,6 +12,45 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "studies" / "S1_out
 import tuning as tu
 
 
+def test_top_two_includes_boundary_ties() -> None:
+    """A boundary tie cannot arbitrarily pick a unique pair (unitless loss)."""
+    group = pd.DataFrame({"algorithm": ["a", "b", "c", "d"], "brier": [0.1, 0.2, 0.2, 0.3]})
+    assert tu.top_two_members(group, "brier") == {"a", "b", "c"}
+    assert tu.top_two_members(group.iloc[::-1], "brier") == {"a", "b", "c"}
+
+
+def test_sanity_rejects_unvalidated_evidence(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A historical CSV cannot bypass source/input/environment validation."""
+    monkeypatch.setattr(tu, "case_data", lambda *args: (None, None))
+
+    def incompatible(*args: object, **kwargs: object) -> None:
+        assert kwargs["read_only"] is True
+        raise ValueError("Incompatible checkpoint manifest")
+
+    monkeypatch.setattr(tu, "evaluate", incompatible)
+    result = tu.validated_sanity(pd.DataFrame())
+    assert "not validated" in result.iloc[0].status
+
+
+def test_subset_report_has_no_dominance_claim(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Sanity-only reports cannot assert conclusions about twelve algorithms."""
+    monkeypatch.setattr(tu, "OUT", tmp_path)
+    results = pd.DataFrame({"site": ["BG"] * 2, "h": [1] * 2,
+                            "algorithm": ["Logistic Regression", "Random Forest"],
+                            "brier": [0.2, 0.1], "default_brier": [0.2, 0.1],
+                            "delta_brier": [0., 0.], "rank_by_brier": [2., 1.],
+                            "default_rank_by_brier": [2., 1.],
+                            "default_accuracy": [0.7, 0.8], "accuracy": [0.7, 0.8]})
+    selected = results[["site", "h", "algorithm"]].assign(config_index=0)
+    budget = {"K": 1, "estimated_seconds": {1: 1}, "feasible": False,
+              "formula": "test", "overhead": "test"}
+    tu.reports(results, selected, pd.DataFrame({"status": ["test"]}), budget,
+               {n: [{}] for n in results.algorithm})
+    summary = (tmp_path / "tuning_summary.md").read_text()
+    assert "SUBSET ONLY" in summary
+    assert "Extra Trees" not in summary
+
+
 @pytest.mark.parametrize("name", list(tu.SEARCH_SPACES))
 def test_default_exact_and_draws_reproducible(name: str) -> None:
     """Config zero includes the complete untouched estimator/pipeline defaults."""
@@ -80,8 +119,8 @@ def test_selection_minimum_and_first_tie(monkeypatch: pytest.MonkeyPatch) -> Non
 
 def test_prediction_integrity() -> None:
     """Every model shares complete finite rows and unique case/origin keys."""
-    frame = pd.DataFrame(dict(site=["BG", "BG"], h=[1, 1], origin_time=["a", "b"],
-                              a=[0.2, 0.7], b=[0.1, 0.9]))
+    frame = pd.DataFrame({"site": ["BG", "BG"], "h": [1, 1], "origin_time": ["a", "b"],
+                              "a": [0.2, 0.7], "b": [0.1, 0.9]})
     tu.validate_predictions(frame, ["a", "b"])
     with pytest.raises(ValueError, match="Duplicate"):
         tu.validate_predictions(pd.concat([frame, frame]), ["a", "b"])
@@ -90,3 +129,101 @@ def test_prediction_integrity() -> None:
         broken.loc[0, "b"] = bad
         with pytest.raises(ValueError, match="Invalid"):
             tu.validate_predictions(broken, ["a", "b"])
+
+
+@pytest.mark.parametrize("h", [1, 6])
+def test_features_cannot_see_future(h: int) -> None:
+    """Perturb future metering; features through the origin hour stay identical."""
+    index = pd.date_range("2018-01-01", periods=600, freq="h")
+    rng = np.random.default_rng(43)
+    data = pd.DataFrame({"outage": rng.integers(0, 2, len(index)),
+                         "load_kwh": rng.uniform(0, 10, len(index))}, index=index)
+    changed = data.copy()
+    changed.iloc[401:, 0] = 1 - changed.iloc[401:, 0]
+    changed.iloc[401:, 1] += 1000
+    pd.testing.assert_frame_equal(tu.features(data, h).iloc[:401],
+                                  tu.features(changed, h).iloc[:401])
+
+
+def test_scaler_fits_only_inner_training(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Validation/future extremes must not enter fitted scaling means (unitless)."""
+    from sklearn.preprocessing import StandardScaler
+
+    original = StandardScaler.fit
+    means = []
+
+    def record(self: StandardScaler, x: pd.DataFrame, *args: object,
+               **kwargs: object) -> StandardScaler:
+        result = original(self, x, *args, **kwargs)
+        means.append(self.mean_.copy())
+        return result
+
+    monkeypatch.setattr(StandardScaler, "fit", record)
+    x = pd.DataFrame({"x": [0., 1., 2., 3., 1000., 2000., 100000.]})
+    y = pd.Series([0, 1, 0, 1, 0, 1, 0])
+    inner = np.arange(7) < 4
+    valid = (np.arange(7) >= 4) & (np.arange(7) < 6)
+    tu.select_config("Logistic Regression", [{}, {"logisticregression__C": 10}],
+                     x, y, inner, valid)
+    np.testing.assert_allclose(means, [[1.5], [1.5]])
+
+
+def test_resume_matches_uninterrupted(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """An interruption preserves completed units; assembly reads them without fitting."""
+    import json
+
+    index = pd.date_range("2018-01-01", "2018-05-31", freq="12h")
+    x = pd.DataFrame({"x": np.sin(np.arange(len(index)))}, index=index)
+    y = pd.Series(np.arange(len(index)) % 2, index=index)
+    candidates = {"Logistic Regression": [{}]}
+    full = tu.evaluate("BG", 1, x, y, candidates, tmp_path / "full", months=(4, 5))
+    original = tu.select_config
+    calls = []
+
+    def interrupt(*args: object) -> tuple:
+        calls.append(1)
+        if len(calls) == 2:
+            raise RuntimeError("simulated interruption")
+        return original(*args)
+
+    monkeypatch.setattr(tu, "select_config", interrupt)
+    with pytest.raises(RuntimeError, match="simulated interruption"):
+        tu.evaluate("BG", 1, x, y, candidates, tmp_path / "resumed", months=(4, 5))
+    assert len(list((tmp_path / "resumed/checkpoints").glob("BG_1_4_*.json"))) == 1
+    calls.clear()
+    resumed = tu.evaluate("BG", 1, x, y, candidates, tmp_path / "resumed", months=(4, 5))
+    assert len(calls) == 1  # April was skipped; only May selected/fitted.
+    for i in range(3):
+        left, right = full[i], resumed[i]
+        if i == 0:
+            left, right = (f.drop(columns="fit_seconds") for f in (left, right))
+        pd.testing.assert_frame_equal(left, right)
+
+    def fail(*args: object) -> None:
+        raise AssertionError("Completed units must never fit again")
+
+    monkeypatch.setattr(tu, "select_config", fail)
+    monkeypatch.setattr(tu, "probabilities", fail)
+    repeated = tu.evaluate("BG", 1, x, y, candidates, tmp_path / "resumed", months=(4, 5), read_only=True)
+    for left, right in zip(resumed, repeated):
+        pd.testing.assert_frame_equal(left, right)
+    with pytest.raises(ValueError, match="Incompatible"):
+        tu.evaluate("BG", 1, x, y, {"Logistic Regression": [{}, {}]}, tmp_path / "resumed", months=(4, 5))
+    altered = y.copy()
+    altered.iloc[0] = 1 - altered.iloc[0]
+    with pytest.raises(ValueError, match="Incompatible"):
+        tu.evaluate("BG", 1, x, altered, candidates, tmp_path / "resumed", months=(4, 5))
+    checkpoint = next((tmp_path / "resumed/checkpoints").glob("BG_1_4_*.json"))
+    saved = checkpoint.read_text()
+    envelope = json.loads(saved)
+    envelope["payload"]["status"] = "incomplete"
+    envelope["sha256"] = tu.digest(envelope["payload"])
+    checkpoint.write_text(json.dumps(envelope))
+    with pytest.raises(ValueError, match="Invalid checkpoint"):
+        tu.evaluate("BG", 1, x, y, candidates, tmp_path / "resumed", months=(4, 5), read_only=True)
+    checkpoint.write_text('{"broken":')
+    with pytest.raises(ValueError, match="Invalid checkpoint"):
+        tu.evaluate("BG", 1, x, y, candidates, tmp_path / "resumed", months=(4, 5), read_only=True)
+    checkpoint.unlink()
+    with pytest.raises(ValueError, match="Missing checkpoint"):
+        tu.evaluate("BG", 1, x, y, candidates, tmp_path / "resumed", months=(4, 5), read_only=True)
