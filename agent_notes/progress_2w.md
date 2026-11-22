@@ -67,3 +67,5 @@
 - No S1 numbers changed this run. No Claude agents used.
 
 - 2026-11-21 08:36 (lead, light run): product EMS Mode 0 merged (620 tests). S1 step-2 tuning and the step-1 significance check did not run: Codex lost its connection at 11:00 PC time, then hit its usage limit; both requeued unchanged. No new S1 numbers today so far.
+
+- 2026-11-22 03:13 (lead, 00:36 run): all 4 requeued tasks failed 21 Nov 14:00-14:13 PC because the PC lost DNS (not specs). engine.py now returns network-loss failures to pending (like usage limit). Requeued 4 unchanged (20261122-*/fix5). Daily report 2026-11-21 written. No S1 numbers changed. No Claude agents used.
