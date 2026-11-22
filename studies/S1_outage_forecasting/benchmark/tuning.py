@@ -72,7 +72,20 @@ def estimator(name: str, config: dict[str, Any], index: int) -> Any:
 
 def json_params(model: Any) -> dict[str, Any]:
     """Serialize full effective parameters, including pipeline component defaults."""
-    return json.loads(json.dumps(model.get_params(deep=True), default=repr, sort_keys=True))
+    params = model.get_params(deep=True)
+    # XGBoost's documented missing-value sentinel is not Python None.
+    if (model.__class__.__name__ == "XGBClassifier"
+            and isinstance(params.get("missing"), float) and np.isnan(params["missing"])):
+        params["missing"] = {"__float__": "nan", "meaning": "XGBoost missing sentinel"}
+    return json.loads(json.dumps(params, default=repr, sort_keys=True, allow_nan=False))
+
+
+def restore_params(params: dict[str, Any]) -> dict[str, Any]:
+    """Restore typed XGBoost metadata; ordinary JSON null stays Python None."""
+    restored = dict(params)
+    if restored.get("missing") == {"__float__": "nan", "meaning": "XGBoost missing sentinel"}:
+        restored["missing"] = np.nan
+    return restored
 
 
 def case_data(site: str, h: int) -> tuple[pd.DataFrame, pd.Series]:
@@ -104,16 +117,56 @@ def probabilities(model: Any, x: pd.DataFrame) -> np.ndarray:
 
 
 def select_config(name: str, configs: list[dict[str, Any]], x: pd.DataFrame,
-                  y: pd.Series, inner: np.ndarray, valid: np.ndarray) -> tuple[int, list[float]]:
-    """Minimize validation Brier; exact ties choose the first candidate."""
-    losses = []
+                  y: pd.Series, inner: np.ndarray, valid: np.ndarray) -> tuple[int | None, list[dict]]:
+    """Minimize finite successful Brier losses; failed draws consume budget; first ties win."""
+    records = []
     for i, config in enumerate(configs):
-        model = estimator(name, config, i)
-        model.fit(x[inner], y[inner])
-        losses.append(float(brier_score_loss(y[valid], probabilities(model, x[valid]))))
-    if not np.isfinite(losses).all():
-        raise ValueError("Nonfinite validation loss")
-    return int(np.argmin(losses)), losses
+        stage = "fit"
+        record = {"index": i, "config": config, "status": "failed", "loss": None}
+        try:
+            model = estimator(name, config, i)
+            model.fit(x[inner], y[inner])
+            stage = "prediction"
+            p = probabilities(model, x[valid])
+            stage = "validation_brier"
+            loss = float(brier_score_loss(y[valid], p))
+            if not np.isfinite(loss):
+                raise ValueError("Nonfinite validation Brier")
+            record.update(status="complete", loss=loss, stage=None, reason=None)
+        except Exception as error:  # noqa: BLE001 - persist third-party estimator failures
+            record.update(stage=stage, reason=f"{type(error).__name__}: {error}")
+        records.append(record)
+    eligible = [r for r in records if r["status"] == "complete"]
+    chosen = min(eligible, key=lambda r: (r["loss"], r["index"]))["index"] if eligible else None
+    return chosen, records
+
+
+def nullable_scores(y: np.ndarray, p: np.ndarray) -> dict:
+    """Return dimensionless metrics; only single-class AUC permits null."""
+    # JSON restores probabilities as float64; compute checkpoint metrics identically.
+    p = np.asarray(p, dtype=float)
+    result = scores(y, p) if len(np.unique(y)) > 1 else None
+    if result is None:
+        # Preserve benchmark definitions without invoking undefined roc_auc_score.
+        from sklearn.metrics import (
+            accuracy_score,
+            f1_score,
+            precision_score,
+            recall_score,
+        )
+        predicted = (p >= 0.5).astype(int)
+        result = {"accuracy": accuracy_score(y, predicted),
+                  "precision": precision_score(y, predicted, zero_division=0),
+                  "recall": recall_score(y, predicted, zero_division=0),
+                  "f1": f1_score(y, predicted, zero_division=0),
+                  "auc": None, "brier": brier_score_loss(y, p)}
+    for key, value in result.items():
+        if key == "auc" and value is None:
+            continue
+        if not np.isfinite(value):
+            raise ValueError(f"Nonfinite required metric: {key}")
+    result["auc_reason"] = "AUC undefined: target contains one class" if result["auc"] is None else None
+    return result
 
 
 def timing_budget(cases: dict, candidates: dict) -> dict:
@@ -146,7 +199,7 @@ def timing_budget(cases: dict, candidates: dict) -> dict:
     return decision
 
 
-SCHEMA = 1
+SCHEMA = 2
 
 
 def digest(value: Any) -> str:
@@ -206,10 +259,24 @@ def read_checkpoint(path: Path, identity: dict, manifest: dict, rows: dict,
         if (unit["status"] != "complete" or unit["identity"] != identity
                 or digest(unit["manifest"]) != digest(manifest) or unit["rows"] != rows):
             raise ValueError("identity, inputs, protocol or completion mismatch")
-        losses = np.asarray(unit["losses"], dtype=float)
+        records = unit["candidate_records"]
+        configs = manifest["candidates"][name]
+        if len(records) != len(configs):
+            raise ValueError("invalid candidate count")
+        for i, (record, config) in enumerate(zip(records, configs)):
+            if record["index"] != i or digest(record["config"]) != digest(config):
+                raise ValueError("invalid candidate identity")
+            if record["status"] == "failed":
+                if record["loss"] is not None or not record["reason"] or not record["stage"]:
+                    raise ValueError("invalid failure record")
+            elif (record["status"] != "complete" or record["loss"] is None
+                  or not np.isfinite(record["loss"]) or record["reason"] is not None
+                  or record["stage"] is not None):
+                raise ValueError("invalid successful candidate")
+        eligible = [r for r in records if r["status"] == "complete"]
         chosen = unit["chosen"]
-        if (len(losses) != len(manifest["candidates"][name]) or not np.isfinite(losses).all()
-                or chosen != int(np.argmin(losses))):
+        if (not eligible or chosen != min(eligible, key=lambda r: (r["loss"], r["index"]))["index"]
+                or unit["losses"] != [r["loss"] for r in records]):
             raise ValueError("invalid selection")
         if digest(unit["parameters"]) != digest(manifest["effective_parameters"][name][chosen]):
             raise ValueError("invalid parameters")
@@ -219,6 +286,8 @@ def read_checkpoint(path: Path, identity: dict, manifest: dict, rows: dict,
                 or not np.isfinite(unit["elapsed_seconds"]) or unit["elapsed_seconds"] < 0
                 or not isinstance(unit["warnings"], list)):
             raise ValueError("invalid predictions or metadata")
+        if digest(unit["metrics"]) != digest(nullable_scores(np.asarray(rows["y"]), probabilities_)):
+            raise ValueError("invalid metrics")
         return unit
     except (KeyError, TypeError, ValueError, IndexError) as error:
         raise ValueError(f"Invalid checkpoint {path}: {error}") from error
@@ -262,11 +331,28 @@ def evaluate(site: str, h: int, x: pd.DataFrame, y: pd.Series, candidates: dict,
                 start = time.perf_counter()
                 with warnings.catch_warnings(record=True) as caught:
                     warnings.simplefilter("always")
-                    chosen, losses = select_config(name, configs, x, y, inner, valid)
-                    model = estimator(name, configs[chosen], chosen)
-                    model.fit(x[outer], y[outer])
-                    p = probabilities(model, x[test])
+                    chosen, records = select_config(name, configs, x, y, inner, valid)
+                    failure = "All candidates failed" if chosen is None else None
+                    stage = "selection" if chosen is None else "outer_refit"
+                    if chosen is not None:
+                        try:
+                            model = estimator(name, configs[chosen], chosen)
+                            model.fit(x[outer], y[outer])
+                            stage = "outer_prediction"
+                            p = probabilities(model, x[test])
+                        except Exception as error:  # noqa: BLE001 - persist third-party estimator failures
+                            failure = f"{type(error).__name__}: {error}"
+                losses = [r["loss"] for r in records]
+                if failure is not None:
+                    unit = {"status": "failed", "identity": identity, "manifest": manifest,
+                            "rows": rows, "chosen": chosen, "candidate_records": records,
+                            "losses": losses, "stage": stage, "reason": failure,
+                            "elapsed_seconds": time.perf_counter() - start,
+                            "warnings": [str(w.message) for w in caught]}
+                    atomic_json(path, {"payload": unit, "sha256": digest(unit)})
+                    raise ValueError(f"Failed unit {identity}: {failure}")
                 unit = {"status": "complete", "identity": identity, "manifest": manifest, "rows": rows,
+                            "candidate_records": records, "metrics": nullable_scores(y[test].values, p),
                             "chosen": chosen, "losses": losses, "parameters": json_params(model),
                             "probabilities": p.tolist(), "elapsed_seconds": time.perf_counter() - start,
                             "warnings": [str(w.message) for w in caught]}
@@ -286,10 +372,8 @@ def evaluate(site: str, h: int, x: pd.DataFrame, y: pd.Series, candidates: dict,
     validate_predictions(prediction, list(candidates))
     results = []
     for name, configs in candidates.items():
-        if prediction.y.nunique() < 2:
-            raise ValueError("Single-class pooled target: AUC is undefined; no complete summary")
         results.append(dict(site=site, h=h, algorithm=name, K=len(configs), kind="algorithm",
-                            **scores(prediction.y.values, prediction[name].values), fit_seconds=seconds[name]))
+                            **nullable_scores(prediction.y.values, prediction[name].values), fit_seconds=seconds[name]))
     return pd.DataFrame(results), pd.DataFrame(selected), prediction
 
 

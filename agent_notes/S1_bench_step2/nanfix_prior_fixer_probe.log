@@ -1,0 +1,28 @@
+{
+  "command": [
+    "D:\\SolarProject\\venv312\\Scripts\\python.exe",
+    "-u",
+    "studies/S1_outage_forecasting/benchmark/tuning.py",
+    "--sites",
+    "BG",
+    "KR",
+    "--horizons",
+    "1",
+    "6",
+    "--K",
+    "8",
+    "--n-jobs",
+    "4",
+    "--out",
+    "D:\\SolarProject\\worktrees\\20261122-s1-bench-step2-nanfix\\agent_notes\\S1_bench_step2\\nanfix_probe"
+  ],
+  "elapsed_seconds": 180.0058246999979,
+  "exit_code_after_stop": 1,
+  "termination": "TerminateJobObject succeeded: parent and all inherited worker processes stopped",
+  "json_files_validated": 63,
+  "complete_units_validated": 59,
+  "failed_units": 0,
+  "stdout": "completed BG h=1 month=4 Logistic Regression\ncompleted BG h=6 month=4 Logistic Regression\ncompleted KR h=1 month=4 Logistic Regression\ncompleted KR h=6 month=4 Logistic Regression\ncompleted BG h=1 month=4 Naive Bayes\ncompleted BG h=6 month=4 Naive Bayes\ncompleted KR h=1 month=4 Naive Bayes\ncompleted KR h=6 month=4 Naive Bayes\ncompleted BG h=1 month=4 k-Nearest Neighbours\ncompleted BG h=6 month=4 k-Nearest Neighbours\ncompleted KR h=1 month=4 k-Nearest Neighbours\ncompleted KR h=6 month=4 k-Nearest Neighbours\ncompleted BG h=1 month=4 Decision Tree\ncompleted BG h=6 month=4 Decision Tree\ncompleted KR h=1 month=4 Decision Tree\ncompleted KR h=6 month=4 Decision Tree\ncompleted KR h=6 month=4 Random Forest\ncompleted KR h=1 month=4 Random Forest\ncompleted BG h=1 month=4 Random Forest\ncompleted BG h=6 month=4 Random Forest\ncompleted KR h=6 month=4 Extra Trees\ncompleted KR h=1 month=4 Extra Trees\ncompleted BG h=1 month=4 Extra Trees\ncompleted BG h=6 month=4 Extra Trees\ncompleted KR h=1 month=4 Gradient Boosting\ncompleted KR h=1 month=4 XGBoost\ncompleted KR h=6 month=4 Gradient Boosting\ncompleted BG h=1 month=4 Gradient Boosting\ncompleted BG h=6 month=4 Gradient Boosting\ncompleted KR h=6 month=4 XGBoost\ncompleted BG h=1 month=4 XGBoost\ncompleted BG h=6 month=4 XGBoost\ncompleted KR h=1 month=4 LightGBM\ncompleted BG h=1 month=4 LightGBM\ncompleted KR h=6 month=4 LightGBM\ncompleted BG h=6 month=4 LightGBM\ncompleted KR h=1 month=4 CatBoost\ncompleted BG h=1 month=4 CatBoost\ncompleted KR h=1 month=4 SVM\ncompleted KR h=6 month=4 CatBoost\ncompleted BG h=6 month=4 CatBoost\ncompleted KR h=1 month=4 Neural Network (MLP)\ncompleted KR h=1 month=5 Logistic Regression\ncompleted KR h=1 month=5 Naive Bayes\ncompleted KR h=1 month=5 k-Nearest Neighbours\ncompleted KR h=1 month=5 Decision Tree\ncompleted BG h=1 month=4 SVM\ncompleted KR h=6 month=4 SVM\ncompleted KR h=6 month=4 Neural Network (MLP)\ncompleted KR h=6 month=5 Logistic Regression\ncompleted KR h=6 month=5 Naive Bayes\ncompleted KR h=6 month=5 k-Nearest Neighbours\ncompleted BG h=1 month=4 Neural Network (MLP)\ncompleted KR h=6 month=5 Decision Tree\ncompleted BG h=1 month=5 Logistic Regression\ncompleted BG h=1 month=5 Naive Bayes\ncompleted BG h=6 month=4 SVM\ncompleted BG h=1 month=5 k-Nearest Neighbours\ncompleted BG h=1 month=5 Decision Tree\n",
+  "stderr": "",
+  "scope": "180-second probe only; no full-grid completion claim"
+}

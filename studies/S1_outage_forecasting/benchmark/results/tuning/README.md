@@ -1,10 +1,49 @@
 # Step 2 tuning: execution status and reproduction
 
 The production grid has **not completed**. There are no production tuned-model
-findings to report. The only current experiment is the restricted K=1 sanity run:
+findings to report. The historical restricted K=1 sanity run covers:
 BG, horizon 1 hour, Logistic Regression and Random Forest, April–December 2018.
 See [sanity/tuning_summary.md](sanity/tuning_summary.md) for computed comparisons
-and [sanity/sanity.csv](sanity/sanity.csv) for full-precision differences.
+and [sanity/sanity.csv](sanity/sanity.csv) for full-precision differences. Those
+checkpoints predate the NaN repair and must not be treated as validated against
+the current source. The new execution evidence is a bounded full-command probe,
+described below; it is not a completed experiment.
+
+## NaN repair and bounded reproduction
+
+The manifest crash came from `effective_parameters.XGBoost[i].missing`, the
+estimator's NaN sentinel. Schema 2 represents that sentinel with typed JSON
+metadata and restores it to NaN; Python `None` remains JSON null. Strict
+`allow_nan=False` remains enabled. Failed fits or undefined validation losses
+record `status=failed`, `loss=null`, stage and reason. They consume their original
+candidate slot and are excluded from minimum-Brier selection; exact ties retain
+the first eligible index. No candidates are redrawn. An all-failed unit or failed
+selected outer refit blocks assembly. Single-class AUC is null with an explicit
+reason; predictions and required finite fields cannot become null.
+
+Run the bounded reproduction from the repository root with an empty scratch
+directory (archive its existing `probe.log` first):
+
+```powershell
+& D:\SolarProject\venv312\Scripts\python.exe agent_notes/S1_bench_step2/run_nanfix_probe.py
+```
+
+The harness runs the following command with the installed interpreter and stops
+the parent and inherited workers at 180 seconds using a Windows Job Object:
+
+```text
+python -u studies/S1_outage_forecasting/benchmark/tuning.py --sites BG KR --horizons 1 6 --K 8 --n-jobs 4 --out agent_notes/S1_bench_step2/nanfix_probe/
+```
+
+It validates completed checkpoints and deletes scratch output except `probe.log`.
+See [NANFIX.md](../../../../../agent_notes/S1_bench_step2/NANFIX.md) and
+[FIX_REPORT.md](../../../../../agent_notes/FIX_REPORT.md) for measured outcomes.
+The probe uses seed 42 and unchanged search spaces and temporal selection.
+It supplies no independent replication or inferential test. Surviving this window
+does not establish full-grid success, later-fold stability or tuned superiority.
+Candidate failures and distinct configurations must be reported by algorithm and
+fold before interpreting a completed grid; equal attempts do not imply equal
+successful or distinct coverage.
 
 ## Reproduce
 
@@ -25,12 +64,13 @@ Production assembly validates sanity checkpoints against current provenance and
 recomputes the comparison; it does not trust an existing sanity CSV alone.
 
 The full-grid command and frozen timing rule are in
-[RUN.md](../../../../../agent_notes/S1_bench_step2/RUN.md). The lead must resolve
-the merge and acceptance gates before treating this work as accepted. K=8 is the
+[RUN.md](../../../../../agent_notes/S1_bench_step2/RUN.md). The current review
+accepts the serialization repair only; earlier baseline and publication gates
+are separate unresolved matters. K=8 is the
 minimum prescribed candidate count: no allowed K meets the runtime target.
 [timing_estimate_20261122.json](timing_estimate_20261122.json) gives the sequential
 estimate from [timing_probe_20261116.csv](timing_probe_20261116.csv). Parallel wall
-time has not been measured; the full grid was deliberately not launched here.
+time has not been measured; only the bounded full-command probe was run for this repair.
 
 ## Findings and limitations
 
@@ -58,7 +98,7 @@ still require external verification before manuscript submission.
 
 ## Artifact status
 
-- `sanity/`: current restricted run, with atomic checksummed unit checkpoints and
+- `sanity/`: historical restricted run, with atomic checksummed unit checkpoints and
   the four assembled artifacts, metrics, warnings and execution metadata.
 - `historical_sanity_before_fixes/`: obsolete pre-fix source fingerprint; never
   use its summary as current evidence.

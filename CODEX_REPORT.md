@@ -1,42 +1,47 @@
-# Codex report — Fixer & Documenter, 20261122-s1-bench-step2-finish
+﻿# CODEX report — 20261122-s1-bench-step2-nanfix
 
-Acceptance is blocked; do not mark all MUST-FIX items complete.
+Reviewed the inherited NaN repair and current REVIEW.md: no in-scope MUST-FIX
+items remain. Root cause is XGBoost missing=NaN in manifest metadata. Strict JSON,
+typed sentinel restoration, None round-trip, explicit failed candidate records,
+nullable single-class AUC and exclusion of failed candidates are covered by tests.
+No additional production edits were necessary in this fixer pass.
 
-Implemented review corrections for unsupported Step 1 equivalence claims,
-subset-only reporting, exact boundary ties, and validation of sanity checkpoints
-before production assembly. Added three regression tests. Made PLAN.md
-self-contained and documented the experiment, reproduction commands, artifact
-status, weaknesses, runtime evidence and outstanding gates.
+## Files touched
 
-Only the prescribed K=1 BG h=1 LR/RF sanity run was rerun across all nine months.
-The full grid was not run. K=8 remains frozen; the historical probe estimates
-about 8.40 sequential hours, with no measured parallel wall-time guarantee.
-Old sanity evidence was safely archived and marked obsolete after deletion was
-blocked by policy. Partial production outputs remain removed; the timing probe
-is retained. No data, results, prices or citations were invented.
+- agent_notes/PLAN.md: reconciled completed work, preserving planning history.
+- studies/S1_outage_forecasting/benchmark/results/tuning/README.md: reproduction,
+  schema/selection rules, historical sanity status, findings and weaknesses.
+- agent_notes/S1_bench_step2/NANFIX.md: fresh verification appended; original
+  traceback preserved and checked against the explicitly supplied source log.
+- agent_notes/FIX_REPORT.md and CODEX_REPORT.md: current handoff reports.
+- agent_notes/S1_bench_step2/: fresh pytest/Ruff/probe logs; prior probe archived
+  as nanfix_prior_fixer_probe.log. Scratch contains only nanfix_probe/probe.log.
+- results/tuning/statistical_audit/nanfix_root_cause.json (under benchmark):
+  regenerated using verify_nanfix_root.py; content unchanged.
 
-Checks: pytest 90 passed (89 warnings); scoped Ruff passed; repository-wide Ruff
-FAILED with 397 violations; git diff --check passed; protected-path diff empty.
-See agent_notes/S1_bench_step2/pytest_fixer.log and ruff_fixer_repository.log.
+Existing uncommitted code, tests and other agents' artifacts were preserved.
 
-Open gates:
-- Required merge failed at ORIG_HEAD.lock outside the writable sandbox. Lead
-  must merge origin/main and rerun checks on that merged revision.
-- LR fails every literal 1e-9 comparison with the rounded baseline. Four-decimal
-  agreement is not a waiver. Lead criterion or verified full-precision baseline
-  remains required. RF passes its Brier tolerance, with unexplained discrepancy.
-- Repository-wide lint includes protected/out-of-scope files; scoped success
-  does not satisfy the global gate. No protected files or lint rules changed.
+## Validation
 
-Files changed in this fixer pass: tuning.py, benchmark README.md, tuning tests,
-PLAN.md, RUN.md, write_run_notes.py, SANITY.md, current sanity artifacts and logs,
-results/tuning/README.md, historical-sanity README/archive,
-agent_notes/FIX_REPORT.md and this report. Earlier resumability implementation,
-partial-output deletions, review/audit notes and diagnostics were inherited in
-the dirty working tree and preserved. benchmark.py, significance.py, legacy/
-and data/ were not edited. No commit, push, installation or network access.
+Installed D:/SolarProject/venv312 environment; no network or installation:
 
-Full item-by-item disposition and remaining SHOULD-FIX work:
-agent_notes/FIX_REPORT.md. Full-grid command: agent_notes/S1_bench_step2/RUN.md.
+- python -m pytest -q: 107 passed, 107 warnings, 92.25 seconds.
+- python -m ruff check studies/S1_outage_forecasting/benchmark/tuning.py tests:
+  passed.
+- verify_nanfix_root.py: passed; eight XGBoost missing sentinels, all 96 parameter
+  documents strict JSON, original traceback matches NANFIX.md.
+- Full prescribed command bounded to 180.0058157000458 seconds: no crash, empty
+  stderr, 65 completed units validated, 0 failed units, 69 strict checkpoint/
+  manifest files. Parent/workers deliberately terminated; scratch cleaned.
+- git diff --check: passed. Protected-path diff: empty.
 
-Resume verification: repeated the same sanity CLI with only DeprecationWarning display suppressed; Python exit code 0, no completed-unit fit messages, and final artifacts assembled. See agent_notes/S1_bench_step2/sanity_resume_fixer.log (empty successful output). The first invocation completed all 18 units and artifacts; PowerShell wrapped its deprecation-warning stderr as NativeCommandError. No Python traceback occurred.
+## Open questions and limitations
+
+No in-scope blocker. Full-grid completion is untested. One seed (42), dependent
+folds, no independent replications or statistical test in this repair. Tests
+partially overlapped the probe; its throughput is not a runtime benchmark.
+Historical LR precision/RF baseline discrepancies and publication requirements
+remain unresolved outside this task. No tuned superiority is claimed. See the
+results README and FIX_REPORT.md for coverage and leakage qualifications.
+
+No edits to legacy/, data/, benchmark.py or significance.py; no commit or push.

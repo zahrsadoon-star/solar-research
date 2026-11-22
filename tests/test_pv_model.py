@@ -6,8 +6,15 @@ import numpy as np
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.pv.model import (PVConfig, estimate_timestamp_offset, legacy_style_poa, load_weather_2018,  # noqa: E402
-                          plane_of_array, pv_power_per_kwp, pvgis_to_pvlib_azimuth)
+from src.pv.model import (
+    PVConfig,
+    estimate_timestamp_offset,
+    legacy_style_poa,
+    load_weather_2018,
+    plane_of_array,
+    pv_power_per_kwp,
+    pvgis_to_pvlib_azimuth,
+)
 
 
 @pytest.fixture(scope="module")

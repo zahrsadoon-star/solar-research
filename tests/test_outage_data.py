@@ -1,15 +1,21 @@
 """Core event accounting, real-source audits and explicit missing-input behavior."""
 
-from pathlib import Path
 from itertools import groupby
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pytest
 
 from outage.data import (
-    RAW, STATUS, WEATHER, load_outage_dataset, load_outage_observations, outage_events,
-    validate_outage_events, validate_outage_labels,
+    RAW,
+    STATUS,
+    WEATHER,
+    load_outage_dataset,
+    load_outage_observations,
+    outage_events,
+    validate_outage_events,
+    validate_outage_labels,
 )
 
 

@@ -112,7 +112,7 @@ def test_selection_minimum_and_first_tie(monkeypatch: pytest.MonkeyPatch) -> Non
     configs = [{"p": [0.4, 0.6]}, {"p": [0.1, 0.9]}, {"p": [0.1, 0.9]}]
     chosen, losses = tu.select_config("stub", configs, x, y, inner, valid)
     assert chosen == 1
-    assert losses == pytest.approx([0.16, 0.01, 0.01])
+    assert [r["loss"] for r in losses] == pytest.approx([0.16, 0.01, 0.01])
     y.iloc[4:] = 0  # unseen outer labels cannot affect selection
     assert tu.select_config("stub", configs, x, y, inner, valid) == (chosen, losses)
 
@@ -227,3 +227,166 @@ def test_resume_matches_uninterrupted(tmp_path: Path, monkeypatch: pytest.Monkey
     checkpoint.unlink()
     with pytest.raises(ValueError, match="Missing checkpoint"):
         tu.evaluate("BG", 1, x, y, candidates, tmp_path / "resumed", months=(4, 5), read_only=True)
+
+
+def test_typed_parameters_and_strict_json(tmp_path: Path) -> None:
+    """None and the dimensionless XGBoost NaN sentinel retain distinct semantics."""
+    import json
+
+    from xgboost import XGBClassifier
+
+    params = tu.json_params(tu.estimator("Decision Tree", {"max_depth": None}, 1))
+    path = tmp_path / "params.json"
+    tu.atomic_json(path, params)
+    restored = tu.restore_params(json.loads(path.read_text()))
+    assert restored["max_depth"] is None
+    assert tu.estimator("Decision Tree", restored, 1).max_depth is None
+    params = tu.json_params(tu.estimator("XGBoost", {}, 0))
+    tu.atomic_json(path, params)
+    restored = tu.restore_params(json.loads(path.read_text()))
+    assert np.isnan(XGBClassifier(**restored).missing)
+    for bad in (np.nan, np.inf, -np.inf):
+        with pytest.raises(ValueError):
+            tu.atomic_json(path, {"required": bad})
+        with pytest.raises(ValueError):
+            tu.digest({"required": bad})
+
+
+def test_failed_candidate_nullable_auc_resume(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Failed fits consume budget; single-class outer AUC is null, never a fake score."""
+    import json
+
+    index = pd.date_range("2018-01-01", "2018-04-30", freq="12h")
+    x = pd.DataFrame({"x": np.sin(np.arange(len(index)))}, index=index)
+    y = pd.Series(np.arange(len(index)) % 2, index=index)
+    y.loc[index.month == 4] = 0
+    configs = {"Decision Tree": [{"max_depth": -1}, {"max_depth": None}, {"max_depth": None}]}
+    full = tu.evaluate("BG", 1, x, y, configs, tmp_path, months=(4,))
+    path = next((tmp_path / "checkpoints").glob("BG_1_4_*.json"))
+    envelope = json.loads(path.read_text(), parse_constant=lambda v: pytest.fail(v))
+    unit = envelope["payload"]
+    assert unit["chosen"] == 1
+    assert unit["losses"][0] is None
+    assert unit["candidate_records"][0]["status"] == "failed"
+    assert unit["candidate_records"][0]["stage"] == "fit"
+    assert unit["metrics"]["auc"] is None
+    assert unit["metrics"]["auc_reason"]
+
+    def fail(*args: object) -> None:
+        raise AssertionError("Must not fit completed units")
+
+    monkeypatch.setattr(tu, "select_config", fail)
+    resumed = tu.evaluate("BG", 1, x, y, configs, tmp_path, months=(4,), read_only=True)
+    for a, b in zip(full, resumed):
+        pd.testing.assert_frame_equal(a, b)
+    unit["chosen"] = 0
+    envelope["sha256"] = tu.digest(unit)
+    tu.atomic_json(path, envelope)
+    with pytest.raises(ValueError, match="invalid selection"):
+        tu.evaluate("BG", 1, x, y, configs, tmp_path, months=(4,), read_only=True)
+
+
+@pytest.mark.parametrize("failure", ["all", "refit", "undefined"])
+def test_failed_unit_recorded(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, failure: str) -> None:
+    """No eligible loss or a selected refit failure prevents successful assembly."""
+    import json
+
+    index = pd.date_range("2018-01-01", "2018-04-30", freq="12h")
+    x = pd.DataFrame({"x": np.arange(len(index))}, index=index)
+    y = pd.Series(np.arange(len(index)) % 2, index=index)
+    configs = {"Decision Tree": [{"max_depth": -1}] if failure == "all" else [{}]}
+    if failure == "undefined":
+        monkeypatch.setattr(tu, "brier_score_loss", lambda *args: np.nan)
+    if failure == "refit":
+        from sklearn.tree import DecisionTreeClassifier
+        original = DecisionTreeClassifier.fit
+
+        def fit(self: object, xx: pd.DataFrame, yy: pd.Series) -> object:
+            if xx.index.max().month == 3:
+                raise ValueError("outer failure")
+            return original(self, xx, yy)
+
+        monkeypatch.setattr(DecisionTreeClassifier, "fit", fit)
+    with pytest.raises(ValueError, match="Failed unit"):
+        tu.evaluate("BG", 1, x, y, configs, tmp_path, months=(4,))
+    path = next((tmp_path / "checkpoints").glob("BG_1_4_*.json"))
+    unit = json.loads(path.read_text())["payload"]
+    assert unit["status"] == "failed"
+    assert unit["reason"]
+    if failure != "refit":
+        assert unit["losses"] == [None]
+    with pytest.raises(ValueError, match="Invalid checkpoint"):
+        tu.evaluate("BG", 1, x, y, configs, tmp_path, months=(4,), read_only=True)
+
+@pytest.mark.parametrize("bad", [np.nan, np.inf, -np.inf])
+def test_nonfinite_prediction_candidate_is_failed(monkeypatch: pytest.MonkeyPatch, bad: float) -> None:
+    """Nonfinite probability cannot become a nullable successful loss."""
+    x = pd.DataFrame({"x": [0, 1, 2, 3]})
+    y = pd.Series([0, 1, 0, 1])
+
+    class Stub:
+        def fit(self, xx: pd.DataFrame, yy: pd.Series) -> None:
+            pass
+
+        def predict_proba(self, xx: pd.DataFrame) -> np.ndarray:
+            return np.full((len(xx), 2), bad)
+
+    monkeypatch.setattr(tu, "estimator", lambda *args: Stub())
+    chosen, records = tu.select_config("stub", [{}], x, y, np.arange(4) < 2, np.arange(4) >= 2)
+    assert chosen is None
+    assert records[0]["status"] == "failed"
+    assert records[0]["loss"] is None
+    assert records[0]["stage"] == "prediction"
+
+
+def test_float32_checkpoint_metrics_match_json() -> None:
+    """Stored ancillary metrics use JSON's float64 reconstruction, not float32 rounding."""
+    import json
+
+    p = np.array([0.12345, 0.98765, 0.45678], dtype=np.float32)
+    y = np.array([0, 1, 0])
+    restored = np.asarray(json.loads(json.dumps(p.tolist(), allow_nan=False)))
+    assert tu.nullable_scores(y, p) == tu.nullable_scores(y, restored)
+
+
+@pytest.mark.parametrize("bad", [np.nan, np.inf, -np.inf])
+def test_undefined_loss_excluded_with_success(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, bad: float,
+) -> None:
+    """Undefined dimensionless Brier consumes one draw without defeating a valid draw."""
+    import json
+
+    x = pd.DataFrame({"x": [0., 1., 2., 3.]})
+    y = pd.Series([0, 1, 0, 1])
+    losses = iter([bad, 0.25])
+    monkeypatch.setattr(tu, "brier_score_loss", lambda *args: next(losses))
+    chosen, records = tu.select_config(
+        "Decision Tree", [{}, {}], x, y, np.arange(4) < 2, np.arange(4) >= 2,
+    )
+    assert chosen == 1
+    assert records[0]["loss"] is None
+    assert records[0]["status"] == "failed"
+    assert records[0]["stage"] == "validation_brier"
+    assert records[0]["reason"] == "ValueError: Nonfinite validation Brier"
+    path = tmp_path / "selection.json"
+    tu.atomic_json(path, {"chosen": chosen, "records": records})
+    assert json.loads(path.read_text(), parse_constant=lambda v: pytest.fail(v))["records"] == records
+
+
+@pytest.mark.parametrize("bad", [np.nan, np.inf, -np.inf])
+def test_unknown_nonfinite_parameter_rejected(bad: float) -> None:
+    """Only the documented XGBoost missing sentinel may bypass finite parameter checks."""
+    with pytest.raises(ValueError):
+        tu.json_params(tu.estimator("Decision Tree", {"max_depth": bad}, 1))
+
+
+@pytest.mark.parametrize("label", [0, 1])
+def test_single_class_auc_only_is_nullable(label: int) -> None:
+    """Either single-class target leaves Brier defined and AUC explicitly unavailable."""
+    y = np.full(4, label)
+    p = np.array([0.1, 0.3, 0.6, 0.8])
+    metrics = tu.nullable_scores(y, p)
+    assert metrics["auc"] is None
+    assert metrics["auc_reason"]
+    assert metrics["brier"] == pytest.approx(np.mean((y - p) ** 2))
+    assert all(np.isfinite(metrics[key]) for key in tu.METRICS if key != "auc")

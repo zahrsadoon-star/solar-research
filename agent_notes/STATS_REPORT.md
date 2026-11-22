@@ -1,123 +1,31 @@
-# Statistician review — Step 2 continuation
+﻿# Statistician review: NaN checkpoint repair
 
-The restricted K=1 results reproduce to floating-point precision. This does not
-validate tuned rankings: the full grid was deliberately not run. The literal LR
-sanity gate remains failed, and repository-wide Ruff and the requested merge remain
-blocked as described below. No production seed, search space or model was changed.
+## Verified scope and root cause
 
-## Evidence and reproduction
+Reviewed PROJECT_CONTEXT.md, AGENTS.md, prior step-2 notes, the existing uncommitted repair, tuning tests, and read-only benchmark/significance sources. Preserved prior implementation changes. Independently scanned all 12 algorithms at K=8: the only nonfinite effective parameters are XGBoost.missing for all eight candidates. This is XGBoost's legitimate NaN sentinel, not a fitted loss or pandas converting None. The original traceback matches the copy in S1_bench_step2/NANFIX.md exactly. Reproduce with S1_bench_step2/verify_nanfix_root.py; its evidence is results/tuning/statistical_audit/nanfix_root_cause.json under the benchmark directory.
 
-Read PROJECT_CONTEXT.md, AGENTS.md, current and committed original PLAN.md, prior
-implementation/run/sanity notes, the earlier statistical verification, tuning.py,
-benchmark.py, significance.py and tuning tests. Existing uncommitted implementation
-and artifacts were preserved; this review is not blinded to previous results.
+The repair retains strict JSON, encodes the sentinel explicitly and restores it as NaN, while ordinary None round-trips as null. Unknown nonfinite parameters still fail. Failed fits/predictions/undefined Brier consume their original slot, retain a reason and null loss, and cannot win. Eligible finite losses minimize (loss, index); no redraw or altered search design. Only single-class AUC is nullable among metrics. All-failed units stop assembly and are rejected on resume. Schema/source provenance invalidates old checkpoints; this is intentional.
 
-`agent_notes/S1_bench_step2/statistical_audit.py` recomputes all six pooled metrics
-from saved K=1 predictions. All agree with saved results within 1e-12. Evidence is
-under `studies/S1_outage_forecasting/benchmark/results/tuning/statistical_audit/`:
-`pooled_metric_checks.csv`, `seed42_repeat_checks.csv`, `seed_metrics.csv`,
-`seed_43_minus_42.csv`, `seed_predictions.csv.gz`, `class_prevalence.csv` and
-`audit_summary.json`. These are diagnostic artifacts, not completed tuning results.
+Added regression tests for NaN and both infinities in validation loss alongside a successful candidate, rejection of nonfinite non-sentinel parameters, and either single-class AUC outcome. Existing tests cover failed-candidate checkpoint/resume, selection ties, None restoration, float32 metrics and JSON reconstruction, boundaries, future-feature perturbations and scaler isolation.
 
-The fresh default-only BG, h=1 run uses all nine outer months, seeds 42 and 43,
-and unchanged LR/RF hyperparameters. K=1 needs no candidate choice; this diagnostic
-refits only the outer models, while the existing sanity checkpoints retain the
-original inner validation work. Random-state parameters alone are set to each
-diagnostic seed, including LR's otherwise unused lbfgs random-state setting.
-Production seed 42 and its checkpoint manifests are untouched. BLAS/OpenMP limits
-are one; default RF n_jobs=-1 is retained.
+## Fresh numerical and seed verification
 
-Seed 42 reproduces saved probabilities with maximum absolute differences of
-1.11e-16 (LR) and 4.44e-16 (RF); origin times and truth match exactly.
-Between seeds 43 and 42, LR's six metrics are unchanged. RF changes are:
+Re-ran S1_bench_step2/statistical_audit.py with fixed seeds 42 and 43, BG h=1, default LR/RF, all nine outer months. This smaller diagnostic changes random-state parameters only; it does not change production seeds or candidate draws. Saved metrics, predictions, split counts and differences are in benchmark/results/tuning/statistical_audit/. Log: S1_bench_step2/nanfix_seed_audit.log.
 
-| Metric | Seed 43 minus seed 42 |
-|---|---:|
-| Accuracy | +0.000909229 |
-| Precision | +0.001422856 |
-| Recall | -0.000281690 |
-| F1 | +0.000642438 |
-| AUC | -0.000538528 |
-| Brier | +0.000261169 |
+All stored pooled metrics recompute within 5.551115123125783e-17. Seed-42 probabilities reproduce stored K=1 results within 1.1102230246251565e-16 (LR) and 5.551115123125783e-16 (RF). LR metrics are unchanged between seeds; RF Brier increases by 0.0002611689645984905. Other RF metric differences are in seed_43_minus_42.csv. These small differences support limited default-model stability only. No equivalence margin/test was prescribed; two seeds do not establish tuned-model or cross-site robustness. Historical full-precision LR versus rounded baseline differences and the unexplained RF baseline discrepancy remain unresolved; no tolerance was relaxed.
 
-These small changes support stability only for this limited default-model check.
-No equivalence test or predeclared seed-stability margin exists. Two seeds do not
-establish robustness for all sites, horizons or tuned models. The prior broader
-review in `agent_notes/S1_bench_verify/STATS_REPORT.md` already reports greater
-KR h=6 F1 sensitivity; that case was not rerun here.
+## Leakage, imbalance and inference
 
-SANITY.md correctly distinguishes full-precision differences from four-decimal
-agreement against benchmark_results.csv. All six literal LR 1e-9 comparisons fail,
-although all six agree after four-decimal rounding. RF's absolute Brier difference
-is about 0.000285669, below 0.005; its discrepancy exceeds rounding alone and its
-cause is unresolved. Fresh seed-42 reproduction does not identify the historical
-RF discrepancy's cause. No tolerance was relaxed.
+Both origins and target times are purged at inner and outer training boundaries. Features use observations through the completed origin hour and known target calendar values; future perturbation and training-only scaler tests cover this. Actual availability of completed-hour metering remains an assumption. MLP early stopping and SVM calibration retain internal non-temporal splitting within training data; no claim of entirely forward internal validation is justified.
 
-## Leakage and imbalance
+Every inspected inner/validation/outer/test split contains both classes. Test prevalence varies from 0.1545698924731182 to 0.803763440860215 for BG and from 0.0268817204301075 to 0.3172043010752688 for KR. Class weighting/resampling and threshold tuning are absent by the frozen design. Accuracy alone is therefore insufficient; Brier and minority-class metrics need joint interpretation. AUC null handling avoids an invented score but does not solve imbalance.
 
-Source inspection and automated tests confirm outer training origins AND target
-times precede the test boundary. Inner training origins AND targets precede the
-validation boundary; validation targets precede the outer test boundary. The
-eligibility mask drops unavailable year-end labels and incomplete feature rows.
-Features use trailing observations through the completed origin hour; target-hour
-calendar features are known in advance. This requires actual availability of
-current-hour metering. Test-month feature histories may update as observations
-arrive, while each fitted model remains fixed for that month.
+No significance tests were performed for this repair or seed diagnostic. Monthly folds share training observations and hourly losses are dependent; folds are not independent runs. Read-only review confirms Step 1 uses normal-approximation Diebold-Mariano with HAC lag 24, Holm within each case, and 168-hour moving-block bootstrap with 2,000 replicates. Within-case correction does not cover the combined study or same-data top-model selection. Bootstrap intervals are pointwise. Seasonality can challenge dependence/stationarity assumptions; fixed lag/block choices have not been empirically validated here. Zero long-run variance is unguarded in dm_test. These are existing limitations, not newly tested significance findings; Step 1 conclusions do not transfer to tuned models.
 
-Added future-perturbation tests at h=1 and h=6 confirm that changing later metering
-cannot alter earlier features. An instrumented scaler test confirms that inner
-validation/future extremes cannot enter training means. Existing tests check
-default identity, frozen candidate draws, both temporal boundaries, minimum-loss
-selection and first-index ties, finite/shared prediction rows, and interrupted
-versus uninterrupted outputs with completed units skipped and invalid units rejected.
+## Bounded probe and checks
 
-Class counts and prevalence are saved for every inner, validation, outer and test
-split across both sites and horizons. All inspected splits contain both classes.
-There is substantial seasonal imbalance, particularly at KR. No weighting,
-resampling or threshold optimization was added: preserving defaults is the design.
-Use Brier together with precision, recall, F1, AUC and the existing references;
-accuracy alone is inadequate. Pooled metrics do not establish minority-class
-utility or probability calibration. Class prevalence is not stationary merely
-because both classes occur in every split.
+A fresh three-minute full-command probe used the prescribed sites/horizons, K=8 and four workers. It ran concurrently with verification jobs, so checkpoint throughput is not a runtime benchmark. Its retained log is S1_bench_step2/nanfix_probe/probe.log; prior experimenter evidence is preserved separately. Scratch checkpoints are deleted by the harness after validation. Exact completion/check counts are recorded in the final CODEX_REPORT.md.
 
-MLP early stopping and SVM probability calibration retain benchmark-internal
-non-temporal splits. They stay within the outer/inner training data but do not
-provide purely forward validation internally. The copied random-split accuracy
-is default-only retrospective context, not prospective forecasting evidence.
+No benchmark.py, significance.py, legacy/ or data/ edits; no network, installation, commit or push. No full-grid completion or tuned ranking claim.
 
-## Statistical inference and multiplicity
-
-Step 2 performs no inferential tests. Tolerances and rankings are descriptive;
-neither requires a p-value correction nor establishes significance or equivalence.
-Hourly losses are serially dependent, monthly folds share training data, and
-seasonal drift limits stationarity assumptions. Folds are not independent seeds.
-
-Read-only inspection of significance.py confirms Step 1 uses a two-sided
-normal-approximation Diebold–Mariano statistic with Newey–West lag 24, Holm within
-each site/horizon, and a seven-day moving-block bootstrap with 2,000 replicates.
-Holm's implementation sorts p-values, takes monotone running maxima and caps at
-one; its family is within-case, not the combined study. HAC and block resampling
-address some temporal dependence but their fixed lag/block choices do not prove
-adequacy under seasonality. Zero long-run variance is not explicitly guarded in
-dm_test. Reference model/top-six selection on the same evaluation outcomes adds
-selection uncertainty not removed by within-case Holm. Bootstrap intervals are
-pointwise, not simultaneous. No new p-values or significance outputs were generated;
-these observations do not constitute empirical validation of Step 1 assumptions,
-and none of its conclusions transfers automatically to tuned models.
-
-## Execution constraints and handoff
-
-The required `git merge origin/main` was attempted before edits; Git failed to
-create ORIG_HEAD.lock in worktree metadata outside the writable repository.
-No merge, commit, push, installation or network operation succeeded or was bypassed.
-
-The existing resumable implementation, cleanup and timing-probe rename were
-reviewed. K=8 and the sequential runtime estimate of about 8.40 hours remain frozen;
-no permitted K meets the 80-minute budget. RUN.md contains the full command and
-parallel-runtime caveats. No performance result was used to change this decision.
-
-Validation command outcomes are recorded in CODEX_REPORT.md and the fresh
-pytest_stats.log / ruff_stats_repository.log files. Repository-wide Ruff reports
-pre-existing violations, including explicitly protected files; this review does
-not change protected code or suppress those failures. benchmark.py, significance.py,
-legacy/ and data/ were not edited.
+Fresh outcomes: 180.0058246999979 seconds; 59 completed units validated, zero failed units, 63 strict-JSON checkpoint/manifest files, empty stderr. Deliberate termination stopped parent and inherited workers; only probe.log remains in scratch. Full pytest: 107 passed, 107 deprecation warnings. Targeted Ruff: passed. Full grid intentionally not completed.

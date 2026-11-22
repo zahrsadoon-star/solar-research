@@ -1,0 +1,54 @@
+{
+  "nonfinite_parameters": [
+    {
+      "algorithm": "XGBoost",
+      "candidate": 0,
+      "parameter": "missing",
+      "value": "nan"
+    },
+    {
+      "algorithm": "XGBoost",
+      "candidate": 1,
+      "parameter": "missing",
+      "value": "nan"
+    },
+    {
+      "algorithm": "XGBoost",
+      "candidate": 2,
+      "parameter": "missing",
+      "value": "nan"
+    },
+    {
+      "algorithm": "XGBoost",
+      "candidate": 3,
+      "parameter": "missing",
+      "value": "nan"
+    },
+    {
+      "algorithm": "XGBoost",
+      "candidate": 4,
+      "parameter": "missing",
+      "value": "nan"
+    },
+    {
+      "algorithm": "XGBoost",
+      "candidate": 5,
+      "parameter": "missing",
+      "value": "nan"
+    },
+    {
+      "algorithm": "XGBoost",
+      "candidate": 6,
+      "parameter": "missing",
+      "value": "nan"
+    },
+    {
+      "algorithm": "XGBoost",
+      "candidate": 7,
+      "parameter": "missing",
+      "value": "nan"
+    }
+  ],
+  "all_96_parameter_documents_strict_json": true,
+  "original_traceback_matches_notes": true
+}

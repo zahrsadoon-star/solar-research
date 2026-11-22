@@ -1,8 +1,7 @@
-نفّذت الاستئناف والـCLI وحذف النتائج الجزئية، وشغّلت sanity فقط.
+تم الإصلاح. السبب كان `XGBoost.missing=NaN` داخل manifest؛ حافظت على معناه وعلى JSON الصارم، وأضفت تسجيل واستبعاد المرشحين الفاشلين.
 
-- **84 اختبار نجح**، وRuff للملفات المعدّلة نظيف.
-- LR يفشل شرط ‎1e-9‎ لكنه يطابق بعد التقريب؛ RF ينجح.
-- الدمج تعذّر بسبب صلاحيات sandbox؛ Ruff العام بقي يفشل بـ397 مخالفة قديمة.
-- أمر التشغيل الكامل بـK=8 وتقدير **8.40 ساعات متسلسلة** موثّق في [RUN.md](D:/SolarProject/worktrees/20261122-s1-bench-step2-finish/agent_notes/S1_bench_step2/RUN.md).
+- **99 اختبار نجح**، وRuff مرّ.
+- التجربة الأخيرة توقفت بعد **180.004 ثانية** بدون crash؛ تحققنا من **65 checkpoint مكتمل**.
+- انحذفت المخرجات المؤقتة وبقي السجل. ما شغّلت الشبكة كاملة ولا سويت commit.
 
-التفاصيل والعوائق في [CODEX_REPORT.md](D:/SolarProject/worktrees/20261122-s1-bench-step2-finish/CODEX_REPORT.md). ما شغّلت full grid ولا سويت commit أو push.
+التفاصيل بـ[CODEX_REPORT.md](/D:/SolarProject/worktrees/20261122-s1-bench-step2-nanfix/CODEX_REPORT.md).
