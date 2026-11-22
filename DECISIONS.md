@@ -26,3 +26,9 @@
   best. No battery / dispatch / energy management in S1 (pilot_v2/dispatch kept as background material only; its
   Codex tasks parked). Grow the benchmark one small reviewed step at a time.
 - Credit management: control/budget.json on the PC (Claude modest, Codex maximum speed).
+
+## 2026-11-22 - S1 step 2 (tuning) acceptance gates (lead)
+- MUST-FIX 3 (reproduction gate): benchmark_results.csv stores metrics rounded to 4 decimals, so a literal 1e-9 gate against it is impossible. Accepted criterion: agreement at stored precision, |diff| <= 5e-5 (half a unit in the 4th decimal). K=1 sanity BG h=1: all six LR metrics pass (max |diff| 3.6e-5); RF Brier diff 2.9e-4 < 0.005 tolerance; RF cause not assigned. Tuned-minus-default differences below ~0.005 Brier must not be called improvements.
+- MUST-FIX 5 (execution): main merged into the branch by the lead (Codex sandbox could not write ORIG_HEAD.lock); 90 tests pass on the merged revision; ruff clean on tuning.py and its tests. Repository-wide ruff gate waived for pre-existing violations in protected/legacy files (same exception as product p06); no protected file edited.
+- MUST-FIX 1, 2, 4 closed by the Codex fixer (checked by lead: no equivalence wording in README, subset runs labelled, sanity evidence rebuilt only from provenance-validated checkpoints).
+- Full grid (K=8, BG+KR, h=1,6) launched on the PC by the lead; tuned numbers need an independent check before entering the paper.
