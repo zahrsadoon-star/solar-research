@@ -1,23 +1,28 @@
-**Verdict: ACCEPTABLE for the narrow numerical-verification task.** This does not establish publication readiness or algorithm superiority.
+**Verdict: MAJOR_REVISION**
 
-Reviewed `agent_notes/PLAN.md` and the task-specific `agent_notes/S1_bench_verify/STATS_REPORT.md`; the root-level statistics report is absent.
+The nested temporal splits and checkpoint validation appear sound on inspection. I found no demonstrated future-label leakage or outcome-driven candidate selection. However, reporting defects and unresolved acceptance gates prevent approval.
 
 **MUST-FIX**
 
-- None blocking acceptance of this verification. All 80 comparisons pass the prescribed tolerances. I verified the frozen source/input/output hashes and independently recomputed pooled metrics from saved predictions.
-- Before publication, correct the README’s feature count to **19**, remove the unsupported attribution of the entire random-split uplift to adjacency, and qualify “win/best” as descriptive performance under the tested configurations. These changes belong to a separately authorized benchmark revision.
+1. **Remove unsupported equivalence claims.** The benchmark `README.md` calls models “statistically equivalent” and “statistically tied.” Nonsignificant difference tests establish neither equivalence nor a best-choice recommendation. Replace these statements with qualified descriptions of the tested comparisons. Step 1 inference must not support tuned-model claims.
+
+2. **Correct subset and tie reporting.** In `tuning.py::reports`, `head(2)` determines dominance even for the two-model sanity run. The saved sanity summary consequently discusses RF/Extra Trees dominance despite never evaluating Extra Trees. Restrict full-benchmark conclusions to the complete requested design, label subsets explicitly, and handle ties at the second-place boundary without arbitrary membership.
+
+3. **Resolve the reproduction gate explicitly.** All six literal LR comparisons fail `1e-9`, although four-decimal agreement holds. The lead must document a precision-compatible acceptance criterion or supply a verified full-precision baseline; rounded agreement cannot silently replace the gate. RF passes its prescribed Brier tolerance, but its historical discrepancy remains unexplained. Small tuned-minus-default differences must not be interpreted as improvements beyond baseline reproducibility and rounding uncertainty.
+
+4. **Validate the sanity evidence used during production assembly.** `tuning.py:479` imports an existing `sanity.csv` without checking its provenance against the production inputs, source and environment. Validate the underlying sanity checkpoints before incorporating that evidence, or clearly mark it as historical and unvalidated.
+
+5. **Close the execution requirements before declaring completion.** The merge remains pending and the recorded repository-wide Ruff check reports 397 violations. Scoped lint success does not satisfy the stated repository-wide gate. Resolve these through the lead’s authorized workflow, then record checks against the merged revision. Do not modify protected files merely to clear lint.
 
 **SHOULD-FIX**
 
-- **Harden comparison completeness.** `compare()` iterates over available independent rows without asserting the complete expected site–horizon–method grid. Missing or duplicate independent cases should fail explicitly. The current artifacts are complete.
-- **Preserve the original freeze on reruns.** The documented `independent` command overwrites original outputs and provenance. Use separate run directories and validate source/config/input hashes before comparison.
-- **Investigate the RF discrepancy.** The largest original difference passes tolerance, but its cause remains unresolved. Preserve the original benchmark environment and predictions; do not attribute it to threading without evidence.
-- **Keep uncertainty claims restricted.** The additional seed reveals minority-class F1 sensitivity. Two seeds and pooled scores do not establish robustness. Any later superiority analysis needs paired, temporally dependent uncertainty estimates and a defined comparison family.
-- **Do not equate common features with equal tuning opportunity.** This verification introduces no tuning, and I found no evidence of cherry-picking. The broader algorithm ranking still needs documented configuration-selection budgets. Feature ablations and stronger probability references are follow-up experiments, not prerequisites for reproducing these prescribed rows.
-- **Resolve deployment and citation evidence before manuscript use.** Causality assumes completed origin-hour measurements are available. Metering latency, proxy-label validity, source attribution and data permissions remain outside what this check establishes; external citation claims were not verified.
+- Add a tiny CLI/process-pool integration test. The existing resume test exercises `evaluate()` with one LR candidate; it does not verify the advertised multi-process command and final artifact assembly.
+- Surface convergence warnings by candidate and fold. Successful-unit checkpoints retain warning text, but failed fits can lose captured warnings before publication.
+- Make `PLAN.md` self-contained: its frozen-space reference points back to itself, and its statement that CLI flags are unimplemented is stale.
+- Describe fairness as **equal candidate counts**, not equal optimization opportunity or computation. Preserve duplicate counts and the frozen search spaces.
+- Before journal-level robustness claims, separately preregister broader seed checks, feature ablations and temporal sensitivity analyses. The two-seed default diagnostic cannot establish tuned-model robustness.
+- Verify dataset attribution, permission and prior-publication overlap before manuscript submission. Those external sources were not verified in this offline review.
 
-No chronological feature, scaling or training-target leakage was found. Random holdout is correctly identified as non-prospective.
+**Verification:** Fresh scoped Ruff and `git diff --check` passed; protected-file diffs were empty. Existing logs report 87 passing tests. I did not rerun the write-producing test suite or launch experiments.
 
-Fresh validation: **11 verifier tests passed**. The recorded full-suite result is **62 passed**; I did not rerun tests requiring filesystem writes.
-
-No files were edited. `agent_notes/REVIEW.md` could not be saved because this session is read-only.
+This review was **not saved to `agent_notes/REVIEW.md`** because this assignment and sandbox are read-only. No files were edited.

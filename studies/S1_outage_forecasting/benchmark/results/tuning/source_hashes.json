@@ -1,0 +1,9 @@
+{
+  "studies/S1_outage_forecasting/benchmark/tuning.py": "411b60b3f3e9837ceea110e41b165462141e34a02031470b1004a16a3de3feb4",
+  "studies/S1_outage_forecasting/benchmark/benchmark.py": "ff828b4ad30521f17b88c045b7857c9f618651ad2e36496f091176974d056e41",
+  "studies/S1_outage_forecasting/benchmark/significance.py": "e364898fd6a1be15c5fe23b46f98d6a1077adc882b8c48d2d623f80cbdcd2689",
+  "studies/S1_outage_forecasting/benchmark/results/benchmark_results.csv": "abab31fd4c60663c3c18de41c3d63892711663daff4fd53a373cb9db93825233",
+  "agent_notes/PLAN.md": "4664ce629e469365848876fd86d12656998e43a919a92639ad9ed1b780da3671",
+  "data/raw/BG18760_with_analysis.xlsx": "fedf6910716d9521138b48100d9956188ef0e556871d20a23d35865485c7fe63",
+  "data/raw/KR-8760.xlsx": "b99c34f1a95be95a4286259a791420261a5242746b9e4d26ebb8d5067c204214"
+}

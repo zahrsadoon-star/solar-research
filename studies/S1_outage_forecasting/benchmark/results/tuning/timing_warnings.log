@@ -1,0 +1,20 @@
+D:\SolarProject\worktrees\20261116-s1-bench-step2-tuning\studies\S1_outage_forecasting\benchmark\benchmark.py:74: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  tgt = d.index + pd.Timedelta(hours=h)
+D:\SolarProject\worktrees\20261116-s1-bench-step2-tuning\studies\S1_outage_forecasting\benchmark\benchmark.py:74: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  tgt = d.index + pd.Timedelta(hours=h)
+D:\SolarProject\worktrees\20261116-s1-bench-step2-tuning\studies\S1_outage_forecasting\benchmark\benchmark.py:74: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  tgt = d.index + pd.Timedelta(hours=h)
+D:\SolarProject\worktrees\20261116-s1-bench-step2-tuning\studies\S1_outage_forecasting\benchmark\benchmark.py:74: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  tgt = d.index + pd.Timedelta(hours=h)
+D:\SolarProject\worktrees\20261116-s1-bench-step2-tuning\studies\S1_outage_forecasting\benchmark\tuning.py:85: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  validation = start - pd.offsets.MonthBegin(1)
+D:\SolarProject\worktrees\20261116-s1-bench-step2-tuning\studies\S1_outage_forecasting\benchmark\tuning.py:85: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  validation = start - pd.offsets.MonthBegin(1)
+D:\SolarProject\worktrees\20261116-s1-bench-step2-tuning\studies\S1_outage_forecasting\benchmark\tuning.py:85: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  validation = start - pd.offsets.MonthBegin(1)
+D:\SolarProject\worktrees\20261116-s1-bench-step2-tuning\studies\S1_outage_forecasting\benchmark\tuning.py:85: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  validation = start - pd.offsets.MonthBegin(1)
+D:\SolarProject\worktrees\20261116-s1-bench-step2-tuning\studies\S1_outage_forecasting\benchmark\tuning.py:85: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  validation = start - pd.offsets.MonthBegin(1)
+D:\SolarProject\worktrees\20261116-s1-bench-step2-tuning\studies\S1_outage_forecasting\benchmark\tuning.py:152: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  fold = pd.DataFrame(dict(site=site, h=h, origin_time=x.index[test],

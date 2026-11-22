@@ -1,0 +1,1 @@
+{"blas_threads_per_worker": 1, "elapsed_seconds": 100.88328109998838, "estimator_parameters_unchanged": true, "loky_max_cpu_count": 1, "openmp_threads_per_worker": 1, "requested_workers": 1, "workers": 1}
