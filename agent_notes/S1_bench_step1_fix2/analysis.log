@@ -1,0 +1,20 @@
+D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\studies\S1_outage_forecasting\benchmark\significance_check\check.py:109: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  if times.isna().any() or not times.diff().iloc[1:].eq(pd.Timedelta(hours=1)).all():
+D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\studies\S1_outage_forecasting\benchmark\significance_check\check.py:109: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  if times.isna().any() or not times.diff().iloc[1:].eq(pd.Timedelta(hours=1)).all():
+D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\studies\S1_outage_forecasting\benchmark\significance_check\check.py:109: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  if times.isna().any() or not times.diff().iloc[1:].eq(pd.Timedelta(hours=1)).all():
+D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\studies\S1_outage_forecasting\benchmark\significance_check\check.py:109: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  if times.isna().any() or not times.diff().iloc[1:].eq(pd.Timedelta(hours=1)).all():
+D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\studies\S1_outage_forecasting\benchmark\significance_check\check.py:164: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  'target_start': str(pd.Timestamp(g.time.iloc[0])+pd.Timedelta(hours=h)), 'target_end': str(pd.Timestamp(g.time.iloc[-1])+pd.Timedelta(hours=h)),
+BG h=1: 15 pairs
+D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\studies\S1_outage_forecasting\benchmark\significance_check\check.py:164: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  'target_start': str(pd.Timestamp(g.time.iloc[0])+pd.Timedelta(hours=h)), 'target_end': str(pd.Timestamp(g.time.iloc[-1])+pd.Timedelta(hours=h)),
+BG h=6: 15 pairs
+D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\studies\S1_outage_forecasting\benchmark\significance_check\check.py:164: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  'target_start': str(pd.Timestamp(g.time.iloc[0])+pd.Timedelta(hours=h)), 'target_end': str(pd.Timestamp(g.time.iloc[-1])+pd.Timedelta(hours=h)),
+KR h=1: 15 pairs
+D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\studies\S1_outage_forecasting\benchmark\significance_check\check.py:164: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  'target_start': str(pd.Timestamp(g.time.iloc[0])+pd.Timedelta(hours=h)), 'target_end': str(pd.Timestamp(g.time.iloc[-1])+pd.Timedelta(hours=h)),
+KR h=6: 15 pairs

@@ -1,0 +1,5 @@
+site,horizon_h,eligible,training,test,test_fraction_requested,seed,shuffle,stratification,unit,first_origin,last_origin,test_origins_before_last_training_origin
+BG,1,8591,6872,1719,0.2,42,True,origin month,hourly origin row,2018-01-08,2018-12-31 22:00:00,1719
+BG,6,8586,6868,1718,0.2,42,True,origin month,hourly origin row,2018-01-08,2018-12-31 17:00:00,1718
+KR,1,8591,6872,1719,0.2,42,True,origin month,hourly origin row,2018-01-08,2018-12-31 22:00:00,1719
+KR,6,8586,6868,1718,0.2,42,True,origin month,hourly origin row,2018-01-08,2018-12-31 17:00:00,1718

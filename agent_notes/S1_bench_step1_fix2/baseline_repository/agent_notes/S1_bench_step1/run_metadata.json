@@ -1,0 +1,18 @@
+{
+  "python": "3.12.15",
+  "seed": 42,
+  "packages": {
+    "numpy": "2.5.4",
+    "pandas": "2.3.3",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.7.2",
+    "lightgbm": "4.7.0",
+    "xgboost": "3.4.1",
+    "catboost": "1.2.10"
+  },
+  "sha256": {
+    "studies/S1_outage_forecasting/benchmark/benchmark.py": "c8556f1992cf98b6bf9fa459d4bc9c05d5e363a90327372175fd4e89fa7262d1",
+    "agent_notes/S1_bench_step1/benchmark_results_before.csv": "abab31fd4c60663c3c18de41c3d63892711663daff4fd53a373cb9db93825233"
+  },
+  "command": "python studies/S1_outage_forecasting/benchmark/benchmark.py"
+}

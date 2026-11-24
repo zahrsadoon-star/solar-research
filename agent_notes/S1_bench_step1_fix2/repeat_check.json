@@ -1,0 +1,12 @@
+{
+  "returncode": 0,
+  "before": {
+    "pairs.csv": "4965a2fa50d109bf8258b029f122aada3e3eb636ff62407822de9c3353c1f9b4",
+    "brier_intervals.png": "31dada52ecb5e3542ec550e6afce09fe6fe2efc05cdd5267753f3d123f6d5c5e"
+  },
+  "after": {
+    "pairs.csv": "4965a2fa50d109bf8258b029f122aada3e3eb636ff62407822de9c3353c1f9b4",
+    "brier_intervals.png": "31dada52ecb5e3542ec550e6afce09fe6fe2efc05cdd5267753f3d123f6d5c5e"
+  },
+  "identical": true
+}

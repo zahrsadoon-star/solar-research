@@ -1,0 +1,85 @@
+{
+  "provenance": {
+    "revision": "cec3552fc9d739c3c08204d7eb70c22c84cbd70f",
+    "python": "3.12.15",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "versions": {
+      "numpy": "2.5.4",
+      "pandas": "2.3.3",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.7.2",
+      "lightgbm": "4.7.0",
+      "catboost": "1.2.10",
+      "xgboost": "3.4.1",
+      "openpyxl": "3.1.5"
+    },
+    "historical_sha256": {
+      "studies/S1_outage_forecasting/benchmark/benchmark.py": "053442fd581c04cf4e4d5a4515d73fa3675928122049df375742116ae4b24385",
+      "studies/S1_outage_forecasting/benchmark/results/benchmark_results.csv": "c500249a34610e2f4163256669d58151dac565670f3ab24363dc8b3eb400d5e7"
+    },
+    "local_sha256": {
+      "data/raw/BG18760_with_analysis.xlsx": "fedf6910716d9521138b48100d9956188ef0e556871d20a23d35865485c7fe63",
+      "data/raw/KR-8760.xlsx": "b99c34f1a95be95a4286259a791420261a5242746b9e4d26ebb8d5067c204214",
+      "studies/S1_outage_forecasting/benchmark/results/hourly_predictions_top6.csv.gz": "38d6a7e325534a265787cce0f95bd9a1624e464ebf583efb42376dcc16f5c800",
+      "studies/S1_outage_forecasting/benchmark/significance_check/check.py": "56a9169a727a4b75596c86c46b761248002876976594d5f43ca12d4008a00cf6",
+      "studies/S1_outage_forecasting/benchmark/significance_check/config.json": "22531aaee12d0943c95b77ddb01359e737bfdc9eebd087c1f24c5479cf744b00"
+    }
+  },
+  "seeds": [
+    42,
+    43
+  ],
+  "max_absolute_brier_seed_change": 0.0010966131766241005,
+  "descriptive_winners": [
+    {
+      "site": "BG",
+      "h": 1,
+      "seed": 42,
+      "lowest_brier": "Extra Trees"
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "seed": 43,
+      "lowest_brier": "Extra Trees"
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "seed": 42,
+      "lowest_brier": "Extra Trees"
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "seed": 43,
+      "lowest_brier": "Extra Trees"
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "seed": 42,
+      "lowest_brier": "Random Forest"
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "seed": 43,
+      "lowest_brier": "Random Forest"
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "seed": 42,
+      "lowest_brier": "Random Forest"
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "seed": 43,
+      "lowest_brier": "Random Forest"
+    }
+  ],
+  "scope": "April only; original 300 trees and leaf size 5; no tuning",
+  "limitation": "One fold and two models do not establish full-benchmark training stability."
+}

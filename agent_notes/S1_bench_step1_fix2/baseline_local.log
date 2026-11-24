@@ -1,0 +1,451 @@
+................................................FFFF.sF................  [100%]
+================================== FAILURES ===================================
+________________ test_real_labels_boundaries_and_scaling[1-BG] ________________
+
+benchmark = <module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'>
+site = 'BG', h = 1
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -> None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) & y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+>       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gzip on 0x23d57e7fd60>
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+>               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError
+________________ test_real_labels_boundaries_and_scaling[1-KR] ________________
+
+benchmark = <module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'>
+site = 'KR', h = 1
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -> None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) & y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+>       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gzip on 0x23d577c4610>
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+>               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError
+________________ test_real_labels_boundaries_and_scaling[6-BG] ________________
+
+benchmark = <module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'>
+site = 'BG', h = 6
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -> None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) & y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+>       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gzip on 0x23d58f81990>
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+>               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError
+________________ test_real_labels_boundaries_and_scaling[6-KR] ________________
+
+benchmark = <module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'>
+site = 'KR', h = 6
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -> None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) & y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+>       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gzip on 0x23d578af7c0>
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+>               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError
+__________________ test_historical_significance_is_disabled ___________________
+
+tmp_path = WindowsPath('D:/SolarProject/worktrees/fix5-20261023-s1-bench-step1-significance/agent_notes/S1_bench_step1_fix2/baseline_repository/pytest_tmp/test_historical_significance_i0')
+
+    def test_historical_significance_is_disabled(tmp_path: Path) -> None:
+        """Both CLI and imported entry point must stop without producing files."""
+        import subprocess
+        import sys
+    
+        script = OUT.parent / 'significance.py'
+        loaded_spec = importlib.util.spec_from_file_location('disabled_significance', script)
+        loaded = importlib.util.module_from_spec(loaded_spec)
+>       loaded_spec.loader.exec_module(loaded)
+
+tests\test_s1_bench_significance.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap_external>:999: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    """S1 benchmark, step 1: is the best algorithm really better, or is the top group a tie?
+    
+    For each site (BG, KR) and horizon (1 h, 6 h): the six best algorithms of benchmark v1 (by Brier score) are re-run
+    with the identical time-ordered protocol of benchmark.py, keeping every hourly prediction. Then, against the
+    best-ranked algorithm of that case:
+      - Diebold-Mariano test on the hourly Brier loss difference, with a Newey-West (HAC) variance, lag = 24 h,
+        two-sided, Holm correction over the comparisons within each case;
+      - moving-block bootstrap (block = 7 days = 168 h, 2,000 replicates) 95 % CI of the Brier difference and of the
+        accuracy difference.
+    A difference is called real only if the CI excludes 0 AND Holm-adjusted p < 0.05.
+    Run:  python significance.py   -> results/significance.csv, results/hourly_predictions_top6.csv.gz
+    """
+    from __future__ import annotations
+    
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+    
+>   import benchmark as bm
+E   ModuleNotFoundError: No module named 'benchmark'
+
+studies\S1_outage_forecasting\benchmark\significance.py:19: ModuleNotFoundError
+============================== warnings summary ===============================
+..\..\..\..\..\venv312\Lib\site-packages\pvlib\soiling.py:14
+  D:\SolarProject\venv312\Lib\site-packages\pvlib\soiling.py:14: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    depo_veloc=None, rain_accum_period=pd.Timedelta('1h')):
+
+tests/test_outage_data.py::test_weather_rejects_invalid_input[shift]
+tests/test_outage_data.py::test_weather_rejects_invalid_input[half_hour]
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\tests\test_outage_data.py:103: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    stamps += pd.Timedelta(hours=3) if kind == "shift" else pd.Timedelta(minutes=30)
+
+tests/test_pv_model.py::test_timestamp_offset_is_a_candidate
+tests/test_pv_model.py::test_timestamp_offset_is_a_candidate
+tests/test_pv_model.py::test_timestamp_offset_is_a_candidate
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\src\pv\model.py:86: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    t = weather.index + pd.Timedelta(minutes=off)
+
+tests/test_pv_model.py: 12 warnings
+  D:\SolarProject\venv312\Lib\site-packages\pvlib\solarposition.py:278: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    return np.array((dtindex - epoch) / pd.Timedelta("1s"))
+
+tests/test_pv_model.py::test_south_beats_north_at_33N
+tests/test_pv_model.py::test_south_beats_north_at_33N
+tests/test_pv_model.py::test_pv_peak_is_around_local_noon
+tests/test_pv_model.py::test_no_generation_at_night
+tests/test_pv_model.py::test_annual_specific_yield_plausible
+tests/test_pv_model.py::test_temperature_derating_reduces_output
+tests/test_pv_model.py::test_temperature_derating_reduces_output
+tests/test_pv_model.py::test_legacy_style_is_worse_and_early
+tests/test_pv_model.py::test_legacy_style_is_worse_and_early
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\src\pv\model.py:104: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    t = weather.index + pd.Timedelta(minutes=off)
+
+tests/test_s1_bench_significance.py: 8 warnings
+tests/test_s1_sig_check.py: 12 warnings
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\studies\S1_outage_forecasting\benchmark\benchmark.py:74: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    tgt = d.index + pd.Timedelta(hours=h)
+
+tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[1-BG]
+tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[1-KR]
+tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[6-BG]
+tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[6-KR]
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\tests\test_s1_bench_significance.py:47: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    target = x.index + pd.Timedelta(hours=h)
+
+tests/test_s1_sig_check.py::test_input_validation
+tests/test_s1_sig_check.py::test_input_validation
+tests/test_s1_sig_check.py::test_input_validation
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\studies\S1_outage_forecasting\benchmark\significance_check\check.py:106: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    if times.isna().any() or not times.diff().iloc[1:].eq(pd.Timedelta(hours=1)).all():
+
+tests/test_s1_sig_check.py::test_original_labels_scaling_and_temporal_boundaries[BG-1]
+tests/test_s1_sig_check.py::test_original_labels_scaling_and_temporal_boundaries[BG-6]
+tests/test_s1_sig_check.py::test_original_labels_scaling_and_temporal_boundaries[KR-1]
+tests/test_s1_sig_check.py::test_original_labels_scaling_and_temporal_boundaries[KR-6]
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\tests\test_s1_sig_check.py:119: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    target = x.index + pd.Timedelta(hours=h)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[1-BG]
+FAILED tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[1-KR]
+FAILED tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[6-BG]
+FAILED tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[6-KR]
+FAILED tests/test_s1_bench_significance.py::test_historical_significance_is_disabled
+5 failed, 65 passed, 1 skipped, 58 warnings in 96.94s (0:01:36)

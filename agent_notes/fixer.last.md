@@ -1,7 +1,10 @@
-حدّثت الفحص المستقل والتوثيق والتقارير. النتائج تتفق ويا main بثلاث حالات؛ BG عند ساعة واحدة يبقي Gradient Boosting ضمن المجموعة العليا. نجح 11 اختبار، والملفات التسعة المحمية تطابق main.
+Completed the audit-input fixes, protocol documentation, failure inventory, and results README.
 
-المهمة بعدها مو مكتملة:
-- الدمج محجوب بصلاحيات Git.
-- الاختبارات الكاملة تنتظر موافقتك على تعديل الاختبار القديم، لأنه خارج المسارات المسموحة صراحةً.
+- Tests: **78 passed** with workspace temporary directory.
+- Modified-file Ruff: passed.
+- Published results: unchanged.
+- Still blocked: main merge permissions, 15 external-temp setup errors, and 834 repository-wide lint diagnostics outside the permitted repair scope.
 
-التفاصيل في [FIX_REPORT.md](agent_notes/FIX_REPORT.md) و[CODEX_REPORT.md](CODEX_REPORT.md).
+Full acceptance remains incomplete. No commits or pushes.
+
+Details: [FIX_REPORT.md](agent_notes/FIX_REPORT.md) and [CODEX_REPORT.md](CODEX_REPORT.md).

@@ -1,0 +1,750 @@
+..............EEEEEEEEEEEEE.....................FFFF.sEFFFEE...........  [100%]
+=================================== ERRORS ====================================
+_________ ERROR at setup of test_loader_fails_closed_without_weather __________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+____ ERROR at setup of test_weather_rejects_invalid_input[missing_column] _____
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+_____ ERROR at setup of test_weather_rejects_invalid_input[missing_hour] ______
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+______ ERROR at setup of test_weather_rejects_invalid_input[extra_hour] _______
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+_______ ERROR at setup of test_weather_rejects_invalid_input[duplicate] _______
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+________ ERROR at setup of test_weather_rejects_invalid_input[reverse] ________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+_________ ERROR at setup of test_weather_rejects_invalid_input[shift] _________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+_______ ERROR at setup of test_weather_rejects_invalid_input[half_hour] _______
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+__________ ERROR at setup of test_weather_rejects_invalid_input[nat] __________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+_________ ERROR at setup of test_weather_rejects_invalid_input[aware] _________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+__________ ERROR at setup of test_weather_rejects_invalid_input[nan] __________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+__________ ERROR at setup of test_weather_rejects_invalid_input[inf] __________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+_________ ERROR at setup of test_weather_rejects_invalid_input[text] __________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+_________ ERROR at setup of test_historical_significance_is_disabled __________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+_____________ ERROR at setup of test_complete_temperature_eda[0] ______________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+_____________ ERROR at setup of test_complete_temperature_eda[17] _____________
+
+self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError
+================================== FAILURES ===================================
+________________ test_real_labels_boundaries_and_scaling[1-BG] ________________
+
+benchmark = <module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'>
+site = 'BG', h = 1
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -> None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) & y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+>       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gzip on 0x296d77b7880>
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+>               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError
+________________ test_real_labels_boundaries_and_scaling[1-KR] ________________
+
+benchmark = <module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'>
+site = 'KR', h = 1
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -> None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) & y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+>       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gzip on 0x296d716a6b0>
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+>               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError
+________________ test_real_labels_boundaries_and_scaling[6-BG] ________________
+
+benchmark = <module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'>
+site = 'BG', h = 6
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -> None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) & y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+>       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gzip on 0x296d73278b0>
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+>               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError
+________________ test_real_labels_boundaries_and_scaling[6-KR] ________________
+
+benchmark = <module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'>
+site = 'KR', h = 6
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -> None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) & y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+>       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <gzip on 0x296d71c4760>
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+>               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError
+_____________________ test_protocol_configuration[dpi-72] _____________________
+
+key = 'dpi', value = 72
+
+    @pytest.mark.parametrize("key,value", [
+        ("dpi", 72), ("weibull_fixed_location", 1), ("quantile_interpolation", "nearest"),
+    ])
+    def test_protocol_configuration(key: str, value: object) -> None:
+        """Nonprotocol DPI, location (hours), or quantile conventions must fail."""
+>       config = json.loads((ROOT / "experiments" / "s1_eda.json").read_text())
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_eda.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/SolarProject/worktrees/fix5-20261023-s1-bench-step1-significance/agent_notes/S1_bench_step1_fix2/baseline_repository/experiments/s1_eda.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\experiments\\s1_eda.json'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1013: FileNotFoundError
+____________ test_protocol_configuration[weibull_fixed_location-1] ____________
+
+key = 'weibull_fixed_location', value = 1
+
+    @pytest.mark.parametrize("key,value", [
+        ("dpi", 72), ("weibull_fixed_location", 1), ("quantile_interpolation", "nearest"),
+    ])
+    def test_protocol_configuration(key: str, value: object) -> None:
+        """Nonprotocol DPI, location (hours), or quantile conventions must fail."""
+>       config = json.loads((ROOT / "experiments" / "s1_eda.json").read_text())
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_eda.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/SolarProject/worktrees/fix5-20261023-s1-bench-step1-significance/agent_notes/S1_bench_step1_fix2/baseline_repository/experiments/s1_eda.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\experiments\\s1_eda.json'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1013: FileNotFoundError
+_________ test_protocol_configuration[quantile_interpolation-nearest] _________
+
+key = 'quantile_interpolation', value = 'nearest'
+
+    @pytest.mark.parametrize("key,value", [
+        ("dpi", 72), ("weibull_fixed_location", 1), ("quantile_interpolation", "nearest"),
+    ])
+    def test_protocol_configuration(key: str, value: object) -> None:
+        """Nonprotocol DPI, location (hours), or quantile conventions must fail."""
+>       config = json.loads((ROOT / "experiments" / "s1_eda.json").read_text())
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_eda.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('D:/SolarProject/worktrees/fix5-20261023-s1-bench-step1-significance/agent_notes/S1_bench_step1_fix2/baseline_repository/experiments/s1_eda.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\experiments\\s1_eda.json'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1013: FileNotFoundError
+============================== warnings summary ===============================
+..\..\..\..\..\venv312\Lib\site-packages\pvlib\soiling.py:14
+  D:\SolarProject\venv312\Lib\site-packages\pvlib\soiling.py:14: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    depo_veloc=None, rain_accum_period=pd.Timedelta('1h')):
+
+tests/test_pv_model.py::test_timestamp_offset_is_a_candidate
+tests/test_pv_model.py::test_timestamp_offset_is_a_candidate
+tests/test_pv_model.py::test_timestamp_offset_is_a_candidate
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\src\pv\model.py:86: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    t = weather.index + pd.Timedelta(minutes=off)
+
+tests/test_pv_model.py: 12 warnings
+  D:\SolarProject\venv312\Lib\site-packages\pvlib\solarposition.py:278: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    return np.array((dtindex - epoch) / pd.Timedelta("1s"))
+
+tests/test_pv_model.py::test_south_beats_north_at_33N
+tests/test_pv_model.py::test_south_beats_north_at_33N
+tests/test_pv_model.py::test_pv_peak_is_around_local_noon
+tests/test_pv_model.py::test_no_generation_at_night
+tests/test_pv_model.py::test_annual_specific_yield_plausible
+tests/test_pv_model.py::test_temperature_derating_reduces_output
+tests/test_pv_model.py::test_temperature_derating_reduces_output
+tests/test_pv_model.py::test_legacy_style_is_worse_and_early
+tests/test_pv_model.py::test_legacy_style_is_worse_and_early
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\src\pv\model.py:104: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    t = weather.index + pd.Timedelta(minutes=off)
+
+tests/test_s1_bench_significance.py: 8 warnings
+tests/test_s1_sig_check.py: 12 warnings
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\studies\S1_outage_forecasting\benchmark\benchmark.py:74: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    tgt = d.index + pd.Timedelta(hours=h)
+
+tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[1-BG]
+tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[1-KR]
+tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[6-BG]
+tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[6-KR]
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\tests\test_s1_bench_significance.py:47: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    target = x.index + pd.Timedelta(hours=h)
+
+tests/test_s1_sig_check.py::test_input_validation
+tests/test_s1_sig_check.py::test_input_validation
+tests/test_s1_sig_check.py::test_input_validation
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\studies\S1_outage_forecasting\benchmark\significance_check\check.py:106: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    if times.isna().any() or not times.diff().iloc[1:].eq(pd.Timedelta(hours=1)).all():
+
+tests/test_s1_sig_check.py::test_original_labels_scaling_and_temporal_boundaries[BG-1]
+tests/test_s1_sig_check.py::test_original_labels_scaling_and_temporal_boundaries[BG-6]
+tests/test_s1_sig_check.py::test_original_labels_scaling_and_temporal_boundaries[KR-1]
+tests/test_s1_sig_check.py::test_original_labels_scaling_and_temporal_boundaries[KR-6]
+  D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\tests\test_s1_sig_check.py:119: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    target = x.index + pd.Timedelta(hours=h)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[1-BG]
+FAILED tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[1-KR]
+FAILED tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[6-BG]
+FAILED tests/test_s1_bench_significance.py::test_real_labels_boundaries_and_scaling[6-KR]
+FAILED tests/test_s1_eda.py::test_protocol_configuration[dpi-72] - FileNotFou...
+FAILED tests/test_s1_eda.py::test_protocol_configuration[weibull_fixed_location-1]
+FAILED tests/test_s1_eda.py::test_protocol_configuration[quantile_interpolation-nearest]
+ERROR tests/test_outage_data.py::test_loader_fails_closed_without_weather - P...
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[missing_column]
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[missing_hour]
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[extra_hour]
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[duplicate]
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[reverse]
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[shift] - ...
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[half_hour]
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[nat] - Pe...
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[aware] - ...
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[nan] - Pe...
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[inf] - Pe...
+ERROR tests/test_outage_data.py::test_weather_rejects_invalid_input[text] - P...
+ERROR tests/test_s1_bench_significance.py::test_historical_significance_is_disabled
+ERROR tests/test_s1_eda.py::test_complete_temperature_eda[0] - PermissionErro...
+ERROR tests/test_s1_eda.py::test_complete_temperature_eda[17] - PermissionErr...
+7 failed, 47 passed, 1 skipped, 56 warnings, 16 errors in 77.59s (0:01:17)

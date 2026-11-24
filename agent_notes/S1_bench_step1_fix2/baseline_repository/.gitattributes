@@ -1,0 +1,9 @@
+# Frozen bench-verify files: hashes were taken on these exact line endings (autocrlf checkout broke the check, 2026-10-23)
+agent_notes/S1_bench_verify/independent_frozen.py text eol=lf
+studies/S1_outage_forecasting/benchmark/verify/config.json text eol=lf
+studies/S1_outage_forecasting/benchmark/verify/results/data_audit.csv text eol=crlf
+studies/S1_outage_forecasting/benchmark/verify/results/exclusions.csv text eol=crlf
+studies/S1_outage_forecasting/benchmark/verify/results/folds.csv text eol=crlf
+studies/S1_outage_forecasting/benchmark/verify/results/independent_metrics.csv text eol=crlf
+studies/S1_outage_forecasting/benchmark/verify/results/outage_shares.csv text eol=crlf
+studies/S1_outage_forecasting/benchmark/verify/results/predictions.csv text eol=crlf

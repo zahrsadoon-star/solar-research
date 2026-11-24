@@ -1,0 +1,119 @@
+{
+  "config": {
+    "seed": 42,
+    "resamples": 2000,
+    "block_hours": 24,
+    "alpha": 0.05,
+    "cases": [
+      [
+        "BG",
+        1
+      ],
+      [
+        "BG",
+        6
+      ],
+      [
+        "KR",
+        1
+      ],
+      [
+        "KR",
+        6
+      ]
+    ]
+  },
+  "cases": [
+    {
+      "site": "BG",
+      "h": 1,
+      "n": 6599,
+      "origin_start": "2018-04-01 00:00:00",
+      "origin_end": "2018-12-31 22:00:00",
+      "target_end": "2018-12-31 23:00:00",
+      "ranking": [
+        "Extra Trees",
+        "Random Forest",
+        "CatBoost",
+        "LightGBM",
+        "XGBoost",
+        "Gradient Boosting"
+      ]
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "n": 6594,
+      "origin_start": "2018-04-01 00:00:00",
+      "origin_end": "2018-12-31 17:00:00",
+      "target_end": "2018-12-31 23:00:00",
+      "ranking": [
+        "Extra Trees",
+        "Random Forest",
+        "Logistic Regression",
+        "Gradient Boosting",
+        "CatBoost",
+        "XGBoost"
+      ]
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "n": 6599,
+      "origin_start": "2018-04-01 00:00:00",
+      "origin_end": "2018-12-31 22:00:00",
+      "target_end": "2018-12-31 23:00:00",
+      "ranking": [
+        "Random Forest",
+        "CatBoost",
+        "Extra Trees",
+        "XGBoost",
+        "LightGBM",
+        "Gradient Boosting"
+      ]
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "n": 6594,
+      "origin_start": "2018-04-01 00:00:00",
+      "origin_end": "2018-12-31 17:00:00",
+      "target_end": "2018-12-31 23:00:00",
+      "ranking": [
+        "Random Forest",
+        "Extra Trees",
+        "k-Nearest Neighbours",
+        "LightGBM",
+        "XGBoost",
+        "Gradient Boosting"
+      ]
+    }
+  ],
+  "reference": "absent; skipped",
+  "input": "studies\\S1_outage_forecasting\\benchmark\\results\\hourly_predictions_top6.csv.gz",
+  "input_sha256": "38d6a7e325534a265787cce0f95bd9a1624e464ebf583efb42376dcc16f5c800",
+  "primary_sha256": "24bcf13d3a6ee7e0fe3bf1333e12d7307ffd0dc466d313884fea642c8ef7e185",
+  "config_sha256": "07ad44d414dc49bb8eec020dce39ee73274094fa16b1c2fa4e07d6431a258695",
+  "script_sha256": "e9661c0c28caf2226ab492a3dd43cf453a7d4d0ab341bd4741d3a57da8d9e40a",
+  "head": "87394866a96d65aa512033fdfa2d50dd2bca9ff0",
+  "origin_main": "dc8246e67d29c6c6e4cd9336a4456c8772ae7845",
+  "python": "3.12.15",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "numpy": "2.5.4",
+  "pandas": "2.3.3",
+  "scipy": "1.18.1",
+  "integration": {
+    "origin_main_is_ancestor": false,
+    "protected_blobs_match": {
+      "studies/S1_outage_forecasting/benchmark/README.md": true,
+      "studies/S1_outage_forecasting/benchmark/benchmark.py": true,
+      "studies/S1_outage_forecasting/benchmark/significance.py": true,
+      "studies/S1_outage_forecasting/benchmark/results/benchmark_accuracy.png": true,
+      "studies/S1_outage_forecasting/benchmark/results/benchmark_fold_scores.csv": true,
+      "studies/S1_outage_forecasting/benchmark/results/benchmark_results.csv": true,
+      "studies/S1_outage_forecasting/benchmark/results/hourly_predictions_top6.csv.gz": true,
+      "studies/S1_outage_forecasting/benchmark/results/overall_ranking.csv": true,
+      "studies/S1_outage_forecasting/benchmark/results/significance.csv": true
+    }
+  }
+}

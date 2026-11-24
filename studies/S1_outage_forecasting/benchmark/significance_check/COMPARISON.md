@@ -1,37 +1,24 @@
 # Independent significance check
 
-Non-rejection is not equivalence. Exploratory within-case Holm only; these groups do not establish pairwise equivalence or study-wide superiority.
+Historical comparator: `cec3552`; current local main is recorded separately in `../results/significance_check/manifest.json`. Non-rejection is not equivalence.
 
-| Case | Independent top group | Main top group | Membership | Unresolved |
-|---|---|---|---|---|
-| BG, 1 h | Extra Trees; Random Forest; CatBoost; LightGBM; XGBoost; Gradient Boosting | Extra Trees; Random Forest; CatBoost; LightGBM; XGBoost | disagree | none |
-| BG, 6 h | Extra Trees; Random Forest; Logistic Regression; Gradient Boosting | Extra Trees; Random Forest; Logistic Regression; Gradient Boosting | agree | none |
-| KR, 1 h | Random Forest; CatBoost; Extra Trees; XGBoost; LightGBM | Random Forest; CatBoost; Extra Trees; XGBoost; LightGBM | agree | none |
-| KR, 6 h | Random Forest; Extra Trees; k-Nearest Neighbours; LightGBM; XGBoost; Gradient Boosting | Random Forest; Extra Trees; k-Nearest Neighbours; LightGBM; XGBoost; Gradient Boosting | agree | none |
+| Case | Independent top group | cec3552 top group | Finding and evidence |
+|---|---|---|---|
+| BG, 1 h | Extra Trees; Random Forest; CatBoost; LightGBM; XGBoost; Gradient Boosting | Extra Trees; Random Forest; CatBoost; LightGBM; XGBoost | differ; Gradient Boosting: check Holm p=0.134812, Brier CI [-0.0115699, -0.00213851]; historical Holm p=0.04801, sign-normalized CI [-0.01399, -0.00019]; RF/Extra Trees Holm p=1, Brier CI [-0.00155765, 0.000640751]; exclusion rule not met; unresolved: none |
+| BG, 6 h | Extra Trees; Random Forest; Logistic Regression; Gradient Boosting | Extra Trees; Random Forest; Logistic Regression; Gradient Boosting | agree: same competitors survive the joint exclusion rule; RF/Extra Trees Holm p=0.842612, Brier CI [-0.00209053, 0.000200737]; exclusion rule not met; unresolved: none |
+| KR, 1 h | Random Forest; CatBoost; Extra Trees; XGBoost; LightGBM | Random Forest; CatBoost; Extra Trees; XGBoost; LightGBM | agree: same competitors survive the joint exclusion rule; RF/Extra Trees Holm p=0.398496, Brier CI [-0.00162407, -1.42615e-05]; exclusion rule not met; unresolved: none |
+| KR, 6 h | Random Forest; Extra Trees; k-Nearest Neighbours; LightGBM; XGBoost; Gradient Boosting | Random Forest; Extra Trees; k-Nearest Neighbours; LightGBM; XGBoost; Gradient Boosting | agree: same competitors survive the joint exclusion rule; RF/Extra Trees Holm p=1, Brier CI [-0.000832352, 0.000793155]; exclusion rule not met; unresolved: none |
 
-## Current-status correction
+## Interpretation and reproducibility
 
-This document supersedes the scientific-status guidance in the preserved benchmark/results/README.md: significance is no longer blocked by Windows preservation drift, and the original-run significance.csv and hourly_predictions_top6.csv.gz are the primary artifacts for this comparison. That README describes an obsolete preservation gate. The required Git merge is a separate integration requirement; see manifest.json for actual ancestry.
+Groups contain the descriptive lowest-Brier algorithm and competitors not excluded by both Holm p < 0.05 and a strictly negative upper Brier interval. This does not establish equivalence or pairwise equality. Invalid comparisons remain unresolved. Effects are A minus B: negative Brier favors A; positive AUC favors A. Historical Brier effects are other minus best and are sign-normalized above.
 
-The preserved benchmark/README.md claims statistical equivalence, calls bagged ensembles the best choice, and says Naive Bayes, Decision Tree, SVM and MLP are clearly behind. This check does not support those claims: non-rejection does not establish equivalence, and algorithms outside each saved shortlist were not tested. Its causal explanation of random-split improvement is also unproven; descriptive improvement does not isolate its cause. Primary documents are protected by the task; the lead must correct their wording separately.
+The check uses paired noncircular 24-hour blocks, 2000 draws, seed 42 reset per case, linear percentile 95% marginal intervals, Bartlett HAC lag h-1+24, horizon-based HLN correction, two-sided Student t with N-1 degrees of freedom, and Holm over all 15 pairs within each case. cec3552 uses 168-hour blocks, fixed HAC lag 24, no HLN correction, and Holm over five best-versus-other comparisons. These choices differ jointly; no membership change is attributed to one choice without isolating it. No across-case error control is claimed.
 
+Only frozen hourly_predictions_top6.csv.gz supplies forecasts. Reference probabilities (no-outage, persistence, seasonal) are absent; reference significance comparisons are unavailable. No superiority over those baselines is claimed. The core frozen-forecast check performs no refitting or settings search. A supplementary exploratory audit refits RF and Extra Trees for April only, both sites/horizons, seeds 42/43. This deviates from the original no-refitting protocol (documented in agent_notes/PLAN.md); its selection is not established as prespecified. The saved full-benchmark training seed is 42; bootstrap replicates are not independent training runs. The April subset does not meet the full-benchmark multiple-run requirement; both models have zero April KR recall at both horizons and seeds. The supplementary bootstrap-seed audit checks same-implementation replay and Monte Carlo stability, not independent implementation correctness or block-length/HAC sensitivity.
 
-## Changed memberships
+Run `python studies/S1_outage_forecasting/benchmark/significance_check/check.py`. Config is beside the script; CSV, JSON and figure outputs are under `../results/significance_check/`. The manifest records source revision, input hash, software versions, case sizes and origin/target ranges.
 
-- BG, 1 h, Gradient Boosting: independent Holm p=0.134812, best-minus-other Brier CI [-0.0115699, -0.00213851]; main Holm p=0.04801, sign-normalized CI [-0.01399, -0.00019]. The competitor is retained by this check.
+Origins are completed hourly observations; the target is grid_kwh at t+h equal to zero, a metering proxy. Evaluation is April-December 2018 with expanding monthly training, excluding training labels reaching the test month. The export alone cannot establish training provenance. Leakage tests audit source behavior separately.
 
-## Interpretation and method differences
-
-Groups include the descriptive Brier best and competitors not excluded by both Holm p < 0.05 and a strictly negative upper Brier difference CI. Effects here are A minus B: negative Brier favors A; positive AUC favors A. Main reports other-minus-best Brier effects, the opposite orientation.
-
-This check uses paired noncircular 24 h blocks, 2000 draws, seed 42 reset per case, linear percentile 95% marginal intervals, HAC lag h-1+24, HLN correction with horizon h, a two-sided Student t reference with N-1 degrees of freedom, and Holm over all 15 pairs. Main uses 168 h blocks, fixed HAC lag 24, no HLN, and best-versus-others only (Holm over five tests). Main reports accuracy intervals; this check reports AUC intervals. These differences jointly explain why group membership can differ; no single change is causally isolated. Shorter blocks change interval widths and the larger Holm family changes rejection thresholds. Saved probability rounding can also affect estimates.
-
-The primary groups above are read from significance.csv and match the main benchmark README table (kNN denotes k-Nearest Neighbours). Its equivalence wording is not adopted here. No reference prediction column exists in the original export; reference comparisons are skipped.
-
-## Scope and reproducibility
-
-Run `python studies/S1_outage_forecasting/benchmark/significance_check/check.py`. Configuration is in config.json; manifest.json records hashes, revisions, software, sample sizes and time ranges. Only hourly_predictions_top6.csv.gz supplies predictions. No refitting or settings changes are performed. Bootstrap draws are not independent training runs; the saved benchmark has a single training seed (42).
-
-Time is interpreted as forecast-origin time, with target time time+h. The target is grid energy equal to zero at t+h, a metering proxy, not any outage over the interval. Completed-origin-hour metering is assumed available. The export cannot verify training provenance or absence of feature leakage. Shortlists were selected on the test set; prior exposure to primary results, temporal nonstationarity, dependence beyond 24 h, shared expanding training sets, monthly refitting, rounded probabilities, proxy-label error, metering latency, class imbalance and one year per household limit inference. Separate site models do not demonstrate geographic transfer. HLN is approximate. No methodological citations were verified offline.
-
-Common features and outer splits do not establish equal tuning budgets. Without reference forecasts, superiority over persistence or seasonal references remains untested. All inference is conditional on saved single-seed forecasts; bootstrap-seed sensitivity is not training-seed replication. Equal-budget tuning and feature ablations remain future work. Before publication, assess dependence beyond 24 hours and seasonal/monthly heterogeneity under a separately approved protocol, and verify methodological sources.
+This is exploratory: shortlists were test-selected and primary results already seen. Limitations include dependence beyond 24 hours, seasonal nonstationarity, shared training sets, monthly model changes, one training seed, rounded probabilities, proxy-label error, uncertain metering latency, class imbalance, unequal tuning budgets and one year per household. Separate models do not demonstrate geographic transfer. Methodological citations remain [UNVERIFIED] offline. The accepted Windows/Linux drift interpretation was not causally isolated.

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="15" failures="0" skipped="0" tests="78" time="117.996" timestamp="2026-11-24T17:11:26.454352+08:00" hostname="DESKTOP-1OBEVBG"><testcase classname="tests.test_outage_data" name="test_observation_contract" time="13.255" /><testcase classname="tests.test_outage_data" name="test_real_event_accounting" time="1.192" /><testcase classname="tests.test_outage_data" name="test_label_audit_preserves_labels" time="1.982" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels0-durations0]" time="0.008" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels1-durations1]" time="0.004" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels2-durations2]" time="0.004" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels3-durations3]" time="0.004" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels4-durations4]" time="0.004" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels5-durations5]" time="0.004" /><testcase classname="tests.test_outage_data" name="test_event_rejects_bad_input[gap]" time="0.003" /><testcase classname="tests.test_outage_data" name="test_event_rejects_bad_input[duplicate]" time="0.003" /><testcase classname="tests.test_outage_data" name="test_event_rejects_bad_input[reverse]" time="0.003" /><testcase classname="tests.test_outage_data" name="test_event_rejects_bad_input[nan]" time="0.003" /><testcase classname="tests.test_outage_data" name="test_event_rejects_bad_input[nonbinary]" time="0.003" /><testcase classname="tests.test_outage_data" name="test_loader_fails_closed_without_weather" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[missing_column]" time="0.006"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[missing_hour]" time="0.002"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[extra_hour]" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[duplicate]" time="0.004"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[reverse]" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[shift]" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[half_hour]" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[nat]" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[aware]" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[nan]" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[inf]" time="0.005"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[text]" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_outage_data" name="test_weather_join_preserves_values_and_local_time" time="5.363" /><testcase classname="tests.test_outage_data" name="test_alignment_rejects_mismatches[National Grid (kWh)]" time="1.527" /><testcase classname="tests.test_outage_data" name="test_alignment_rejects_mismatches[Date &amp; Time]" time="0.053" /><testcase classname="tests.test_outage_data" name="test_missing_invalid_status_excluded_from_agreement" time="0.327" /><testcase classname="tests.test_outage_data" name="test_complete_dataset_contract" time="3.240" /><testcase classname="tests.test_outage_data" name="test_alignment_exposes_time_only_mismatch" time="0.339" /><testcase classname="tests.test_outage_data" name="test_event_runs_independent_oracle[0]" time="0.394" /><testcase classname="tests.test_outage_data" name="test_event_runs_independent_oracle[17]" time="0.453" /><testcase classname="tests.test_outage_data" name="test_observations_preserve_raw_values" time="3.076" /><testcase classname="tests.test_outage_data" name="test_event_validation_detects_corrupt_reference" time="1.158" /><testcase classname="tests.test_pv_model" name="test_pvgis_to_pvlib_azimuth" time="0.003" /><testcase classname="tests.test_pv_model" name="test_weather_index_is_local_and_complete" time="0.051" /><testcase classname="tests.test_pv_model" name="test_timestamp_offset_is_a_candidate" time="0.733" /><testcase classname="tests.test_pv_model" name="test_south_beats_north_at_33N" time="0.450" /><testcase classname="tests.test_pv_model" name="test_pv_peak_is_around_local_noon" time="0.310" /><testcase classname="tests.test_pv_model" name="test_no_generation_at_night" time="0.252" /><testcase classname="tests.test_pv_model" name="test_annual_specific_yield_plausible" time="0.161" /><testcase classname="tests.test_pv_model" name="test_temperature_derating_reduces_output" time="0.403" /><testcase classname="tests.test_pv_model" name="test_legacy_style_is_worse_and_early" time="0.414" /><testcase classname="tests.test_s1_bench_significance" name="test_features_do_not_use_future_observations[1]" time="9.692" /><testcase classname="tests.test_s1_bench_significance" name="test_features_do_not_use_future_observations[6]" time="0.052" /><testcase classname="tests.test_s1_bench_significance" name="test_real_labels_boundaries_and_scaling[1-BG]" time="3.889" /><testcase classname="tests.test_s1_bench_significance" name="test_real_labels_boundaries_and_scaling[1-KR]" time="1.871" /><testcase classname="tests.test_s1_bench_significance" name="test_real_labels_boundaries_and_scaling[6-BG]" time="3.821" /><testcase classname="tests.test_s1_bench_significance" name="test_real_labels_boundaries_and_scaling[6-KR]" time="1.562" /><testcase classname="tests.test_s1_bench_significance" name="test_preservation_ignores_order_and_runtime_but_detects_score_drift" time="0.070" /><testcase classname="tests.test_s1_bench_significance" name="test_export_alignment_and_pooled_scores" time="0.675" /><testcase classname="tests.test_s1_bench_significance" name="test_primary_significance_matches_main" time="0.085" /><testcase classname="tests.test_s1_eda" name="test_protocol_configuration[dpi-72]" time="0.027" /><testcase classname="tests.test_s1_eda" name="test_protocol_configuration[weibull_fixed_location-1]" time="0.005" /><testcase classname="tests.test_s1_eda" name="test_protocol_configuration[quantile_interpolation-nearest]" time="0.004" /><testcase classname="tests.test_s1_eda" name="test_complete_temperature_eda[0]" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_s1_eda" name="test_complete_temperature_eda[17]" time="0.003"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'&quot;">self = WindowsPath('D:/SolarProject/tmp/pytest/fix2sig'), mode = 448
+parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+&gt;           os.mkdir(self, mode)
+E           PermissionError: [WinError 5] Access is denied: 'D:\\SolarProject\\tmp\\pytest\\fix2sig'
+
+..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\pathlib.py:1311: PermissionError</error></testcase><testcase classname="tests.test_s1_sig_check" name="test_identical_forecasts" time="0.002" /><testcase classname="tests.test_s1_sig_check" name="test_better_forecast" time="0.006" /><testcase classname="tests.test_s1_sig_check" name="test_hac_hln_against_matrix" time="0.005" /><testcase classname="tests.test_s1_sig_check" name="test_bootstrap_reproducible_and_paired" time="0.195" /><testcase classname="tests.test_s1_sig_check" name="test_holm_hand_example" time="0.003" /><testcase classname="tests.test_s1_sig_check" name="test_input_validation" time="0.056" /><testcase classname="tests.test_s1_sig_check" name="test_delivered_pairs_and_comparison" time="0.033" /><testcase classname="tests.test_s1_sig_check" name="test_original_labels_scaling_and_temporal_boundaries[BG-1]" time="3.852" /><testcase classname="tests.test_s1_sig_check" name="test_original_labels_scaling_and_temporal_boundaries[BG-6]" time="4.184" /><testcase classname="tests.test_s1_sig_check" name="test_original_labels_scaling_and_temporal_boundaries[KR-1]" time="1.605" /><testcase classname="tests.test_s1_sig_check" name="test_original_labels_scaling_and_temporal_boundaries[KR-6]" time="1.513" /><testcase classname="tests.test_s1_sig_check" name="test_bootstrap_matches_shared_draws" time="0.022" /><testcase classname="tests.test_s1_sig_check" name="test_invalid_probabilities_rejected[-0.01]" time="0.027" /><testcase classname="tests.test_s1_sig_check" name="test_invalid_probabilities_rejected[1.01]" time="0.026" /><testcase classname="tests.test_s1_sig_check" name="test_invalid_probabilities_rejected[inf]" time="0.027" /><testcase classname="tests.test_s1_sig_check" name="test_single_class_bootstrap_is_unavailable" time="0.067" /><testcase classname="tests.test_s1_sig_check" name="test_auc_matches_sklearn_under_imbalance_and_ties" time="0.014" /><testcase classname="tests.test_s1_sig_check" name="test_holm_is_invariant_to_pair_order" time="0.003" /></testsuite></testsuites>

@@ -1,0 +1,13 @@
+algorithm,mean_rank
+Random Forest,1.5
+Extra Trees,1.75
+CatBoost,4.25
+LightGBM,5.0
+XGBoost,5.0
+Gradient Boosting,5.5
+Logistic Regression,7.0
+k-Nearest Neighbours,7.5
+SVM,8.75
+Neural Network (MLP),9.0
+Decision Tree,10.75
+Naive Bayes,12.0

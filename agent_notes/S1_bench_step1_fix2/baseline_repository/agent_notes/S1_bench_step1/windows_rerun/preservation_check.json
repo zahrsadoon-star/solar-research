@@ -1,0 +1,1232 @@
+{
+  "passed": false,
+  "comparison": "Exact published precision, keyed rows; timing excluded",
+  "max_absolute_difference_by_metric": {
+    "accuracy": 0.005900000000000016,
+    "precision": 0.010699999999999932,
+    "recall": 0.020199999999999996,
+    "f1": 0.01649999999999996,
+    "auc": 0.0020999999999999908,
+    "brier": 0.0013000000000000234,
+    "accuracy_random_split": 0.0040999999999999925,
+    "rank_by_brier": 3.0
+  },
+  "max_absolute_fit_seconds_difference": 167.8,
+  "differences": [
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "accuracy",
+      "before": 0.7922,
+      "after": 0.7942,
+      "difference": 0.0020000000000000018
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "accuracy",
+      "before": 0.8262,
+      "after": 0.8259,
+      "difference": -0.000300000000000078
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "accuracy",
+      "before": 0.8251,
+      "after": 0.8254,
+      "difference": 0.000300000000000078
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "accuracy",
+      "before": 0.8233,
+      "after": 0.8247,
+      "difference": 0.0013999999999999568
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "accuracy",
+      "before": 0.7618,
+      "after": 0.7608,
+      "difference": -0.0010000000000000009
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "accuracy",
+      "before": 0.7769,
+      "after": 0.7775,
+      "difference": 0.0005999999999999339
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "accuracy",
+      "before": 0.7704,
+      "after": 0.7736,
+      "difference": 0.0031999999999999806
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "accuracy",
+      "before": 0.7777,
+      "after": 0.7778,
+      "difference": 0.00010000000000010001
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "accuracy",
+      "before": 0.7739,
+      "after": 0.768,
+      "difference": -0.005900000000000016
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "accuracy",
+      "before": 0.9047,
+      "after": 0.9048,
+      "difference": 0.00010000000000010001
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "accuracy",
+      "before": 0.9145,
+      "after": 0.9147,
+      "difference": 0.00019999999999997797
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "accuracy",
+      "before": 0.912,
+      "after": 0.916,
+      "difference": 0.0040000000000000036
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "accuracy",
+      "before": 0.917,
+      "after": 0.9157,
+      "difference": -0.0013000000000000789
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "accuracy",
+      "before": 0.9151,
+      "after": 0.9127,
+      "difference": -0.0024000000000000687
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "accuracy",
+      "before": 0.8907,
+      "after": 0.8893,
+      "difference": -0.0014000000000000679
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "accuracy",
+      "before": 0.8992,
+      "after": 0.8993,
+      "difference": 9.999999999998899e-05
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "accuracy",
+      "before": 0.8985,
+      "after": 0.8996,
+      "difference": 0.0010999999999999899
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "accuracy",
+      "before": 0.901,
+      "after": 0.9019,
+      "difference": 0.0009000000000000119
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "accuracy",
+      "before": 0.8984,
+      "after": 0.8963,
+      "difference": -0.0020999999999999908
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "precision",
+      "before": 0.7923,
+      "after": 0.7904,
+      "difference": -0.0019000000000000128
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "precision",
+      "before": 0.8115,
+      "after": 0.8116,
+      "difference": 9.999999999998899e-05
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "precision",
+      "before": 0.7966,
+      "after": 0.7963,
+      "difference": -0.00029999999999996696
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "precision",
+      "before": 0.8099,
+      "after": 0.8105,
+      "difference": 0.0006000000000000449
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "precision",
+      "before": 0.813,
+      "after": 0.8165,
+      "difference": 0.0035000000000000586
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "precision",
+      "before": 0.7401,
+      "after": 0.7375,
+      "difference": -0.0025999999999999357
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "precision",
+      "before": 0.756,
+      "after": 0.7562,
+      "difference": 0.00019999999999997797
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "precision",
+      "before": 0.7534,
+      "after": 0.753,
+      "difference": -0.00039999999999995595
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "precision",
+      "before": 0.7559,
+      "after": 0.7557,
+      "difference": -0.00019999999999997797
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "precision",
+      "before": 0.7582,
+      "after": 0.7575,
+      "difference": -0.0007000000000000339
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "precision",
+      "before": 0.7436,
+      "after": 0.7439,
+      "difference": 0.00029999999999996696
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "precision",
+      "before": 0.8552,
+      "after": 0.8573,
+      "difference": 0.0020999999999999908
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "precision",
+      "before": 0.8151,
+      "after": 0.8258,
+      "difference": 0.010699999999999932
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "precision",
+      "before": 0.8592,
+      "after": 0.8511,
+      "difference": -0.008099999999999996
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "precision",
+      "before": 0.8352,
+      "after": 0.8336,
+      "difference": -0.0016000000000000458
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "precision",
+      "before": 0.7527,
+      "after": 0.7442,
+      "difference": -0.008500000000000063
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "precision",
+      "before": 0.8193,
+      "after": 0.8195,
+      "difference": 0.00019999999999997797
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "precision",
+      "before": 0.7925,
+      "after": 0.7828,
+      "difference": -0.009699999999999931
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "precision",
+      "before": 0.8283,
+      "after": 0.8338,
+      "difference": 0.005499999999999949
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "precision",
+      "before": 0.7989,
+      "after": 0.7939,
+      "difference": -0.0050000000000000044
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "recall",
+      "before": 0.8318,
+      "after": 0.8403,
+      "difference": 0.008500000000000063
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "recall",
+      "before": 0.8817,
+      "after": 0.8808,
+      "difference": -0.0009000000000000119
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "recall",
+      "before": 0.8814,
+      "after": 0.882,
+      "difference": 0.0006000000000000449
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "recall",
+      "before": 0.882,
+      "after": 0.8817,
+      "difference": -0.00029999999999996696
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "recall",
+      "before": 0.8721,
+      "after": 0.8696,
+      "difference": -0.0024999999999999467
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "recall",
+      "before": 0.8592,
+      "after": 0.8628,
+      "difference": 0.0036000000000000476
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "recall",
+      "before": 0.8648,
+      "after": 0.8659,
+      "difference": 0.0010999999999999899
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "recall",
+      "before": 0.8527,
+      "after": 0.8623,
+      "difference": 0.009599999999999942
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "recall",
+      "before": 0.867,
+      "after": 0.8679,
+      "difference": 0.0009000000000000119
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "recall",
+      "before": 0.8515,
+      "after": 0.8369,
+      "difference": -0.014600000000000057
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "recall",
+      "before": 0.6446,
+      "after": 0.6455,
+      "difference": 0.0009000000000000119
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "recall",
+      "before": 0.5803,
+      "after": 0.5794,
+      "difference": -0.0009000000000000119
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "recall",
+      "before": 0.6033,
+      "after": 0.6226,
+      "difference": 0.019300000000000095
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "recall",
+      "before": 0.5941,
+      "after": 0.5932,
+      "difference": -0.0009000000000000119
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "recall",
+      "before": 0.6051,
+      "after": 0.5886,
+      "difference": -0.01649999999999996
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "recall",
+      "before": 0.5032,
+      "after": 0.5023,
+      "difference": -0.0009000000000000119
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "recall",
+      "before": 0.4995,
+      "after": 0.5005,
+      "difference": 0.0009999999999999454
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "recall",
+      "before": 0.5225,
+      "after": 0.5427,
+      "difference": 0.020199999999999996
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "recall",
+      "before": 0.5051,
+      "after": 0.5069,
+      "difference": 0.0018000000000000238
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "recall",
+      "before": 0.5142,
+      "after": 0.5023,
+      "difference": -0.011900000000000022
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "f1",
+      "before": 0.8116,
+      "after": 0.8146,
+      "difference": 0.0030000000000000027
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "f1",
+      "before": 0.8451,
+      "after": 0.8448,
+      "difference": -0.00029999999999996696
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "f1",
+      "before": 0.8444,
+      "after": 0.8446,
+      "difference": 0.00019999999999997797
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "f1",
+      "before": 0.8415,
+      "after": 0.8422,
+      "difference": 0.0006999999999999229
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "f1",
+      "before": 0.7952,
+      "after": 0.7953,
+      "difference": 9.999999999998899e-05
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "f1",
+      "before": 0.8067,
+      "after": 0.8074,
+      "difference": 0.0007000000000000339
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "f1",
+      "before": 0.7999,
+      "after": 0.8039,
+      "difference": 0.0039999999999998925
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "f1",
+      "before": 0.8077,
+      "after": 0.8079,
+      "difference": 0.00019999999999997797
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "f1",
+      "before": 0.8022,
+      "after": 0.7952,
+      "difference": -0.007000000000000006
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "f1",
+      "before": 0.6906,
+      "after": 0.6912,
+      "difference": 0.0006000000000000449
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "f1",
+      "before": 0.6934,
+      "after": 0.7099,
+      "difference": 0.01649999999999996
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "f1",
+      "before": 0.7025,
+      "after": 0.6991,
+      "difference": -0.0033999999999999586
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "f1",
+      "before": 0.7018,
+      "after": 0.69,
+      "difference": -0.011800000000000033
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "f1",
+      "before": 0.6032,
+      "after": 0.5998,
+      "difference": -0.0033999999999999586
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "f1",
+      "before": 0.6207,
+      "after": 0.6214,
+      "difference": 0.0006999999999999229
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "f1",
+      "before": 0.6298,
+      "after": 0.641,
+      "difference": 0.011199999999999988
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "f1",
+      "before": 0.6275,
+      "after": 0.6305,
+      "difference": 0.0030000000000000027
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "f1",
+      "before": 0.6257,
+      "after": 0.6153,
+      "difference": -0.010400000000000076
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "auc",
+      "before": 0.8835,
+      "after": 0.8828,
+      "difference": -0.0006999999999999229
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "auc",
+      "before": 0.9109,
+      "after": 0.911,
+      "difference": 9.999999999998899e-05
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "auc",
+      "before": 0.9032,
+      "after": 0.9053,
+      "difference": 0.0020999999999999908
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "auc",
+      "before": 0.9105,
+      "after": 0.9109,
+      "difference": 0.00040000000000006697
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "auc",
+      "before": 0.9068,
+      "after": 0.9077,
+      "difference": 0.0008999999999999009
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "auc",
+      "before": 0.8244,
+      "after": 0.8245,
+      "difference": 9.999999999998899e-05
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "auc",
+      "before": 0.8463,
+      "after": 0.8471,
+      "difference": 0.0007999999999999119
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "auc",
+      "before": 0.8482,
+      "after": 0.8487,
+      "difference": 0.000500000000000056
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "auc",
+      "before": 0.8451,
+      "after": 0.8432,
+      "difference": -0.0019000000000000128
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "auc",
+      "before": 0.8877,
+      "after": 0.8871,
+      "difference": -0.0006000000000000449
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "auc",
+      "before": 0.9154,
+      "after": 0.9155,
+      "difference": 9.999999999998899e-05
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "auc",
+      "before": 0.8992,
+      "after": 0.9011,
+      "difference": 0.0019000000000000128
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "auc",
+      "before": 0.9177,
+      "after": 0.9171,
+      "difference": -0.0005999999999999339
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "auc",
+      "before": 0.9011,
+      "after": 0.8999,
+      "difference": -0.0011999999999999789
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "auc",
+      "before": 0.8374,
+      "after": 0.8376,
+      "difference": 0.00019999999999997797
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "auc",
+      "before": 0.875,
+      "after": 0.8748,
+      "difference": -0.00019999999999997797
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "auc",
+      "before": 0.8487,
+      "after": 0.8483,
+      "difference": -0.00039999999999995595
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "auc",
+      "before": 0.8761,
+      "after": 0.8762,
+      "difference": 9.999999999998899e-05
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "auc",
+      "before": 0.8535,
+      "after": 0.8523,
+      "difference": -0.0012000000000000899
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "brier",
+      "before": 0.1386,
+      "after": 0.1388,
+      "difference": 0.00020000000000000573
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "brier",
+      "before": 0.1207,
+      "after": 0.1206,
+      "difference": -0.00010000000000000286
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "brier",
+      "before": 0.127,
+      "after": 0.1263,
+      "difference": -0.0007000000000000062
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "brier",
+      "before": 0.1211,
+      "after": 0.1208,
+      "difference": -0.0002999999999999947
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "brier",
+      "before": 0.1244,
+      "after": 0.1237,
+      "difference": -0.0006999999999999923
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "brier",
+      "before": 0.17,
+      "after": 0.1702,
+      "difference": 0.00019999999999997797
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "brier",
+      "before": 0.1577,
+      "after": 0.1567,
+      "difference": -0.0010000000000000009
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "brier",
+      "before": 0.1549,
+      "after": 0.1546,
+      "difference": -0.00030000000000002247
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "brier",
+      "before": 0.1599,
+      "after": 0.1612,
+      "difference": 0.0013000000000000234
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Decision Tree",
+      "metric": "brier",
+      "before": 0.0769,
+      "after": 0.0767,
+      "difference": -0.00019999999999999185
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "brier",
+      "before": 0.0705,
+      "after": 0.0698,
+      "difference": -0.0006999999999999923
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "brier",
+      "before": 0.0675,
+      "after": 0.0676,
+      "difference": 9.999999999998899e-05
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "brier",
+      "before": 0.07,
+      "after": 0.071,
+      "difference": 0.000999999999999987
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Decision Tree",
+      "metric": "brier",
+      "before": 0.0908,
+      "after": 0.091,
+      "difference": 0.00019999999999999185
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "brier",
+      "before": 0.0814,
+      "after": 0.0815,
+      "difference": 0.00010000000000000286
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "brier",
+      "before": 0.0841,
+      "after": 0.0844,
+      "difference": 0.0003000000000000086
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "brier",
+      "before": 0.0836,
+      "after": 0.0845,
+      "difference": 0.0009000000000000119
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "accuracy_random_split",
+      "before": 0.8546,
+      "after": 0.854,
+      "difference": -0.0006000000000000449
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "accuracy_random_split",
+      "before": 0.8557,
+      "after": 0.8551,
+      "difference": -0.0006000000000000449
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "accuracy_random_split",
+      "before": 0.8528,
+      "after": 0.8517,
+      "difference": -0.0010999999999999899
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "accuracy_random_split",
+      "before": 0.8557,
+      "after": 0.8598,
+      "difference": 0.0040999999999999925
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "accuracy_random_split",
+      "before": 0.7829,
+      "after": 0.7823,
+      "difference": -0.0006000000000000449
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "accuracy_random_split",
+      "before": 0.7858,
+      "after": 0.7823,
+      "difference": -0.0035000000000000586
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "accuracy_random_split",
+      "before": 0.787,
+      "after": 0.7852,
+      "difference": -0.0018000000000000238
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "accuracy_random_split",
+      "before": 0.7905,
+      "after": 0.7928,
+      "difference": 0.0022999999999999687
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Extra Trees",
+      "metric": "accuracy_random_split",
+      "before": 0.9279,
+      "after": 0.9284,
+      "difference": 0.000500000000000056
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Random Forest",
+      "metric": "accuracy_random_split",
+      "before": 0.9267,
+      "after": 0.9284,
+      "difference": 0.0017000000000000348
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "accuracy_random_split",
+      "before": 0.9267,
+      "after": 0.9284,
+      "difference": 0.0017000000000000348
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Extra Trees",
+      "metric": "accuracy_random_split",
+      "before": 0.9185,
+      "after": 0.9179,
+      "difference": -0.0005999999999999339
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Random Forest",
+      "metric": "accuracy_random_split",
+      "before": 0.9173,
+      "after": 0.9168,
+      "difference": -0.000500000000000056
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "LightGBM",
+      "metric": "rank_by_brier",
+      "before": 4.0,
+      "after": 5.0,
+      "difference": 1.0
+    },
+    {
+      "site": "BG",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "rank_by_brier",
+      "before": 5.0,
+      "after": 4.0,
+      "difference": -1.0
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "LightGBM",
+      "metric": "rank_by_brier",
+      "before": 7.0,
+      "after": 6.0,
+      "difference": -1.0
+    },
+    {
+      "site": "BG",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "rank_by_brier",
+      "before": 6.0,
+      "after": 7.0,
+      "difference": 1.0
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "Gradient Boosting",
+      "metric": "rank_by_brier",
+      "before": 6.0,
+      "after": 4.0,
+      "difference": -2.0
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "XGBoost",
+      "metric": "rank_by_brier",
+      "before": 4.0,
+      "after": 7.0,
+      "difference": 3.0
+    },
+    {
+      "site": "KR",
+      "h": 1,
+      "algorithm": "k-Nearest Neighbours",
+      "metric": "rank_by_brier",
+      "before": 7.0,
+      "after": 6.0,
+      "difference": -1.0
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "Gradient Boosting",
+      "metric": "rank_by_brier",
+      "before": 6.0,
+      "after": 5.0,
+      "difference": -1.0
+    },
+    {
+      "site": "KR",
+      "h": 6,
+      "algorithm": "XGBoost",
+      "metric": "rank_by_brier",
+      "before": 5.0,
+      "after": 6.0,
+      "difference": 1.0
+    }
+  ]
+}

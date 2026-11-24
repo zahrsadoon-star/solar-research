@@ -1,0 +1,10 @@
+{
+  "seed": 43,
+  "elapsed_seconds": 231.26988859998528,
+  "source_sha256": "e5ebda6b32cfbcd45c4d4c5413a3f08911990008199ac8e50f69448a6d37f388",
+  "verifier_sha256": "e90fe9fb55223233218d4945b660faed4bd7ec2efc6de979d6db1ed29535e687",
+  "sklearn": "1.7.2",
+  "max_abs_diff": 0.00794219840840582,
+  "all_within_rf_reproduction_tolerance": false,
+  "statistical_test": "none; descriptive fixed-seed sensitivity, not an equivalence test"
+}

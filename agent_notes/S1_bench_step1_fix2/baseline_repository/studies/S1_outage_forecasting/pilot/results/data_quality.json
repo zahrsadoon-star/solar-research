@@ -1,0 +1,18 @@
+{
+ "BG": {
+  "outage_share": 0.49360730593607305,
+  "events": 1064,
+  "outage_hours": 4324,
+  "mean_duration_h": 4.06390977443609,
+  "max_duration_h": 59,
+  "hours_no_grid_no_gen": 4
+ },
+ "KR": {
+  "outage_share": 0.13881278538812786,
+  "events": 1030,
+  "outage_hours": 1216,
+  "mean_duration_h": 1.1805825242718446,
+  "max_duration_h": 8,
+  "hours_no_grid_no_gen": 14
+ }
+}

@@ -55,7 +55,7 @@ def test_bootstrap_reproducible_and_paired() -> None:
     y = np.tile([0, 1], 60)
     p = np.random.default_rng(8).uniform(size=120)
     probabilities = np.column_stack([p, p, 1-p])
-    args = dict(block=24, resamples=30, seed=42)
+    args = {'block': 24, 'resamples': 30, 'seed': 42}
     a, b = check.bootstrap(y, probabilities, **args)
     c, d = check.bootstrap(y, probabilities, **args)
     np.testing.assert_array_equal(a, c)
@@ -79,8 +79,8 @@ def test_holm_hand_example() -> None:
 
 def test_input_validation() -> None:
     """Reject gaps, duplicate keys and partial missingness rather than dropping rows."""
-    frame = pd.DataFrame(dict(site=['BG']*40, h=[1]*40,
-        time=pd.date_range('2018-04-01', periods=40, freq='h'), y=np.tile([0, 1], 20)))
+    frame = pd.DataFrame({'site': ['BG']*40, 'h': [1]*40,
+        'time': pd.date_range('2018-04-01', periods=40, freq='h'), 'y': np.tile([0, 1], 20)})
     for i in range(6):
         frame[f'model{i}'] = .1*i
     assert len(check.validate(frame, [['BG', 1]])[0][3]) == 6
@@ -95,7 +95,7 @@ def test_input_validation() -> None:
 
 def test_delivered_pairs_and_comparison() -> None:
     """All four complete families and comparison cases are delivered."""
-    pairs = pd.read_csv(PATH.parent / 'pairs.csv')
+    pairs = pd.read_csv(check.OUTPUT / 'pairs.csv')
     assert len(pairs) == 60
     assert pairs.groupby(['site', 'h']).size().eq(15).all()
     assert not pairs.duplicated(['site', 'h', 'algorithm_a', 'algorithm_b']).any()
@@ -126,14 +126,70 @@ def test_original_labels_scaling_and_temporal_boundaries(site: str, h: int) -> N
         test = x.index.month == month
         assert target[train].max() < x.index[test].min()
         assert y[train].nunique() == y[test].nunique() == 2
-    scaler = benchmark.algorithms()['Logistic Regression'].steps[0][1]
-    scaler.fit(x[train])
-    np.testing.assert_allclose(scaler.mean_, x[train].mean())
-    scaler.transform(x[test])
-    np.testing.assert_allclose(scaler.mean_, x[train].mean())
+        scaler = benchmark.algorithms()['Logistic Regression'].steps[0][1]
+        scaler.fit(x[train])
+        np.testing.assert_allclose(scaler.mean_, x[train].mean())
+        scaler.transform(x[test])
+        np.testing.assert_allclose(scaler.mean_, x[train].mean())
     changed = data.copy()
     origin = data.index[400]
     changed.loc[changed.index > origin, 'outage'] = 1-changed.loc[changed.index > origin, 'outage']
     changed.loc[changed.index > origin, 'load_kwh'] += 100
     pd.testing.assert_frame_equal(benchmark.features(data, h).loc[:origin],
                                   benchmark.features(changed, h).loc[:origin])
+
+
+def test_bootstrap_matches_shared_draws() -> None:
+    """Both dimensionless metrics use the same noncircular hourly draws."""
+    y = np.tile([0, 1], 31)
+    probabilities = np.random.default_rng(17).uniform(size=(62, 2))
+    bs, au = check.bootstrap(y, probabilities, block=24, resamples=7, seed=42)
+    rng = np.random.default_rng(42)
+    for draw in range(7):
+        indices = check.block_indices(len(y), 24, rng)
+        np.testing.assert_allclose(bs[draw], ((probabilities[indices] - y[indices, None]) ** 2).mean(axis=0))
+        for column in range(2):
+            assert au[draw, column] == check.auc(y[indices], probabilities[indices, column])
+
+
+@pytest.mark.parametrize('value', [-0.01, 1.01, np.inf])
+def test_invalid_probabilities_rejected(value: float) -> None:
+    """Out-of-range or nonfinite dimensionless probabilities cannot enter inference."""
+    frame = pd.DataFrame({'site': ['BG'] * 40, 'h': [1] * 40,
+        'time': pd.date_range('2018-04-01', periods=40, freq='h'), 'y': np.tile([0, 1], 20)})
+    for i in range(6):
+        frame[f'model{i}'] = .1 * i
+    frame.loc[0, 'model0'] = value
+    with pytest.raises(ValueError, match='invalid probability'):
+        check.validate(frame, [['BG', 1]])
+
+
+def test_single_class_bootstrap_is_unavailable() -> None:
+    """Undefined AUC replicates are counted without redraw or partial intervals."""
+    frame = pd.DataFrame({'site': ['BG'] * 40, 'h': [1] * 40,
+        'time': pd.date_range('2018-04-01', periods=40, freq='h'), 'y': np.zeros(40)})
+    for i in range(6):
+        frame[f'model{i}'] = .1 * i
+    pairs, _ = check.analyze(frame, {'cases': [['BG', 1]], 'block_hours': 24,
+        'resamples': 5, 'seed': 42, 'alpha': .05})
+    assert pairs.auc_valid_resamples.eq(0).all()
+    assert pairs.auc_status.eq('undefined_replicate').all()
+    assert pairs[['auc_ci_low', 'auc_ci_high']].isna().all().all()
+    assert pairs.dm_status.eq('invalid_variance').all()
+    assert not pairs.a_better.any()
+
+
+def test_auc_matches_sklearn_under_imbalance_and_ties() -> None:
+    """Rank AUC agrees with sklearn for imbalanced classes and tied probabilities."""
+    from sklearn.metrics import roc_auc_score
+
+    y = np.array([1, 1] + [0] * 98)
+    p = np.random.default_rng(43).integers(0, 5, len(y)) / 4
+    assert check.auc(y, p) == pytest.approx(roc_auc_score(y, p), abs=1e-14)
+
+
+def test_holm_is_invariant_to_pair_order() -> None:
+    """Family correction is invariant to pair order, including tied p-values."""
+    p = np.array([.001, .04, .04, .9, np.nan])
+    order = np.array([4, 2, 0, 3, 1])
+    np.testing.assert_array_equal(check.holm(p)[order], check.holm(p[order]))

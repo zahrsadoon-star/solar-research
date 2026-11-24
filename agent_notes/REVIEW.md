@@ -1,27 +1,31 @@
 **Verdict: MAJOR_REVISION**
 
-The independent statistical check substantially follows `agent_notes/PLAN.md`. I found no demonstrated error in its paired bootstrap, HAC/HLN calculation, Holm adjustment, or AUC calculation. The lead’s cross-platform drift decision is accepted; recovering agreement is not required.
+The check appropriately reports the BG 1-hour disagreement, distinguishes non-rejection from equivalence, and acknowledges missing reference forecasts. However, task acceptance and reproducibility remain incomplete.
 
 **MUST-FIX**
 
-1. **Complete the required integration.** `origin/main` is not an ancestor of HEAD. I independently verified that the nine listed primary files match local `origin/main` byte-for-byte, but copying blobs does not complete Step 0. The lead must complete the merge in an environment with writable Git metadata and verify preservation afterward.
+1. **Complete main integration and preservation verification.** `results/significance_check/manifest.json` records `local_main_is_ancestor: false` and numerous missing or nonmatching main artifacts. Preserving ten pre-existing branch artifacts does not satisfy preservation of every published main result. Merge in an authorized writable session, retain main’s results, and regenerate the integration manifest.
 
-2. **Repair the obsolete tests before running the full suite.** `tests/test_s1_bench_significance.py` still reads moved prediction files and asserts that the restored primary significance entry point is disabled. Its direct `loaded.main()` call can now invoke the primary analysis. Obtain the necessary allowed-path exception, update archive paths, and replace the obsolete test with a nonexecuting preservation check. Then require an unfiltered `python -m pytest -q` pass. The reported **65 passed, four failed, one skipped, one deselected** does not meet acceptance.
+2. **Meet the actual acceptance checks.** The saved log supports **78 passed**, but only on the unmerged branch with a local temporary directory. The requested external-basetemp run records **15 setup errors**, and repository-wide Ruff records **834 diagnostics**. Scoped lint success cannot substitute for the required full check. Resolve permissions and obtain an explicit lead decision on out-of-scope lint repairs; rerun acceptance checks after integration.
 
-3. **Resolve contradictory scientific guidance.** `benchmark/results/README.md` still declares significance blocked and primary artifacts unusable. The restored benchmark README claims statistical equivalence, proven superiority, and a causal explanation for random-split improvement. These claims are unsupported by this check. Preserve main’s protected files as instructed, but add an explicit current-status correction in the permitted `COMPARISON.md`, identifying the superseded claims; arrange any primary-document correction separately with the lead. Non-rejection does not establish equivalence, and excluded algorithms were not tested here.
+3. **Pin the statistical audit’s historical inputs.** `agent_notes/S1_bench_step1_fix2/statistical_audit.py` reads the working-tree `results/benchmark_results.csv`, although integration will replace it with main’s version. `training_seed_audit.py` likewise imports the moving working-tree benchmark implementation. Pin the intended historical score table and training source to recorded revisions/hashes. Record relevant estimator versions and data hashes so these audit results remain reproducible after merging.
+
+4. **Reconcile the protocol deviation.** `PLAN.md` prohibits refitting, whereas `training_seed_audit.py` refits two models. `COMPARISON.md` says “No refitting … was performed” without distinguishing the core check from the supplementary audit. Document the supplementary work explicitly as a protocol amendment/deviation, including its scope and timing. Do not describe its selection as prespecified without dated supporting evidence. April-only results cannot satisfy full-benchmark independent-training-run requirements.
+
+5. **Complete the promised failure inventory.** The statistician follow-up in `FAILURES.md` says each setup error is listed “below,” but the file ends there. Append the exact node IDs and causes from the existing log, distinguishing the original five failures, subsequent permission errors, and final post-merge results.
 
 **SHOULD-FIX**
 
-- State baseline fairness explicitly in `COMPARISON.md`: common features and outer splits do not establish equal tuning budgets. No reference forecasts are available, so superiority over persistence or seasonal references remains untested.
-- Keep conclusions conditional on the saved single-seed forecasts. Bootstrap-seed sensitivity is not training-seed replication; equal-budget tuning and feature ablations remain future work, not completed evidence.
-- Before publication, assess dependence beyond 24 hours and seasonal/monthly heterogeneity under a separately approved protocol. Current caveats appropriately limit the pooled inference.
-- Verify methodological sources before publication. No fabricated citations were found, but source verification remains outstanding.
-- Generate manifest integration status from actual repository state; the currently hard-coded permission-denied status will become inaccurate after integration.
+- **Assess dependence sensitivity separately.** Changing bootstrap seed tests Monte Carlo stability, not adequacy of 24-hour blocks or HAC bandwidth. A separately declared sensitivity analysis using longer blocks and alternative bandwidths would strengthen inference. Retain the frozen primary specification and report every sensitivity result.
 
-**Verification**
+- **Clarify what is independently verified.** `statistical_audit.py` calls the same `check.analyze` implementation that generated the results. This verifies replay consistency, not independent implementation correctness. The hand-calculated tests provide useful additional evidence; describe these distinctions accurately.
 
-Fresh execution of the independent-check tests produced **11 passed, 19 warnings**. Manifest input, primary-result, script, and configuration hashes match current files. Broader pytest execution failed before collection because capture required a writable temporary directory; no fresh full-suite pass is claimed.
+- **Keep fairness and usefulness claims narrow.** Test-selected shortlists, unequal tuning budgets, absent baseline probabilities, and one original training seed prevent broad claims of algorithm superiority. The retained zero-recall April KR results deserve visibility wherever practical outage detection is discussed.
 
-The saved comparison reports agreement in three cases. BG 1 h retains Gradient Boosting under the independent procedure. This disagreement is reported transparently and is not itself a defect.
+- **Strengthen leakage provenance.** Current-source boundary and scaler tests do not establish how historical forecasts were trained. Preserve this limitation and document when completed-hour outage/load observations would actually become available.
 
-No files were edited. This review could not be saved to `agent_notes/REVIEW.md` because the session is read-only.
+- **Resolve methodological sources before journal submission.** Keeping citations marked `[UNVERIFIED]` is honest, but publication requires verified sources and justification for the HAC/HLN procedure under monthly refitting and seasonal dependence.
+
+- **Exclude disposable diagnostic copies from the deliverable.** Retain necessary logs and manifests, but have an authorized implementation session clean up the copied repository and temporary outputs.
+
+This review used source inspection and existing logs; I did not rerun write-producing tests or modify files. `agent_notes/REVIEW.md` was **not saved** because this session is read-only.

@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="1" tests="71" time="96.048" timestamp="2026-11-23T13:10:26.027544+08:00" hostname="DESKTOP-1OBEVBG"><testcase classname="tests.test_outage_data" name="test_observation_contract" time="5.486" /><testcase classname="tests.test_outage_data" name="test_real_event_accounting" time="1.203" /><testcase classname="tests.test_outage_data" name="test_label_audit_preserves_labels" time="2.031" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels0-durations0]" time="0.008" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels1-durations1]" time="0.008" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels2-durations2]" time="0.009" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels3-durations3]" time="0.008" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels4-durations4]" time="0.007" /><testcase classname="tests.test_outage_data" name="test_event_boundaries[labels5-durations5]" time="0.007" /><testcase classname="tests.test_outage_data" name="test_event_rejects_bad_input[gap]" time="0.005" /><testcase classname="tests.test_outage_data" name="test_event_rejects_bad_input[duplicate]" time="0.005" /><testcase classname="tests.test_outage_data" name="test_event_rejects_bad_input[reverse]" time="0.004" /><testcase classname="tests.test_outage_data" name="test_event_rejects_bad_input[nan]" time="0.006" /><testcase classname="tests.test_outage_data" name="test_event_rejects_bad_input[nonbinary]" time="0.006" /><testcase classname="tests.test_outage_data" name="test_loader_fails_closed_without_weather" time="0.016" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[missing_column]" time="0.193" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[missing_hour]" time="0.194" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[extra_hour]" time="0.203" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[duplicate]" time="0.256" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[reverse]" time="0.242" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[shift]" time="0.274" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[half_hour]" time="0.262" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[nat]" time="0.213" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[aware]" time="0.823" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[nan]" time="0.216" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[inf]" time="0.223" /><testcase classname="tests.test_outage_data" name="test_weather_rejects_invalid_input[text]" time="0.229" /><testcase classname="tests.test_outage_data" name="test_weather_join_preserves_values_and_local_time" time="5.163" /><testcase classname="tests.test_outage_data" name="test_alignment_rejects_mismatches[National Grid (kWh)]" time="1.515" /><testcase classname="tests.test_outage_data" name="test_alignment_rejects_mismatches[Date &amp; Time]" time="0.057" /><testcase classname="tests.test_outage_data" name="test_missing_invalid_status_excluded_from_agreement" time="0.377" /><testcase classname="tests.test_outage_data" name="test_complete_dataset_contract" time="3.030" /><testcase classname="tests.test_outage_data" name="test_alignment_exposes_time_only_mismatch" time="0.540" /><testcase classname="tests.test_outage_data" name="test_event_runs_independent_oracle[0]" time="0.410" /><testcase classname="tests.test_outage_data" name="test_event_runs_independent_oracle[17]" time="0.441" /><testcase classname="tests.test_outage_data" name="test_observations_preserve_raw_values" time="2.911" /><testcase classname="tests.test_outage_data" name="test_event_validation_detects_corrupt_reference" time="1.175" /><testcase classname="tests.test_pv_model" name="test_pvgis_to_pvlib_azimuth" time="0.002" /><testcase classname="tests.test_pv_model" name="test_weather_index_is_local_and_complete" time="0.051" /><testcase classname="tests.test_pv_model" name="test_timestamp_offset_is_a_candidate" time="0.746" /><testcase classname="tests.test_pv_model" name="test_south_beats_north_at_33N" time="0.467" /><testcase classname="tests.test_pv_model" name="test_pv_peak_is_around_local_noon" time="0.218" /><testcase classname="tests.test_pv_model" name="test_no_generation_at_night" time="0.225" /><testcase classname="tests.test_pv_model" name="test_annual_specific_yield_plausible" time="0.220" /><testcase classname="tests.test_pv_model" name="test_temperature_derating_reduces_output" time="0.443" /><testcase classname="tests.test_pv_model" name="test_legacy_style_is_worse_and_early" time="0.432" /><testcase classname="tests.test_s1_bench_significance" name="test_features_do_not_use_future_observations[1]" time="3.506" /><testcase classname="tests.test_s1_bench_significance" name="test_features_do_not_use_future_observations[6]" time="0.083" /><testcase classname="tests.test_s1_bench_significance" name="test_real_labels_boundaries_and_scaling[1-BG]" time="3.186"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'">benchmark = &lt;module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'&gt;
+site = 'BG', h = 1
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -&gt; None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) &amp; y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+&gt;       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;gzip on 0x23d57e7fd60&gt;
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+&gt;               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError</failure></testcase><testcase classname="tests.test_s1_bench_significance" name="test_real_labels_boundaries_and_scaling[1-KR]" time="1.029"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'">benchmark = &lt;module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'&gt;
+site = 'KR', h = 1
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -&gt; None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) &amp; y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+&gt;       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;gzip on 0x23d577c4610&gt;
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+&gt;               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError</failure></testcase><testcase classname="tests.test_s1_bench_significance" name="test_real_labels_boundaries_and_scaling[6-BG]" time="2.891"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'">benchmark = &lt;module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'&gt;
+site = 'BG', h = 6
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -&gt; None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) &amp; y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+&gt;       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;gzip on 0x23d58f81990&gt;
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+&gt;               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError</failure></testcase><testcase classname="tests.test_s1_bench_significance" name="test_real_labels_boundaries_and_scaling[6-KR]" time="0.747"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'">benchmark = &lt;module 's1_benchmark' from 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\benchmark.py'&gt;
+site = 'KR', h = 6
+
+    @pytest.mark.parametrize('site', ['BG', 'KR'])
+    @pytest.mark.parametrize('h', [1, 6])
+    def test_real_labels_boundaries_and_scaling(benchmark, site: str, h: int) -&gt; None:
+        """Check hourly label alignment and training-only scaling at monthly boundaries."""
+        data = benchmark.load(site)
+        x, y = benchmark.features(data, h), data.outage.shift(-h)
+        ok = x.notna().all(axis=1) &amp; y.notna()
+        x, y = x[ok], y[ok]
+        target = x.index + pd.Timedelta(hours=h)
+&gt;       exported = pd.read_csv(OUT / 'predictions.csv.gz', parse_dates=['origin_time'])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_s1_bench_significance.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1026: in read_csv
+    return _read(filepath_or_buffer, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:620: in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1620: in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\parsers\readers.py:1880: in _make_engine
+    self.handles = get_handle(
+..\..\..\..\..\venv312\Lib\site-packages\pandas\io\common.py:765: in get_handle
+    handle = gzip.GzipFile(  # type: ignore[assignment]
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;gzip on 0x23d578af7c0&gt;
+filename = 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+mode = 'rb', compresslevel = 9, fileobj = None, mtime = None
+
+    def __init__(self, filename=None, mode=None,
+                 compresslevel=_COMPRESS_LEVEL_BEST, fileobj=None, mtime=None):
+        """Constructor for the GzipFile class.
+    
+        At least one of fileobj and filename must be given a
+        non-trivial value.
+    
+        The new class instance is based on fileobj, which can be a regular
+        file, an io.BytesIO object, or any other object which simulates a file.
+        It defaults to None, in which case filename is opened to provide
+        a file object.
+    
+        When fileobj is not None, the filename argument is only used to be
+        included in the gzip file header, which may include the original
+        filename of the uncompressed file.  It defaults to the filename of
+        fileobj, if discernible; otherwise, it defaults to the empty string,
+        and in this case the original filename is not included in the header.
+    
+        The mode argument can be any of 'r', 'rb', 'a', 'ab', 'w', 'wb', 'x', or
+        'xb' depending on whether the file will be read or written.  The default
+        is the mode of fileobj if discernible; otherwise, the default is 'rb'.
+        A mode of 'r' is equivalent to one of 'rb', and similarly for 'w' and
+        'wb', 'a' and 'ab', and 'x' and 'xb'.
+    
+        The compresslevel argument is an integer from 0 to 9 controlling the
+        level of compression; 1 is fastest and produces the least compression,
+        and 9 is slowest and produces the most compression. 0 is no compression
+        at all. The default is 9.
+    
+        The mtime argument is an optional numeric timestamp to be written
+        to the last modification time field in the stream when compressing.
+        If omitted or None, the current time is used.
+    
+        """
+    
+        if mode and ('t' in mode or 'U' in mode):
+            raise ValueError("Invalid mode: {!r}".format(mode))
+        if mode and 'b' not in mode:
+            mode += 'b'
+    
+        try:
+            if fileobj is None:
+&gt;               fileobj = self.myfileobj = builtins.open(filename, mode or 'rb')
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               FileNotFoundError: [Errno 2] No such file or directory: 'D:\\SolarProject\\worktrees\\fix5-20261023-s1-bench-step1-significance\\agent_notes\\S1_bench_step1_fix2\\baseline_repository\\studies\\S1_outage_forecasting\\benchmark\\results\\predictions.csv.gz'
+
+..\..\..\..\..\tools\python\cpython-3.12.15-windows-x86_64-none\Lib\gzip.py:201: FileNotFoundError</failure></testcase><testcase classname="tests.test_s1_bench_significance" name="test_preservation_ignores_order_and_runtime_but_detects_score_drift" time="0.040" /><testcase classname="tests.test_s1_bench_significance" name="test_export_alignment_and_pooled_scores" time="0.003"><skipped type="pytest.skip" message="Benchmark export not yet generated">D:\SolarProject\worktrees\fix5-20261023-s1-bench-step1-significance\agent_notes\S1_bench_step1_fix2\baseline_repository\tests\test_s1_bench_significance.py:83: Benchmark export not yet generated</skipped></testcase><testcase classname="tests.test_s1_bench_significance" name="test_historical_significance_is_disabled" time="0.019"><failure message="ModuleNotFoundError: No module named 'benchmark'">tmp_path = WindowsPath('D:/SolarProject/worktrees/fix5-20261023-s1-bench-step1-significance/agent_notes/S1_bench_step1_fix2/baseline_repository/pytest_tmp/test_historical_significance_i0')
+
+    def test_historical_significance_is_disabled(tmp_path: Path) -&gt; None:
+        """Both CLI and imported entry point must stop without producing files."""
+        import subprocess
+        import sys
+    
+        script = OUT.parent / 'significance.py'
+        loaded_spec = importlib.util.spec_from_file_location('disabled_significance', script)
+        loaded = importlib.util.module_from_spec(loaded_spec)
+&gt;       loaded_spec.loader.exec_module(loaded)
+
+tests\test_s1_bench_significance.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+&lt;frozen importlib._bootstrap_external&gt;:999: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    """S1 benchmark, step 1: is the best algorithm really better, or is the top group a tie?
+    
+    For each site (BG, KR) and horizon (1 h, 6 h): the six best algorithms of benchmark v1 (by Brier score) are re-run
+    with the identical time-ordered protocol of benchmark.py, keeping every hourly prediction. Then, against the
+    best-ranked algorithm of that case:
+      - Diebold-Mariano test on the hourly Brier loss difference, with a Newey-West (HAC) variance, lag = 24 h,
+        two-sided, Holm correction over the comparisons within each case;
+      - moving-block bootstrap (block = 7 days = 168 h, 2,000 replicates) 95 % CI of the Brier difference and of the
+        accuracy difference.
+    A difference is called real only if the CI excludes 0 AND Holm-adjusted p &lt; 0.05.
+    Run:  python significance.py   -&gt; results/significance.csv, results/hourly_predictions_top6.csv.gz
+    """
+    from __future__ import annotations
+    
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+    
+&gt;   import benchmark as bm
+E   ModuleNotFoundError: No module named 'benchmark'
+
+studies\S1_outage_forecasting\benchmark\significance.py:19: ModuleNotFoundError</failure></testcase><testcase classname="tests.test_s1_eda" name="test_protocol_configuration[dpi-72]" time="0.006" /><testcase classname="tests.test_s1_eda" name="test_protocol_configuration[weibull_fixed_location-1]" time="0.004" /><testcase classname="tests.test_s1_eda" name="test_protocol_configuration[quantile_interpolation-nearest]" time="0.003" /><testcase classname="tests.test_s1_eda" name="test_complete_temperature_eda[0]" time="15.224" /><testcase classname="tests.test_s1_eda" name="test_complete_temperature_eda[17]" time="14.721" /><testcase classname="tests.test_s1_sig_check" name="test_identical_forecasts" time="0.002" /><testcase classname="tests.test_s1_sig_check" name="test_better_forecast" time="0.005" /><testcase classname="tests.test_s1_sig_check" name="test_hac_hln_against_matrix" time="0.006" /><testcase classname="tests.test_s1_sig_check" name="test_bootstrap_reproducible_and_paired" time="0.141" /><testcase classname="tests.test_s1_sig_check" name="test_holm_hand_example" time="0.005" /><testcase classname="tests.test_s1_sig_check" name="test_input_validation" time="0.094" /><testcase classname="tests.test_s1_sig_check" name="test_delivered_pairs_and_comparison" time="0.027" /><testcase classname="tests.test_s1_sig_check" name="test_original_labels_scaling_and_temporal_boundaries[BG-1]" time="3.189" /><testcase classname="tests.test_s1_sig_check" name="test_original_labels_scaling_and_temporal_boundaries[BG-6]" time="3.636" /><testcase classname="tests.test_s1_sig_check" name="test_original_labels_scaling_and_temporal_boundaries[KR-1]" time="1.274" /><testcase classname="tests.test_s1_sig_check" name="test_original_labels_scaling_and_temporal_boundaries[KR-6]" time="1.462" /></testsuite></testsuites>

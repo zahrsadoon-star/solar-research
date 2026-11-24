@@ -1,84 +1,58 @@
-# Statistical verification of the independent S1 check
+# Statistical verification of the S1 significance check
 
-## Verified calculations and seed sensitivity
+Status: completed the statistical audit of the current branch. Full task acceptance remains blocked by Git/external-temp permissions and repository-wide lint.
 
-The existing independent implementation was reviewed without reading, importing,
-or executing main's significance.py. The original prediction columns are
-site, h, time, y, Extra Trees, Random Forest, CatBoost, LightGBM, XGBoost, Gradient Boosting, Logistic Regression, k-Nearest Neighbours. There are six populated algorithms per case and no
-reference predictions; all fifteen unordered pairs per case are included.
+## Verified numbers and independent seeds
 
-Recomputed the entire analysis with 2000 moving-block bootstrap draws at each of
-seeds 42 and 43. Seed 42 reproduces every saved numeric pair result within CSV
-serialization precision. Seed 43 changes 0 pair
-decisions. Maximum absolute endpoint changes (dimensionless) are
-{"brier_ci_low": 0.00039404735082749966, "brier_ci_high": 0.0002967921697205458, "auc_ci_low": 0.0007353460830184233, "auc_ci_high": 0.0008516449142585095}.
-These runs assess bootstrap Monte Carlo sensitivity only, not independent model
-training variability. No models were refitted and no settings were tuned.
+Recomputed all frozen-prediction comparisons with 2,000 bootstrap draws at each of seeds 42 and 43. Seed 42 reproduces every saved numeric pair result within CSV serialization precision. Seed 43 changes 0 of the 60 pair decisions, so all four top groups remain unchanged. Maximum absolute interval endpoint changes (dimensionless):
 
-Original-export Brier and AUC values were recomputed against the published rounded
-benchmark table. Maximum absolute differences are
-{"auc": 4.222946086496204e-05, "brier": 4.860826813768426e-05}; detailed
-values are in original_metric_audit.csv. Treat these as comparisons between saved
-rounded predictions and published metrics, not proof of bitwise training replay.
+```json
+{
+  "brier_ci_low": 0.00039404735082749966,
+  "brier_ci_high": 0.0002967921697205458,
+  "auc_ci_low": 0.0007353460830184233,
+  "auc_ci_high": 0.0008516449142585095
+}
+```
 
-## Leakage and class imbalance
+Against the published rounded benchmark table, maximum absolute differences from recomputed frozen probabilities are Brier 4.86082681377e-05 and AUC 4.2229460865e-05, both consistent with the table's four-decimal rounding. This verifies stored metrics, not a bitwise historical training replay. Evidence: metric_audit.csv, seed43_pairs.csv and summary.json under results/significance_check/statistical_audit/.
 
-Four new parameterized tests in tests/test_s1_sig_check.py verify original-export
-labels against raw data at time+h, strict training-target-before-test boundaries,
-both classes in every monthly train/test fold, training-only StandardScaler
-moments, and invariance of earlier features under perturbing future observations.
-All passed. Source inspection confirms scalers are in sklearn pipelines fitted
-on the training fold. Features include completed-origin-hour readings; this
-availability assumption remains essential. These checks do not reconstruct the
-historical cloud execution. Random-split results are nonprospective; MLP internal
-early stopping uses a random validation subset within its outer training set.
+Separately refitted RF and Extra Trees for April at both horizons and sites, using training seeds 42 and 43 with original hyperparameters. Extra Trees has lower Brier in both BG cases and RF in both KR cases at both seeds. Maximum absolute within-model Brier change is 0.00109661317662. These are descriptive rankings, not significance conclusions on the April subset. Evidence: april_seed_scores.csv and april_summary.json. Bootstrap seed stability and training seed stability are distinct checks; neither proves equivalence.
 
-Monthly test outage prevalence ranges from 0.02688172 to
-0.80376344; original_class_shares.csv records every case/month.
-The benchmark uses no explicit class weights or class resampling. Probability
-losses retain the observed prevalence; bootstrap rows preserve temporal clusters
-and are not class balanced. AUC measures ranking, while Brier reflects calibration
-and prevalence. Accuracy alone is inadequate under imbalance. Every observed
-fold has both classes; the checker returns unavailable AUC intervals if a bootstrap
-replicate loses a class, rather than silently discarding draws.
 
-## Statistical assumptions and interpretation
+## Scope and preserved work
 
-Verified paired noncircular moving blocks of 24 hours, percentile 95% intervals,
-Bartlett Newey-West HAC lag h-1+24, HLN correction and two-sided Student t p-values,
-and Holm over all fifteen comparisons within each case. Tests independently check
-HAC through a covariance matrix, identical forecasts, a clear advantage, seeded
-bootstrap reproducibility, tied AUC scores and a hand-computed Holm example.
-Holm permits dependent tests but cannot repair inaccurate marginal p-values.
-Pooled seasonal data, shared training sets and monthly refitting challenge weak
-stationarity assumptions; dependence beyond 24 hours is not excluded. HLN is an
-approximate finite-sample correction. No methodological sources were verified
-offline and no citations were invented.
+Read PROJECT_CONTEXT.md, AGENTS.md and earlier agent notes before acting. Kept the pre-existing implementation repairs and the user's PLAN.md. The earlier STATS_REPORT.md described obsolete failures and was superseded by this audit. No published results, legacy/ or data/ were edited. The main merge was retried and failed at ORIG_HEAD.lock due to shared Git metadata permissions. Therefore this is an audit of the current branch, not a merged-main acceptance result.
 
-COMPARISON.md agrees with main's top-group membership in three cases. BG 1 h keeps
-Gradient Boosting (Holm p about 0.134812 versus main's 0.04801). Main uses longer
-blocks, a different HAC lag at h=6, no HLN and five best-versus-other tests rather
-than fifteen all-pair tests. The effects of these changes were not individually
-isolated. Non-rejection is not equivalence. Shortlists were selected on test scores;
-this is exploratory within-case correction, not study-wide confirmatory inference.
-Main README's equivalence and proven-winner language is not supported by these tests.
+## Leakage and imbalance
 
-## Integration and validation limitations
+Original exported labels match raw-data labels at origin+h. The existing tests verify strictly earlier training target times, both classes in monthly train/test folds, and unchanged past features when future observations are perturbed. Extended the StandardScaler check from only December to every April–December training fold. Source inspection confirms scaling is inside training-fitted sklearn pipelines. These tests verify current source and export labels, not historical training execution. Current-hour outage and rolling load are assumed available after the origin hour completes; unresolved reporting latency would change this interpretation. The target clock features are calendar information, not future measurements. The random-split comparison is not prospective evaluation; MLP early stopping uses random validation within outer training data.
 
-The merge was attempted again and failed creating ORIG_HEAD.lock in shared Git
-metadata outside the writable repository. All specified main files were freshly
-verified byte-for-byte against local origin/main without inspecting significance.py.
-The archived Windows drift remains accepted as cross-platform variability under
-the lead decision; REPRO_NOTE.md records metric maxima and rank changes.
+There is no explicit class weighting or resampling in the benchmark. Keeping observed class frequencies is reasonable for probability scoring, but high accuracy cannot establish useful outage detection. In the April subset, both RF and Extra Trees at both seeds and horizons have KR recall and F1 of zero at the fixed 0.5 threshold, despite accuracy about 0.95833. KR test outage share is 0.0416667. These negative results are retained in april_seed_scores.csv; no threshold or class weights were tuned. AUC remains a ranking measure; Brier depends on calibration and prevalence. Added an independent sklearn AUC cross-check with rare positives and tied scores.
 
-Ran python -m pytest -q with only the obsolete historical-disabled-entry-point test
-excluded through PYTEST_ADDOPTS, to avoid executing main and overwriting artifacts.
-Result: 65 passed, 4 failed, 1 skipped, 1 deselected, 58 warnings. The four failures
-are old tests using the pre-move predictions path. The skipped test also uses that
-path. All eleven independent-check tests passed. An unfiltered passing suite is
-not claimed. The already prepared pending_test_update.patch needs an exception to
-the allowed-file list. No commit, push, package installation or network access.
+## Statistical tests and multiplicity
 
-Reproduce this audit: python agent_notes/S1_bench_step1/verify_independent.py.
-Machine-readable outputs and the alternate-seed pairs are in the same directory.
-These are audit artifacts, not manuscript results.
+Reviewed paired, noncircular moving-block bootstrap with 24-hour blocks and 2,000 replicates per seed. Both algorithms and both metrics share the same sampled rows. Intervals are marginal 95% percentile intervals, not simultaneous confidence bands. Undefined AUC replicates make the interval unavailable rather than being silently replaced. Tests cover these behaviors.
+
+Brier inference uses Bartlett HAC with lag h-1+24, horizon-based HLN correction and two-sided Student t probabilities. The existing independent covariance-matrix test verifies the arithmetic. Holm corrects all 15 pairwise tests within each case; invalid p-values count as one. Added a test of Holm invariance to pair ordering, including ties. Holm tolerates dependent tests but cannot validate marginal p-values whose assumptions fail. No across-case error control is provided. The extra CI exclusion condition does not increase the set of Holm rejections, but the intervals themselves are still marginal.
+
+Temporal dependence beyond a day, pooled seasons, overlapping targets, shared training sets and changing monthly models limit the weak-stationarity approximation. The HLN/t calculation is approximate, not an exact finite-sample result here. Test-selected shortlists make this exploratory. No sources or citations were fabricated or newly verified offline. Failure to reject RF versus Extra Trees does not establish equivalence. The group is defined relative to the descriptive best, not by every pair being tied.
+
+## Historical comparison
+
+COMPARISON.md already gives one line per case against cec3552. Membership agrees for BG 6 h, KR 1 h and KR 6 h. BG 1 h includes Gradient Boosting in this check (Holm p=0.134812); cec3552 excludes it (p=0.04801). The procedures differ in block length, HAC lag, HLN correction and the Holm family size. No single cause was experimentally isolated. References are absent from the frozen shortlist export, so baseline superiority is not established by this check. No numerical tolerance was widened.
+
+## Acceptance checks
+
+- Full current branch suite using a repository-local basetemp: 78 passed, 72 dependency deprecation warnings; no skips or deselections. Logs and JUnit XML: agent_notes/S1_bench_step1_fix2/statistician_pytest.*.
+- Exact requested external basetemp, before the two new tests: 61 passed and 15 setup errors, all PermissionError for D:/SolarProject/tmp/pytest/fix2sig. Exact node IDs and causes are appended to FAILURES.md.
+- Scoped ruff: passed for the check, both changed test files and both new audit scripts.
+- Repository-wide ruff: failed with 834 diagnostics, including the retained baseline diagnostic copy. Excluding only disposable diagnostic/scratch directories leaves 409 existing diagnostics. No blanket exclusions or out-of-scope fixes were made.
+- Protected result hashes: all ten existing benchmark artifacts match protected_before.json; statistician_preservation.json records this. This is not a claim that current main's absent artifacts were integrated.
+- git diff --check: passed (pre-existing line-ending warnings only).
+
+## Reproduction and limitations
+
+Run python agent_notes/S1_bench_step1_fix2/statistical_audit.py and python agent_notes/S1_bench_step1_fix2/training_seed_audit.py. Outputs are under studies/S1_outage_forecasting/benchmark/results/significance_check/statistical_audit/. The training audit selects April, RF and Extra Trees, original 300 trees and leaf size 5, seeds 42 and 43, before inspecting results. Single-thread fitting changes resource use only. This limited independent-training check cannot establish all-month/all-model seed stability. The frozen full benchmark still has only its original training seed.
+
+Merge and external-basetemp execution require an environment with the necessary filesystem permissions; global lint requires a broader authorized repair scope. No network, installation, commit or push was used.

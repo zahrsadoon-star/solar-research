@@ -1,46 +1,50 @@
-ï»¿# CODEX report
+# CODEX_REPORT — fix5 S1 fixer/documenter
 
-Implemented the permitted review fixes and refreshed the independent S1 analysis.
-The task is not fully accepted: Git integration is permission-blocked and the old
-test-file repair awaits an explicit allowed-path exception.
+Status: PARTIAL. Review MUST-FIX items 3 and 4 are repaired; item 5 has a complete
+available failure inventory. Integration and full acceptance remain blocked.
 
-## Files touched in this pass
+## Work and files touched in this follow-up
 
-- studies/S1_outage_forecasting/benchmark/significance_check/check.py:
-  current-status correction, scientific limitations, actual Git ancestry/blob checks.
-- significance_check/COMPARISON.md, pairs.csv and manifest.json: regenerated outputs.
-- significance_check/README.md: reproduction, factual findings and weaknesses.
-- agent_notes/S1_bench_step1/REPRO_NOTE.md: regenerated accepted platform-drift summary.
-- agent_notes/FIX_REPORT.md and CODEX_REPORT.md: current disposition and handoff.
-- Task-local pytest temporary/cache files.
+- `agent_notes/S1_bench_step1_fix2/audit_inputs.py`: new fixed-revision source/score
+  loader and data/software provenance.
+- `statistical_audit.py`, `training_seed_audit.py` in that directory: use pinned
+  inputs and record provenance; remove unsupported prespecification claim.
+- `studies/S1_outage_forecasting/benchmark/significance_check/check.py` and generated
+  `COMPARISON.md`: distinguish core frozen analysis from supplementary refitting.
+- `studies/S1_outage_forecasting/benchmark/results/significance_check/`: regenerated
+  primary/audit outputs and added README with reproduction and limitations.
+- `agent_notes/PLAN.md`: retrospective protocol deviation, timing and narrow scope.
+- `agent_notes/S1_bench_step1_fix2/FAILURES.md`: all omitted setup node IDs/causes,
+  current requested-basetemp outcome and merge failure; added logs and preservation
+  verification in the same directory.
+- `agent_notes/FIX_REPORT.md` and this report: review disposition and acceptance.
 
-Existing independent implementation, tests, archives and prior working-tree changes
-were supplied at session start and retained. No main source/results edited in this
-pass; significance.py was neither read nor executed. No data, legacy, method or src
-changes; no network, installation, training rerun, commit or push.
+Existing uncommitted repairs and notes were preserved. No commit, push, network,
+installation, legacy/ edit or data/ edit. No test/tolerance changes in this follow-up.
 
-## Validation
+## Checks and findings
 
-Independent tests: 11 passed, 19 existing timedelta deprecation warnings.
-git diff --check passed with line-ending notices. The analysis uses the fixed
-configuration and original-run predictions; main results are read only for comparison.
-Three case groups agree; BG 1 h retains Gradient Boosting in this independent check.
-Non-rejection is not equivalence.
+- Required external-basetemp pytest: 63 passed, 15 setup errors (permission denied).
+- Full pytest with workspace basetemp: 78 passed, 72 dependency warnings, no skips.
+- Scoped Ruff on modified implementation/tests/audits: passes.
+- Repository-wide Ruff: 834 diagnostics; includes protected legacy and out-of-scope
+  files. These were not suppressed or modified.
+- `git diff --check`: passes, line-ending warnings only.
+- Ten existing published result hashes unchanged. Refreshed integration manifest
+  truthfully reports unmerged main and 92 absent/nonmatching source/result entries.
+- Comparison agrees for three cases; BG 1 h retains Gradient Boosting unlike
+  cec3552. No equivalence or broad superiority claim. April KR recall/F1 stay zero.
 
-## Unresolved
+## Unresolved requirements
 
-`git merge origin/main` failed creating ORIG_HEAD.lock in shared metadata outside the
-writable worktree. The lead must perform the integration and recheck preservation.
-Manifest status is now generated from Git rather than a hard-coded failure message.
+Git merge fails creating shared ORIG_HEAD.lock outside the writable repository.
+The prescribed pytest temporary path is likewise outside the permitted workspace.
+No permission bypass was attempted. Integration and post-merge acceptance need
+an appropriately writable environment. Repository-wide lint needs the lead to
+reconcile the permitted repair scope with diagnostics in protected files.
+Earlier diagnostic copies remain after the prior documented cleanup rejection;
+do not stage those directories. See agent_notes/FIX_REPORT.md for full details.
 
-Requested permission to edit tests/test_s1_bench_significance.py, which the explicit
-allowed-path list excludes. A concrete pending_test_update.patch exists in the task
-notes. Its current entry-point test can overwrite primary artifacts, so it must be
-replaced before an unfiltered full-suite run. No full-suite passing claim is made.
-
-Primary README corrections remain for the lead; COMPARISON.md explicitly supersedes
-unsupported claims. Method-source verification, equal-budget tuning, independent
-training replication and seasonal/dependence assessment remain future work.
-
-Full-suite collection succeeded: 71 tests collected, one existing warning.
-This was collection only, not a full-suite execution or passing result.
+Both supplementary audits completed with pinned provenance. Verified seed-42 replay,
+no changed pair decisions for seed 43, current local hashes, all 16 April training
+rows and the zero KR recall/F1 results. Numerical conclusions remain unchanged.
